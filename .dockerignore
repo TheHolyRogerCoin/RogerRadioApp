@@ -1,0 +1,11 @@
+*Dockerfile*
+*docker-compose*
+node_modules
+/build
+.DS_Store
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.ash_history

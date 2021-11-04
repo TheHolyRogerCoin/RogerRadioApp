@@ -1,0 +1,4 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+./scripts/validate_commit.js $1 && (cd "./$GIT_PREFIX"; yarn lint)

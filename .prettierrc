@@ -1,0 +1,36 @@
+{
+    "jsxBracketSameLine": false,
+    "singleQuote": true,
+    "overrides": [
+        {
+            "files": ["**/*.css", "**/*.scss", "**/*.pcss", "**/*.html"],
+            "options": {
+                "singleQuote": false,
+                "tabWidth": 4
+            }
+        },
+        {
+            "files": ["src/modules/**/*.ts"],
+            "options": {
+                "printWidth": 80
+            }
+        },
+        {
+            "files": ["src/routes/Layout/index.tsx"],
+            "options": {
+                "printWidth": 120
+            }
+        }
+    ],
+    "arrowParens": "always",
+    "bracketSpacing": true,
+    "jsxSingleQuote": false,
+    "printWidth": 120,
+    "tabWidth": 4,
+    "endOfLine": "auto",
+    "semi": true,
+    "tslintIntegration": true,
+    "stylelintIntegration": true,
+    "ignorePath": ".gitignore",
+    "trailingComma": "es5"
+}
