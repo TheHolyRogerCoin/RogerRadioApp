@@ -16,18 +16,25 @@ const useStyles = makeStyles((theme) => ({
     npHead: {
         fontSize: '1.5em',
         fontWeight: 900,
-        marginBottom: theme.spacing(1),
     },
     npProg: {
-        marginBottom: theme.spacing(2),
+        position: 'relative',
     },
     npRotation: {
         fontSize: '0.8em',
-        fontWeight: 900,
-        marginBottom: theme.spacing(1),
+        '& span': {
+            fontWeight: 900,
+        },
     },
     npString: {
         fontWeight: 900,
+    },
+    npNext: {
+        fontSize: '0.75em',
+        position: 'relative',
+        '& span': {
+            fontWeight: 900,
+        },
     },
 }));
 
@@ -69,14 +76,27 @@ const NowPlayingComponent: React.FC = () => {
         <div className={classes.nowPlaying}>
             <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
-                    <div className={classes.npHead}>Rogering You With...</div>
                     <span className={classes.npString}>
                         {nowPlaying.Artist} - {nowPlaying.Title}
                     </span>
+                </Grid>
+                <Grid item xs={12}>
                     <div className={classes.npProg}>
                         <LinearProgress variant="determinate" value={getProgress()} />
                     </div>
-                    <div className={classes.npRotation}>Playing tracks from {nowPlaying.CurrentRotation}</div>
+                </Grid>
+                <Grid item xs={12}>
+                    <div className={classes.npRotation}>
+                        Playing tracks from <span>{nowPlaying.CurrentRotation}</span>
+                    </div>
+                </Grid>
+                <Grid item xs={12}>
+                    <div className={classes.npNext}>
+                        After this...{' '}
+                        <span>
+                            {nowPlaying.NextTrack.Artist} - {nowPlaying.NextTrack.Title}
+                        </span>
+                    </div>
                 </Grid>
             </Grid>
         </div>

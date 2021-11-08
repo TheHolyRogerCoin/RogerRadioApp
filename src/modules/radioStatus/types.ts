@@ -1,3 +1,8 @@
+interface NextTrack {
+    Artist: string;
+    Title: string;
+}
+
 export interface NowPlayingInfo {
     Artist: string;
     Duration: string;
@@ -5,6 +10,7 @@ export interface NowPlayingInfo {
     TimeLeft: string;
     Title: string;
     CurrentRotation: string;
+    NextTrack: NextTrack;
 }
 
 export interface RadioStatusInfo {

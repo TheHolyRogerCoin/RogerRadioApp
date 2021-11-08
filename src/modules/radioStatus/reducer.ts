@@ -23,6 +23,10 @@ export const initialRadioStatusState: RadioStatusState = {
             TimeLeft: '1',
             Title: '',
             CurrentRotation: '',
+            NextTrack: {
+                Title: '',
+                Artist: '',
+            },
         },
     },
     loading: false,
