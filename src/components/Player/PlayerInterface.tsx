@@ -61,12 +61,12 @@ const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, ur
     }, [playing, media, mediaIsPlaying]);
 
     React.useEffect(() => {
-        if (!muted && volume && media) {
+        if (mediaIsPlaying && !muted && volume && media) {
             media.setVolume(Math.max(Math.min(volume, 1.0), 0));
-        } else if (muted && media) {
+        } else if (mediaIsPlaying && muted && media) {
             media.setVolume(0);
         }
-    }, [muted, volume, media]);
+    }, [mediaIsPlaying, muted, volume, media]);
 
     React.useEffect(() => {
         if (mediaEnded) {
