@@ -33,7 +33,7 @@ const PlayerComponent: React.FC = () => {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [isMuted, setIsMuted] = React.useState(false);
     const [volume, setVolume] = React.useState(1);
-    const [playerUrl, setPlayerUrl] = React.useState(streamUrl());
+    const [playerUrl, setPlayerUrl] = React.useState<string | undefined>(streamUrl());
 
     const togglePlay = React.useCallback(() => {
         setIsPlaying((pState) => !pState);
@@ -44,9 +44,14 @@ const PlayerComponent: React.FC = () => {
     }, []);
 
     const handleReload = React.useCallback(() => {
-        setPlayerUrl('');
-        setPlayerUrl(streamUrl());
+        setPlayerUrl(undefined);
     }, []);
+
+    React.useEffect(() => {
+        if (!playerUrl) {
+            setPlayerUrl(streamUrl());
+        }
+    }, [playerUrl]);
 
     const handleVolChange = React.useCallback((event: React.ChangeEvent<any>, value) => {
         setVolume(value);
@@ -58,7 +63,15 @@ const PlayerComponent: React.FC = () => {
 
     return (
         <div className={classes.radioPlayer}>
-            <PlayerInterface volume={volume} playing={isPlaying} muted={isMuted} url={playerUrl} onEnded={onError} />
+            {playerUrl && (
+                <PlayerInterface
+                    volume={volume}
+                    playing={isPlaying}
+                    muted={isMuted}
+                    url={playerUrl}
+                    onEnded={onError}
+                />
+            )}
             <div className={classes.splash}>
                 <img className={classes.splashImg} src={RogerRadioStatic} alt="" />
             </div>

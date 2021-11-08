@@ -46,6 +46,14 @@ const mainTheme = createTheme({
                 paddingRight: '22px',
             },
         },
+        MuiLinearProgress: {
+            colorPrimary: {
+                backgroundColor: colourHover,
+            },
+            barColorPrimary: {
+                backgroundColor: colourActive,
+            },
+        },
         MuiInputBase: {
             root: {
                 color: '#fff',

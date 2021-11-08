@@ -1,6 +1,7 @@
-import { createStyles, WithStyles } from '@material-ui/core';
+import { createStyles, Grid, WithStyles } from '@material-ui/core';
 import { Theme, withStyles } from '@material-ui/core/styles';
 import * as React from 'react';
+import { NowPlaying } from '../../components/NowPlaying/NowPlaying';
 import { Player } from '../../components/Player/Player';
 
 const styles = (theme: Theme) =>
@@ -15,7 +16,16 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const DashboardComponent: React.FC<Props> = ({ classes }) => {
-    return <Player />;
+    return (
+        <Grid container spacing={0} alignItems="center">
+            <Grid item xs={12}>
+                <Player />
+            </Grid>
+            <Grid item xs={12}>
+                <NowPlaying />
+            </Grid>
+        </Grid>
+    );
 };
 
 export const Dashboard = withStyles(styles, { withTheme: true })(React.memo(DashboardComponent));

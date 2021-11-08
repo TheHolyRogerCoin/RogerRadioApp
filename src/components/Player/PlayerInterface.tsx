@@ -18,6 +18,7 @@ const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, ur
     const [mediaEnded, setMediaEnded] = React.useState(false);
 
     const mediaRef = React.useRef(media);
+    const volRef = React.useRef(volume);
 
     const prevUrl = usePrevious(url);
 
@@ -46,9 +47,11 @@ const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, ur
 
     React.useEffect(() => {
         window.console.log(media);
+        const vRef = volRef.current;
         if (playing && media && !mediaIsPlaying) {
             window.console.log('playing');
             media.play({ playAudioWhenScreenIsLocked: true });
+            media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
             ForegroundService.start('RogerRadio', 'RogerRadio is streaming.', 'main_logo_transparent');
         } else if (!playing && media && mediaIsPlaying) {
             media.stop();
