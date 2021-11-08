@@ -1,9 +1,9 @@
 import { Button, Grid, makeStyles, Slider } from '@material-ui/core';
 import { VolumeDown, VolumeUp } from '@material-ui/icons';
 import * as React from 'react';
-import ReactPlayer from 'react-player';
 import { streamUrl } from '../../api';
 import RogerRadioStatic from '../../assets/images/rogerradiostatic.gif';
+import { PlayerInterface } from './PlayerInterface';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +33,7 @@ const PlayerComponent: React.FC = () => {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [isMuted, setIsMuted] = React.useState(false);
     const [volume, setVolume] = React.useState(1);
+    const [playerUrl, setPlayerUrl] = React.useState(streamUrl());
 
     const togglePlay = React.useCallback(() => {
         setIsPlaying((pState) => !pState);
@@ -40,6 +41,11 @@ const PlayerComponent: React.FC = () => {
 
     const toggleMute = React.useCallback(() => {
         setIsMuted((pState) => !pState);
+    }, []);
+
+    const handleReload = React.useCallback(() => {
+        setPlayerUrl('');
+        setPlayerUrl(streamUrl());
     }, []);
 
     const handleVolChange = React.useCallback((event: React.ChangeEvent<any>, value) => {
@@ -52,17 +58,7 @@ const PlayerComponent: React.FC = () => {
 
     return (
         <div className={classes.radioPlayer}>
-            <ReactPlayer
-                volume={volume}
-                width="100%"
-                height="100%"
-                controls={false}
-                playing={isPlaying}
-                muted={isMuted}
-                url={streamUrl()}
-                onEnded={onError}
-                onError={onError}
-            />
+            <PlayerInterface volume={volume} playing={isPlaying} muted={isMuted} url={playerUrl} onEnded={onError} />
             <div className={classes.splash}>
                 <img className={classes.splashImg} src={RogerRadioStatic} alt="" />
             </div>
@@ -90,6 +86,7 @@ const PlayerComponent: React.FC = () => {
             <div className={classes.buttons}>
                 <Button onClick={togglePlay}>{!isPlaying ? 'Play' : 'Stop'}</Button>
                 <Button onClick={toggleMute}>{!isMuted ? 'Mute' : 'UnMute'}</Button>
+                <Button onClick={handleReload}>Reload</Button>
             </div>
         </div>
     );

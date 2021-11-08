@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <platform name="android">
+    <config-file parent="/*" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    </config-file>
     <platform name="android">
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
