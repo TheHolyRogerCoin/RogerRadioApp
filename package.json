@@ -38,7 +38,8 @@
     "start-mock-ws": "npm-run-all -p start mockAPI mockWS",
     "build": "cross-env NODE_ENV=production NODE_OPTIONS=--max_old_space_size=8192 webpack --config ./webpack/production.ts",
     "build:mobile": "./scripts/build_capacitor.sh",
-    "build:mobile:dev": "./scripts/build_capacitor_dev.sh",
+    "build:mobile:android": "./scripts/build_capacitor_android.sh",
+    "build:mobile:ios": "./scripts/build_capacitor_ios.sh",
     "analyze": "cross-env ANALYZE=1 NODE_ENV=production NODE_OPTIONS=--max_old_space_size=8192 webpack --config ./webpack/production.ts  --profile --json > stats.json",
     "test": "jest --config jest.config.js --silent",
     "test:coverage": "jest --config jest.config.js --collectCoverage=true",
@@ -46,7 +47,8 @@
     "spec:integration": "cypress open",
     "clean": "rimraf build",
     "prepare": "husky install",
-    "resources": "cordova-res android && node scripts/resources.js"
+    "resources:android": "cordova-res android && node scripts/resources_android.js",
+    "resources:ios": "cordova-res ios && node scripts/resources_ios.js"
   },
   "devDependencies": {
     "@date-io/core": "^1.3.6",
