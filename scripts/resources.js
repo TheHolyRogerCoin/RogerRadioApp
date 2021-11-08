@@ -7,9 +7,11 @@ const TARGET_IOS_ICON = 'ios/App/App/Assets.xcassets/AppIcon.appiconset/';
 const TARGET_IOS_SPLASH = 'ios/App/App/Assets.xcassets/Splash.imageset/';
 
 const SOURCE_ANDROID_ICON = 'resources/android/icon/';
+const SOURCE_ANDROID_RESOURCES = 'resources/android/';
 const SOURCE_ANDROID_SPLASH = 'resources/android/splash/';
 
 const TARGET_ANDROID_ICON = 'android/app/src/main/res/';
+const TARGET_ANDROID_RESOURCES = 'android/app/src/main/res/drawable/';
 const TARGET_ANDROID_SPLASH = 'android/app/src/main/res/';
 
 const IOS_ICONS = [
@@ -74,6 +76,9 @@ const ANDROID_SPLASHES = [
   { source: 'drawable-port-xxhdpi-screen.png', target: 'drawable-port-xxhdpi/splash.png' },
   { source: 'drawable-port-xxxhdpi-screen.png', target: 'drawable-port-xxxhdpi/splash.png' }
 ];
+const ANDROID_RESOURCES = [
+  { source: 'icon-foreground.png', target: 'main_logo_transparent.png' },
+];
 
 function copyImages(sourcePath, targetPath, images) {
   for (const icon of images) {
@@ -88,6 +93,7 @@ function copyImages(sourcePath, targetPath, images) {
 
 copyImages(SOURCE_ANDROID_ICON, TARGET_ANDROID_ICON, ANDROID_ICONS);
 copyImages(SOURCE_ANDROID_SPLASH, TARGET_ANDROID_SPLASH, ANDROID_SPLASHES);
+copyImages(SOURCE_ANDROID_RESOURCES, TARGET_ANDROID_RESOURCES, ANDROID_RESOURCES);
 
 // copyImages(SOURCE_IOS_ICON, TARGET_IOS_ICON, IOS_ICONS);
 // copyImages(SOURCE_IOS_SPLASH, TARGET_IOS_SPLASH, IOS_SPLASHES);

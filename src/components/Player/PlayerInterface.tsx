@@ -49,7 +49,7 @@ const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, ur
         if (playing && media && !mediaIsPlaying) {
             window.console.log('playing');
             media.play({ playAudioWhenScreenIsLocked: true });
-            ForegroundService.start('RogerRadio', 'RogerRadio is streaming.');
+            ForegroundService.start('RogerRadio', 'RogerRadio is streaming.', 'main_logo_transparent');
         } else if (!playing && media && mediaIsPlaying) {
             media.stop();
             ForegroundService.stop();
