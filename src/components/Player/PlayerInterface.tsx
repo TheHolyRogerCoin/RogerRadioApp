@@ -99,7 +99,7 @@ const PlayerInterfaceComponent: React.FC = () => {
                     title: 'RogerRadio',
                     text: 'RogerRadio is streaming.',
                     icon: 'res://main_logo_transparent',
-                    smallIcon: 'res://main_logo_transparent',
+                    smallIcon: 'res://notification_logo',
                     sticky: true,
                     sound: false,
                     actions: 'radioStopGrp',

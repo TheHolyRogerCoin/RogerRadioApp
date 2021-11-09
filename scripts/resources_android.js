@@ -38,6 +38,7 @@ const ANDROID_SPLASHES = [
 ];
 const ANDROID_RESOURCES = [
   { source: 'icon-transparent.png', target: 'res/drawable/main_logo_transparent.png' },
+  { source: 'icon-notification.png', target: 'res/drawable/notification_logo.png' },
   { source: 'AndroidManifest.xml', target: 'AndroidManifest.xml' },
   { source: 'values/ic_launcher.xml', target: 'res/mipmap-anydpi-v26/ic_launcher.xml' },
   { source: 'values/ic_launcher.xml', target: 'res/mipmap-anydpi-v26/ic_launcher_round.xml' },
