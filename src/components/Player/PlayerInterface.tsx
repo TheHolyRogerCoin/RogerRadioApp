@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ForegroundService } from '@ionic-native/foreground-service';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Media, MediaObject } from '@ionic-native/media';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
@@ -31,6 +31,23 @@ const PlayerInterfaceComponent: React.FC = () => {
 
     useSetPlayerUrl();
 
+    document.addEventListener(
+        'deviceready',
+        () => {
+            window.console.log('Device ready.');
+            window.console.log(LocalNotifications);
+            window.console.log((LocalNotifications as any).launchDetails);
+            LocalNotifications.addActions('radioStopGrp', [{ id: 'radioStop', title: 'Stop' }]);
+
+            LocalNotifications.on('radioStop').subscribe((notification) => {
+                dispatch(playerStop());
+            });
+
+            LocalNotifications.fireQueuedEvents();
+        },
+        false
+    );
+
     const loadPlayer = React.useCallback((mediaUrl) => {
         window.console.log('loading player');
         const mObj = Media.create(mediaUrl);
@@ -40,7 +57,7 @@ const PlayerInterfaceComponent: React.FC = () => {
                 mObj.release();
                 setMediaEnded(true);
                 setMedia(undefined);
-                ForegroundService.stop();
+                LocalNotifications && LocalNotifications.clearAll();
             }
         });
         setMedia(mObj);
@@ -62,7 +79,7 @@ const PlayerInterfaceComponent: React.FC = () => {
             window.console.log('reloading');
             media && media.stop();
             media && media.release();
-            ForegroundService.stop();
+            LocalNotifications && LocalNotifications.clearAll();
             setMedia(undefined);
         }
     }, [media, mediaReloading, mediaReloadLock]);
@@ -74,11 +91,23 @@ const PlayerInterfaceComponent: React.FC = () => {
             window.console.log('playing');
             media.play({ playAudioWhenScreenIsLocked: true });
             media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
-            ForegroundService.start('RogerRadio', 'RogerRadio is streaming.', 'main_logo_transparent');
+            LocalNotifications &&
+                LocalNotifications.schedule({
+                    autoLaunch: true,
+                    channelId: 1696912,
+                    channelName: 'rogerradio.notifications',
+                    title: 'RogerRadio',
+                    text: 'RogerRadio is streaming.',
+                    icon: 'res://main_logo_transparent',
+                    smallIcon: 'res://main_logo_transparent',
+                    sticky: true,
+                    sound: false,
+                    actions: 'radioStopGrp',
+                } as any);
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
             window.console.log('stopping');
             media.stop();
-            ForegroundService.stop();
+            LocalNotifications && LocalNotifications.clearAll();
             setMediaIsPlaying(false);
         }
     }, [playing, media, mediaIsPlaying, mediaReloading]);
@@ -108,7 +137,7 @@ const PlayerInterfaceComponent: React.FC = () => {
             if (mRef) {
                 mRef.stop();
                 mRef.release();
-                ForegroundService.stop();
+                LocalNotifications && LocalNotifications.clearAll();
             }
         };
     }, []);
