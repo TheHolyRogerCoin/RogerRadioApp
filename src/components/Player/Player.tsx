@@ -1,9 +1,17 @@
 import { Button, Grid, makeStyles, Slider } from '@material-ui/core';
 import { VolumeDown, VolumeUp } from '@material-ui/icons';
 import * as React from 'react';
-import { streamUrl } from '../../api';
+import { useDispatch, useSelector } from 'react-redux';
 import RogerRadioStatic from '../../assets/images/rogerradiostatic.gif';
-import { PlayerInterface } from './PlayerInterface';
+import {
+    playerTogglePlay,
+    playerToggleMute,
+    playerSetVolume,
+    playerSetUrl,
+    selectPlayerMuted,
+    selectPlayerPlaying,
+    selectPlayerVolume,
+} from '../../modules/player';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,48 +38,34 @@ const useStyles = makeStyles((theme) => ({
 
 const PlayerComponent: React.FC = () => {
     const classes = useStyles();
-    const [isPlaying, setIsPlaying] = React.useState(false);
-    const [isMuted, setIsMuted] = React.useState(false);
-    const [volume, setVolume] = React.useState(1);
-    const [playerUrl, setPlayerUrl] = React.useState<string | undefined>(streamUrl());
+
+    const dispatch = useDispatch();
+
+    const volume: number = useSelector(selectPlayerVolume);
+    const isMuted: boolean = useSelector(selectPlayerMuted);
+    const isPlaying: boolean = useSelector(selectPlayerPlaying);
 
     const togglePlay = React.useCallback(() => {
-        setIsPlaying((pState) => !pState);
-    }, []);
+        dispatch(playerTogglePlay());
+    }, [dispatch]);
 
     const toggleMute = React.useCallback(() => {
-        setIsMuted((pState) => !pState);
-    }, []);
+        dispatch(playerToggleMute());
+    }, [dispatch]);
 
     const handleReload = React.useCallback(() => {
-        setPlayerUrl(undefined);
-    }, []);
+        dispatch(playerSetUrl(undefined));
+    }, [dispatch]);
 
-    React.useEffect(() => {
-        if (!playerUrl) {
-            setPlayerUrl(streamUrl());
-        }
-    }, [playerUrl]);
-
-    const handleVolChange = React.useCallback((event: React.ChangeEvent<any>, value) => {
-        setVolume(value);
-    }, []);
-
-    const onError = React.useCallback(() => {
-        setIsPlaying(false);
-    }, []);
+    const handleVolChange = React.useCallback(
+        (event: React.ChangeEvent<any>, value) => {
+            dispatch(playerSetVolume(value));
+        },
+        [dispatch]
+    );
 
     return (
         <div className={classes.radioPlayer}>
-            {playerUrl && (
-                <PlayerInterface
-                    volume={volume}
-                    playing={isPlaying}
-                    muted={isMuted}
-                    url={playerUrl}
-                    onEnded={onError}
-                />
-            )}
             <div className={classes.splash}>
                 <img className={classes.splashImg} src={RogerRadioStatic} alt="" />
             </div>

@@ -5,21 +5,13 @@ const SOURCE_ANDROID_RESOURCES = 'resources/android/';
 const SOURCE_ANDROID_SPLASH = 'resources/android/splash/';
 
 const TARGET_ANDROID_ICON = 'android/app/src/main/res/';
-const TARGET_ANDROID_RESOURCES = 'android/app/src/main/res/drawable/';
+const TARGET_ANDROID_RESOURCES = 'android/app/src/main/';
 const TARGET_ANDROID_SPLASH = 'android/app/src/main/res/';
 
 const ANDROID_ICONS = [
   { source: 'drawable-ldpi-icon.png', target: 'drawable-hdpi-icon.png' },
-  { source: 'drawable-mdpi-icon.png', target: 'mipmap-mdpi/ic_launcher.png' },
-  { source: 'drawable-mdpi-icon.png', target: 'mipmap-mdpi/ic_launcher_round.png' },
-  { source: 'drawable-hdpi-icon.png', target: 'mipmap-hdpi/ic_launcher.png' },
-  { source: 'drawable-hdpi-icon.png', target: 'mipmap-hdpi/ic_launcher_round.png' },
-  { source: 'drawable-xhdpi-icon.png', target: 'mipmap-xhdpi/ic_launcher.png' },
-  { source: 'drawable-xhdpi-icon.png', target: 'mipmap-xhdpi/ic_launcher_round.png' },
-  { source: 'drawable-xxhdpi-icon.png', target: 'mipmap-xxhdpi/ic_launcher.png' },
-  { source: 'drawable-xxhdpi-icon.png', target: 'mipmap-xxhdpi/ic_launcher_round.png' },
-  { source: 'drawable-xxxhdpi-icon.png', target: 'mipmap-xxxhdpi/ic_launcher.png' },
-  { source: 'drawable-xxxhdpi-icon.png', target: 'mipmap-xxxhdpi/ic_launcher_round.png' },
+  { source: 'xxhdpi-foreground.png', target: 'drawable/ic_launcher_foreground.png' },
+  { source: 'xxhdpi-background.png', target: 'drawable/ic_launcher_background.png' },
   { source: 'mdpi-foreground.png', target: 'mipmap-mdpi/ic_launcher_foreground.png' },
   { source: 'hdpi-foreground.png', target: 'mipmap-hdpi/ic_launcher_foreground.png' },
   { source: 'xhdpi-foreground.png', target: 'mipmap-xhdpi/ic_launcher_foreground.png' },
@@ -45,8 +37,30 @@ const ANDROID_SPLASHES = [
   { source: 'drawable-port-xxxhdpi-screen.png', target: 'drawable-port-xxxhdpi/splash.png' }
 ];
 const ANDROID_RESOURCES = [
-  { source: 'icon-foreground.png', target: 'main_logo_transparent.png' },
+  { source: 'icon-transparent.png', target: 'res/drawable/main_logo_transparent.png' },
+  { source: 'AndroidManifest.xml', target: 'AndroidManifest.xml' },
+  { source: 'values/ic_launcher.xml', target: 'res/mipmap-anydpi-v26/ic_launcher.xml' },
+  { source: 'values/ic_launcher.xml', target: 'res/mipmap-anydpi-v26/ic_launcher_round.xml' },
 ];
+const ANDROID_DELETIONS = [
+  'drawable/ic_launcher_background.xml',
+  'drawable-v24',
+  'values/ic_launcher_background.xml',
+];
+
+function deleteFiles(targetPath, files) {
+  for (const file of files) {
+    let target = targetPath + file;
+    fs.rm(target, {recursive: true}, err => {
+      if (err) {
+        console.log(`Skipped: ${target}`);
+      } else {
+        console.log(`Deleted: ${target}`);
+      }
+    });
+  }
+}
+
 
 function copyImages(sourcePath, targetPath, images) {
   for (const icon of images) {
@@ -62,3 +76,4 @@ function copyImages(sourcePath, targetPath, images) {
 copyImages(SOURCE_ANDROID_ICON, TARGET_ANDROID_ICON, ANDROID_ICONS);
 copyImages(SOURCE_ANDROID_SPLASH, TARGET_ANDROID_SPLASH, ANDROID_SPLASHES);
 copyImages(SOURCE_ANDROID_RESOURCES, TARGET_ANDROID_RESOURCES, ANDROID_RESOURCES);
+deleteFiles(TARGET_ANDROID_ICON, ANDROID_DELETIONS);

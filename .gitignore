@@ -31,6 +31,6 @@ index.css
 # environment config
 public/config/
 
-resources/android/*
-!resources/android/icon-*.png
+resources/android/icon
+resources/android/splash
 resources/ios/

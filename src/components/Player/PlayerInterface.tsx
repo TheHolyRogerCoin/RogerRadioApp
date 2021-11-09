@@ -1,64 +1,87 @@
 import * as React from 'react';
 import { ForegroundService } from '@ionic-native/foreground-service';
 import { Media, MediaObject } from '@ionic-native/media';
-import { usePrevious } from '../../hooks/usePrevious';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
+import {
+    playerStop,
+    selectPlayerMuted,
+    selectPlayerUrl,
+    selectPlayerPlaying,
+    selectPlayerVolume,
+} from '../../modules/player';
 
-interface Props {
-    url: string;
-    muted?: boolean;
-    playing?: boolean;
-    volume?: number;
-    onEnded?: () => void;
-}
-
-const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, url, volume = 1.0 }) => {
+const PlayerInterfaceComponent: React.FC = () => {
     const [media, setMedia] = React.useState<MediaObject | undefined>(undefined);
+    const [mediaReloading, setMediaReloading] = React.useState(false);
+    const [mediaReloadLock, setMediaReloadLock] = React.useState(false);
     // const [mediaStatus, setMediaStatus] = React.useState<number | undefined>(undefined);
     const [mediaIsPlaying, setMediaIsPlaying] = React.useState(false);
     const [mediaEnded, setMediaEnded] = React.useState(false);
 
+    const dispatch = useDispatch();
+
+    const volume: number = useSelector(selectPlayerVolume);
+    const muted: boolean = useSelector(selectPlayerMuted);
+    const playing: boolean = useSelector(selectPlayerPlaying);
+    const url: string | undefined = useSelector(selectPlayerUrl);
+
     const mediaRef = React.useRef(media);
     const volRef = React.useRef(volume);
 
-    const prevUrl = usePrevious(url);
+    useSetPlayerUrl();
 
     const loadPlayer = React.useCallback((mediaUrl) => {
+        window.console.log('loading player');
         const mObj = Media.create(mediaUrl);
         mObj.onStatusUpdate.subscribe((status) => {
-            // setMediaStatus(status);
             setMediaIsPlaying(status === 2);
             if (status === 4) {
                 mObj.release();
                 setMediaEnded(true);
+                setMedia(undefined);
+                ForegroundService.stop();
             }
         });
         setMedia(mObj);
+        setMediaReloading(false);
+        setMediaReloadLock(false);
     }, []);
 
     React.useEffect(() => {
-        if (!media) {
+        if (!media && url && url.length) {
             loadPlayer(url);
-        } else if (media && url != prevUrl) {
-            media.stop();
-            media.release();
-            url.length && loadPlayer(url);
+        } else if (media && !url) {
+            setMediaReloading(true);
         }
-    }, [media, url, prevUrl, loadPlayer]);
+    }, [media, url, loadPlayer]);
 
     React.useEffect(() => {
-        window.console.log(media);
+        if (mediaReloading && !mediaReloadLock) {
+            setMediaReloadLock(true);
+            window.console.log('reloading');
+            media && media.stop();
+            media && media.release();
+            ForegroundService.stop();
+            setMedia(undefined);
+        }
+    }, [media, mediaReloading, mediaReloadLock]);
+
+    React.useEffect(() => {
+        window.console.log(`play effect, media: ${media}`);
         const vRef = volRef.current;
-        if (playing && media && !mediaIsPlaying) {
+        if (!mediaReloading && playing && media && !mediaIsPlaying) {
             window.console.log('playing');
             media.play({ playAudioWhenScreenIsLocked: true });
             media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
             ForegroundService.start('RogerRadio', 'RogerRadio is streaming.', 'main_logo_transparent');
-        } else if (!playing && media && mediaIsPlaying) {
+        } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
+            window.console.log('stopping');
             media.stop();
             ForegroundService.stop();
             setMediaIsPlaying(false);
         }
-    }, [playing, media, mediaIsPlaying]);
+    }, [playing, media, mediaIsPlaying, mediaReloading]);
 
     React.useEffect(() => {
         if (mediaIsPlaying && !muted && volume && media) {
@@ -68,13 +91,16 @@ const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, ur
         }
     }, [mediaIsPlaying, muted, volume, media]);
 
+    const onError = React.useCallback(() => {
+        dispatch(playerStop());
+    }, [dispatch]);
+
     React.useEffect(() => {
         if (mediaEnded) {
-            onEnded && onEnded();
             setMediaEnded(false);
-            setMedia(undefined);
+            onError();
         }
-    }, [mediaEnded, onEnded]);
+    }, [mediaEnded, onError]);
 
     React.useEffect(() => {
         const mRef = mediaRef.current;
@@ -82,11 +108,11 @@ const PlayerInterfaceComponent: React.FC<Props> = ({ muted, onEnded, playing, ur
             if (mRef) {
                 mRef.stop();
                 mRef.release();
+                ForegroundService.stop();
             }
         };
     }, []);
     return null;
-    // const media = new Media(src, mediaSuccess, [mediaError], [mediaStatus]);
 };
 
 export const PlayerInterface = React.memo(PlayerInterfaceComponent);
