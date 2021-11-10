@@ -95,9 +95,15 @@ const PlayerComponent: React.FC = () => {
                 </Grid>
             </div>
             <div className={classes.buttons}>
-                <Button onClick={togglePlay}>{!isPlaying ? 'Play' : 'Stop'}</Button>
-                <Button onClick={toggleMute}>{!isMuted ? 'Mute' : 'UnMute'}</Button>
-                <Button onClick={handleReload}>Reload</Button>
+                <Button variant="contained" onClick={togglePlay}>
+                    {!isPlaying ? 'Play' : 'Stop'}
+                </Button>
+                <Button variant="contained" onClick={toggleMute}>
+                    {!isMuted ? 'Mute' : 'UnMute'}
+                </Button>
+                <Button variant="contained" onClick={handleReload}>
+                    Reload
+                </Button>
             </div>
         </div>
     );

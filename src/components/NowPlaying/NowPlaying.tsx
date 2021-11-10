@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     npProg: {
         position: 'relative',
     },
+    npProgComp: {
+        position: 'relative',
+    },
     npRotation: {
         fontSize: '0.8em',
         '& span': {
@@ -84,7 +87,7 @@ const NowPlayingComponent: React.FC = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <div className={classes.npProg}>
-                        <LinearProgress variant="determinate" value={getProgress()} />
+                        <LinearProgress className={classes.npProgComp} variant="determinate" value={getProgress()} />
                     </div>
                 </Grid>
                 <Grid item xs={12}>

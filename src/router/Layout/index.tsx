@@ -47,7 +47,8 @@ const mainTheme = createTheme({
                         },
                     },
                 },
-                text: {
+                contained: {
+                    color: '#fff',
                     marginLeft: '6px',
                     marginRight: '6px',
                     paddingLeft: '22px',
@@ -57,6 +58,9 @@ const mainTheme = createTheme({
         },
         MuiLinearProgress: {
             styleOverrides: {
+                root: {
+                    height: '8px',
+                },
                 colorPrimary: {
                     backgroundColor: colourHover,
                 },
