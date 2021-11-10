@@ -1,5 +1,9 @@
-import { Button, Grid, makeStyles, Slider } from '@material-ui/core';
-import { VolumeDown, VolumeUp } from '@material-ui/icons';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Slider from '@mui/material/Slider';
+import VolumeDown from '@mui/icons-material/VolumeDown';
+import VolumeUp from '@mui/icons-material/VolumeUp';
+import { makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RogerRadioStatic from '../../assets/images/rogerradiostatic.gif';
@@ -58,8 +62,8 @@ const PlayerComponent: React.FC = () => {
     }, [dispatch]);
 
     const handleVolChange = React.useCallback(
-        (event: React.ChangeEvent<any>, value) => {
-            dispatch(playerSetVolume(value));
+        (event: Event, value: any) => {
+            dispatch(playerSetVolume(Number(value)));
         },
         [dispatch]
     );

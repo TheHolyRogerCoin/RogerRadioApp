@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AlertMessage } from '../../components/AlertMessage/AlertMessage';

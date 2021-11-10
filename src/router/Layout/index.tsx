@@ -1,7 +1,12 @@
-import { CssBaseline, makeStyles } from '@material-ui/core';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import classNames from 'classnames';
 import * as React from 'react';
+
+declare module '@mui/styles' {
+    interface DefaultTheme extends Theme {}
+}
 
 const drawerWidth = 240;
 
@@ -16,106 +21,132 @@ const mainTheme = createTheme({
         background: {
             paper: 'var(--body-background-color)',
         },
-        type: 'dark',
+        mode: 'dark',
     },
-    overrides: {
+    components: {
         MuiTableCell: {
-            root: {
-                padding: '6px 16px',
-            },
-            stickyHeader: {
-                backgroundColor: 'var(--body-background-color)',
+            styleOverrides: {
+                root: {
+                    padding: '6px 16px',
+                },
+                stickyHeader: {
+                    backgroundColor: 'var(--body-background-color)',
+                },
             },
         },
         MuiButton: {
-            root: {
-                background: colourActive,
-                '&:hover': {
-                    backgroundColor: colourHover,
-                },
-                '@media (hover: none)': {
+            styleOverrides: {
+                root: {
+                    background: colourActive,
                     '&:hover': {
-                        backgroundColor: `${colourHover} !important`,
+                        backgroundColor: colourHover,
+                    },
+                    '@media (hover: none)': {
+                        '&:hover': {
+                            backgroundColor: `${colourHover} !important`,
+                        },
                     },
                 },
-            },
-            text: {
-                marginLeft: '6px',
-                marginRight: '6px',
-                paddingLeft: '22px',
-                paddingRight: '22px',
+                text: {
+                    marginLeft: '6px',
+                    marginRight: '6px',
+                    paddingLeft: '22px',
+                    paddingRight: '22px',
+                },
             },
         },
         MuiLinearProgress: {
-            colorPrimary: {
-                backgroundColor: colourHover,
-            },
-            barColorPrimary: {
-                backgroundColor: colourActive,
+            styleOverrides: {
+                colorPrimary: {
+                    backgroundColor: colourHover,
+                },
+                barColorPrimary: {
+                    backgroundColor: colourActive,
+                },
             },
         },
         MuiInputBase: {
-            root: {
-                color: '#fff',
-            },
-            input: {
-                color: '#fff',
+            styleOverrides: {
+                root: {
+                    color: '#fff',
+                },
+                input: {
+                    color: '#fff',
+                },
             },
         },
         MuiInput: {
-            root: {
-                color: '#fff',
-            },
-            formControl: {
-                color: '#fff',
+            styleOverrides: {
+                root: {
+                    color: '#fff',
+                },
+                formControl: {
+                    color: '#fff',
+                },
             },
         },
         MuiListItemIcon: {
-            root: {
-                color: '#000',
-                minWidth: 35,
+            styleOverrides: {
+                root: {
+                    color: '#000',
+                    minWidth: 35,
+                },
             },
         },
         MuiListItemText: {
-            root: {
-                color: '#000',
+            styleOverrides: {
+                root: {
+                    color: '#000',
+                },
             },
         },
         MuiPaper: {
-            root: {
-                backgroundColor: 'var(--body-background-color)',
-                color: '#fff',
+            styleOverrides: {
+                root: {
+                    backgroundColor: 'var(--body-background-color)',
+                    color: '#fff',
+                },
             },
         },
         MuiTablePagination: {
-            root: {
-                color: '#fff',
+            styleOverrides: {
+                root: {
+                    color: '#fff',
+                },
             },
         },
         MuiPopover: {
-            paper: {
-                backgroundColor: 'var(--header-background-color)',
-                paddingLeft: 'calc(var(--gap) * 2)',
-                paddingRight: 'calc(var(--gap) * 2)',
+            styleOverrides: {
+                paper: {
+                    backgroundColor: 'var(--header-background-color)',
+                    paddingLeft: 'calc(var(--gap) * 2)',
+                    paddingRight: 'calc(var(--gap) * 2)',
+                },
             },
         },
         MuiTab: {
-            root: {
-                minWidth: '120px !important',
+            styleOverrides: {
+                root: {
+                    minWidth: '120px !important',
+                },
             },
         },
         MuiSlider: {
-            root: {
-                color: colourActive,
+            styleOverrides: {
+                root: {
+                    color: colourActive,
+                },
             },
         },
         MuiSvgIcon: {
-            colorAction: {
-                color: '#000',
-            },
-            root: {
-                fill: colourActive,
-                fontSize: '2.2rem',
+            styleOverrides: {
+                colorAction: {
+                    color: '#000',
+                },
+                root: {
+                    fill: colourActive,
+                    fontSize: '2.2rem',
+                },
             },
         },
     },
@@ -159,22 +190,31 @@ const useStyles = makeStyles((theme) => ({
 interface OwnProps {
     children: React.ReactNode;
 }
-const LayoutComponent: React.FC<OwnProps> = ({ children }) => {
+
+const LayoutWrapComponent: React.FC<OwnProps> = ({ children }) => {
     const classes = useStyles();
     const open = false;
     return (
+        <div className={classes.root}>
+            <CssBaseline />
+            <main
+                className={classNames(classes.content, {
+                    [classes.contentShift]: open,
+                })}
+            >
+                <div className={classes.toolbar} />
+                {children}
+            </main>
+        </div>
+    );
+};
+
+const LayoutWrap = React.memo(LayoutWrapComponent);
+
+const LayoutComponent: React.FC<OwnProps> = ({ children }) => {
+    return (
         <ThemeProvider theme={mainTheme}>
-            <div className={classes.root}>
-                <CssBaseline />
-                <main
-                    className={classNames(classes.content, {
-                        [classes.contentShift]: open,
-                    })}
-                >
-                    <div className={classes.toolbar} />
-                    {children}
-                </main>
-            </div>
+            <LayoutWrap>{children}</LayoutWrap>
         </ThemeProvider>
     );
 };

@@ -1,4 +1,5 @@
-import { makeStyles, SnackbarContent } from '@material-ui/core';
+import SnackbarContent from '@mui/material/SnackbarContent';
+import { makeStyles } from '@mui/styles';
 import classNames from 'classnames';
 import * as React from 'react';
 

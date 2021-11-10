@@ -1,4 +1,6 @@
-import { Grid, LinearProgress, makeStyles } from '@material-ui/core';
+import { makeStyles } from '@mui/styles';
+import Grid from '@mui/material/Grid';
+import LinearProgress from '@mui/material/LinearProgress';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { useFetchStatusUpdateInterval } from '../../hooks/useFetchStatusUpdateInterval';
@@ -11,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     nowPlaying: {
         position: 'relative',
         textAlign: 'center',
-        margin: `${theme.spacing(3)}px ${theme.spacing(1)}px`,
+        margin: `${theme.spacing(3)} ${theme.spacing(1)}`,
     },
     npHead: {
         fontSize: '1.5em',
