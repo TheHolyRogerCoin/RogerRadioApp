@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     splashImg: {
-        maxWidth: '100%',
+        maxWidth: '75%',
         position: 'relative',
     },
     buttons: {

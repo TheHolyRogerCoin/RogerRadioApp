@@ -13,6 +13,16 @@ export interface NowPlayingInfo {
     NextTrack: NextTrack;
 }
 
+export interface PlaylistItem {
+    Artist: string;
+    Title: string;
+    Position: string;
+}
+
 export interface RadioStatusInfo {
     now_playing: NowPlayingInfo;
+}
+
+export interface RadioPlaylistInfo {
+    playlist: PlaylistItem[];
 }

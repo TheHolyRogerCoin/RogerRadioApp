@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import { API, radioApiKey, RequestOptions } from '../../../api';
 import { alertPush } from '../../alert';
-import { radioStatusData, radioStatusError } from '../actions';
+import { radioPlaylistData, radioPlaylistError } from '../actions';
 
 const radioStatusOptions: RequestOptions = {
     apiVersion: 'radio',
@@ -10,15 +10,15 @@ const radioStatusOptions: RequestOptions = {
     },
 };
 
-export function* radioStatusFetchSaga() {
+export function* radioPlaylistFetchSaga() {
     try {
-        const radioStatus = yield call(
+        const response = yield call(
             API.get(radioStatusOptions),
-            '/public_stats'
+            '/public_stats/playlist'
         );
-        yield put(radioStatusData(radioStatus.data));
+        yield put(radioPlaylistData(response.data));
     } catch (error: any) {
-        yield put(radioStatusError());
+        yield put(radioPlaylistError());
         yield put(
             alertPush({
                 message: error.message,

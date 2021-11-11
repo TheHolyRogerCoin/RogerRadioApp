@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { radioStatusFetch, selectShouldFetchRadioStatus } from '../modules/radioStatus';
+import { radioPlaylistFetch, selectShouldFetchRadioPlaylist } from '../modules/radioStatus';
 
 const TIMEOUT_INT = 3000;
 
-export const useFetchStatusUpdateInterval = () => {
+export const useFetchPlaylistUpdateInterval = () => {
     const dispatch = useDispatch();
-    const shouldDispatch = useSelector(selectShouldFetchRadioStatus);
+    const shouldDispatch = useSelector(selectShouldFetchRadioPlaylist);
 
     const isSet = React.useRef(false);
 
     const fetchUpdates = React.useCallback(() => {
         if (shouldDispatch) {
-            dispatch(radioStatusFetch());
+            dispatch(radioPlaylistFetch());
         }
     }, [dispatch, shouldDispatch]);
 

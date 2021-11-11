@@ -4,14 +4,21 @@ import {
     RADIO_STATUS_DATA,
     RADIO_STATUS_ERROR,
     RADIO_STATUS_FETCH,
+    RADIO_PLAYLIST_DATA,
+    RADIO_PLAYLIST_ERROR,
+    RADIO_PLAYLIST_FETCH,
 } from './constants';
-import { RadioStatusInfo } from './types';
+import { RadioStatusInfo, RadioPlaylistInfo } from './types';
 
 export interface RadioStatusState extends CommonState {
     status: RadioStatusInfo;
-    loading: boolean;
-    timestamp?: number;
-    timestampData?: number;
+    playlist: RadioPlaylistInfo['playlist'];
+    loadingStatus: boolean;
+    timestampStatus?: number;
+    timestampStatusData?: number;
+    loadingPlaylist: boolean;
+    timestampPlaylist?: number;
+    timestampPlaylistData?: number;
 }
 
 export const initialRadioStatusState: RadioStatusState = {
@@ -29,7 +36,9 @@ export const initialRadioStatusState: RadioStatusState = {
             },
         },
     },
-    loading: false,
+    playlist: [],
+    loadingPlaylist: false,
+    loadingStatus: false,
 };
 
 export const radioStatusReducer = (
@@ -40,20 +49,38 @@ export const radioStatusReducer = (
         case RADIO_STATUS_FETCH:
             return {
                 ...state,
-                loading: true,
-                timestamp: Math.floor(Date.now() / 1000),
+                loadingStatus: true,
+                timestampStatus: Math.floor(Date.now() / 1000),
             };
         case RADIO_STATUS_DATA:
             return {
                 ...state,
-                loading: false,
+                loadingStatus: false,
                 status: action.payload,
-                timestampData: Math.floor(Date.now() / 1000),
+                timestampStatusData: Math.floor(Date.now() / 1000),
             };
         case RADIO_STATUS_ERROR:
             return {
                 ...state,
-                loading: false,
+                loadingStatus: false,
+            };
+        case RADIO_PLAYLIST_FETCH:
+            return {
+                ...state,
+                loadingPlaylist: true,
+                timestampPlaylist: Math.floor(Date.now() / 1000),
+            };
+        case RADIO_PLAYLIST_DATA:
+            return {
+                ...state,
+                loadingPlaylist: false,
+                playlist: action.payload.playlist,
+                timestampPlaylistData: Math.floor(Date.now() / 1000),
+            };
+        case RADIO_PLAYLIST_ERROR:
+            return {
+                ...state,
+                loadingPlaylist: false,
             };
         default:
             return state;

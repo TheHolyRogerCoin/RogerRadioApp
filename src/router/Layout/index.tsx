@@ -3,6 +3,7 @@ import { makeStyles } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import classNames from 'classnames';
 import * as React from 'react';
+import { NavBar } from '../../components/NavBar/NavBar';
 
 declare module '@mui/styles' {
     interface DefaultTheme extends Theme {}
@@ -24,6 +25,16 @@ const mainTheme = createTheme({
         mode: 'dark',
     },
     components: {
+        MuiBottomNavigationAction: {
+            styleOverrides: {
+                root: {
+                    padding: '6px 12px 4px',
+                    '&.Mui-selected': {
+                        paddingTop: '0px',
+                    },
+                },
+            },
+        },
         MuiTableCell: {
             styleOverrides: {
                 root: {
@@ -161,21 +172,14 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'var(--main-background-color)',
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
         color: '#fff',
-    },
-    toolbar: {
-        // display: 'flex',
-        display: 'none',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(2),
-
+        height: 'calc(100% - 50px)',
+        overflowY: 'scroll',
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -206,9 +210,9 @@ const LayoutWrapComponent: React.FC<OwnProps> = ({ children }) => {
                     [classes.contentShift]: open,
                 })}
             >
-                <div className={classes.toolbar} />
                 {children}
             </main>
+            <NavBar />
         </div>
     );
 };

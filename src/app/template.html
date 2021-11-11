@@ -19,13 +19,37 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>RogerRadio</title>
+    <style>
+      html, body {
+        background: #000;
+      }
+      .pg-loader-container {
+        align-items: center;
+        backdrop-filter: blur(10px);
+        background: #000;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        left: 0;
+        position: fixed;
+        right: 0;
+        top: 0;
+        z-index: 999999;
+      }
+      .pg-loader-container .spinner-border {
+        color: #fd7604 !important;
+        font-size: 40px;
+        height: 2em;
+        width: 2em;
+      }
+    </style>
   </head>
   <body>
     <script src="env.js"></script>
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
-    <div id="root"></div>
+    <div id="root"><div class="pg-loader-container"><div class="spinner-border text-primary"></div></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
