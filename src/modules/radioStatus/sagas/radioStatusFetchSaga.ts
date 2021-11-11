@@ -1,11 +1,14 @@
 import { call, put, takeLeading } from 'redux-saga/effects';
-import { API, RequestOptions } from '../../../api';
+import { API, radioApiKey, RequestOptions } from '../../../api';
 import { alertPush } from '../../alert';
 import { radioStatusData, radioStatusError } from '../actions';
 import { RADIO_STATUS_FETCH } from '../constants';
 
 const radioStatusOptions: RequestOptions = {
     apiVersion: 'radio',
+    headers: {
+        'pub-api-key': radioApiKey(),
+    },
 };
 
 export function* rootRadioStatusSaga() {
