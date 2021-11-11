@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { radioStatusFetch, selectShouldFetchRadioStatus } from '../modules/radioStatus';
 
-const TIMEOUT_INT = 3000;
+const TIMEOUT_INT = 15000;
 
 export const useFetchStatusUpdateInterval = () => {
     const dispatch = useDispatch();
