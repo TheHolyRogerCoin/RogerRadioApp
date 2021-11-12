@@ -1,4 +1,5 @@
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
 import CachedIcon from '@mui/icons-material/Cached';
@@ -42,6 +43,10 @@ const useStyles = makeStyles((theme) => ({
     volControl: {
         position: 'relative',
     },
+    btnVol: {
+        display: 'inline !important',
+        padding: '0px !important',
+    },
     btnIcn: {
         fill: '#fff !important',
         fontSize: '1.75em !important',
@@ -76,6 +81,14 @@ const PlayerComponent: React.FC = () => {
         [dispatch]
     );
 
+    const handleVolDown = React.useCallback(() => {
+        dispatch(playerSetVolume(Math.max(Number(volume) - 0.01, 0.0)));
+    }, [dispatch, volume]);
+
+    const handleVolUp = React.useCallback(() => {
+        dispatch(playerSetVolume(Math.min(Number(volume) + 0.01, 1.0)));
+    }, [dispatch, volume]);
+
     return (
         <div className={classes.radioPlayer}>
             <div className={classes.splash}>
@@ -84,7 +97,9 @@ const PlayerComponent: React.FC = () => {
             <div className={classes.volControl}>
                 <Grid container spacing={2} alignItems="center">
                     <Grid item xs={2}>
-                        <VolumeDown />
+                        <IconButton className={classes.btnVol} onClick={handleVolDown}>
+                            <VolumeDown />
+                        </IconButton>
                     </Grid>
                     <Grid item xs={8}>
                         <Slider
@@ -98,7 +113,9 @@ const PlayerComponent: React.FC = () => {
                         />
                     </Grid>
                     <Grid item xs={2}>
-                        <VolumeUp />
+                        <IconButton className={classes.btnVol} onClick={handleVolUp}>
+                            <VolumeUp />
+                        </IconButton>
                     </Grid>
                 </Grid>
             </div>
