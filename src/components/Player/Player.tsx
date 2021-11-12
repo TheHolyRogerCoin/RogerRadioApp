@@ -1,6 +1,10 @@
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Slider from '@mui/material/Slider';
+import CachedIcon from '@mui/icons-material/Cached';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import { makeStyles } from '@mui/styles';
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     splashImg: {
-        maxWidth: '75%',
+        maxHeight: '39vh',
         position: 'relative',
     },
     buttons: {
@@ -37,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     },
     volControl: {
         position: 'relative',
+    },
+    btnIcn: {
+        fill: '#fff !important',
+        fontSize: '1.75em !important',
     },
 }));
 
@@ -96,13 +104,17 @@ const PlayerComponent: React.FC = () => {
             </div>
             <div className={classes.buttons}>
                 <Button variant="contained" onClick={togglePlay}>
-                    {!isPlaying ? 'Play' : 'Stop'}
+                    {!isPlaying ? (
+                        <PlayCircleIcon className={classes.btnIcn} />
+                    ) : (
+                        <StopCircleIcon className={classes.btnIcn} />
+                    )}
                 </Button>
                 <Button variant="contained" onClick={toggleMute}>
-                    {!isMuted ? 'Mute' : 'UnMute'}
+                    {!isMuted ? <VolumeOffIcon className={classes.btnIcn} /> : <VolumeUp className={classes.btnIcn} />}
                 </Button>
                 <Button variant="contained" onClick={handleReload}>
-                    Reload
+                    <CachedIcon className={classes.btnIcn} />
                 </Button>
             </div>
         </div>
