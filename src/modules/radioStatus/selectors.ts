@@ -47,3 +47,27 @@ export const selectRadioPlaylistTimestampData = (
 export const selectShouldFetchRadioPlaylist = (state: AppState): boolean => {
     return !selectRadioPlaylistLoading(state);
 };
+
+export const selectRadioScheduleList = (
+    state: AppState
+): RadioStatusState['scheduleList'] =>
+    selectRadioStatusState(state).scheduleList;
+
+export const selectRadioScheduleListLoading = (
+    state: AppState
+): boolean | undefined => selectRadioStatusState(state).loadingScheduleList;
+
+export const selectRadioScheduleListTimestamp = (
+    state: AppState
+): number | undefined => selectRadioStatusState(state).timestampScheduleList;
+
+export const selectRadioScheduleListTimestampData = (
+    state: AppState
+): number | undefined =>
+    selectRadioStatusState(state).timestampScheduleListData;
+
+export const selectShouldFetchRadioScheduleList = (
+    state: AppState
+): boolean => {
+    return !selectRadioScheduleListLoading(state);
+};

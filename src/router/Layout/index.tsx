@@ -17,7 +17,7 @@ const colourHover = '#ce5e00';
 const mainTheme = createTheme({
     palette: {
         primary: {
-            main: 'rgb(245, 233, 56)',
+            main: colourActive,
         },
         background: {
             paper: 'var(--body-background-color)',
@@ -139,10 +139,19 @@ const mainTheme = createTheme({
                 },
             },
         },
+        MuiTabs: {
+            styleOverrides: {
+                root: {
+                    minHeight: 30,
+                },
+            },
+        },
         MuiTab: {
             styleOverrides: {
                 root: {
-                    minWidth: '120px !important',
+                    padding: '6px 6px',
+                    minHeight: 30,
+                    minWidth: '80px !important',
                 },
             },
         },

@@ -5,8 +5,15 @@ import {
     RADIO_PLAYLIST_DATA,
     RADIO_PLAYLIST_ERROR,
     RADIO_PLAYLIST_FETCH,
+    RADIO_SCHEDULE_DATA,
+    RADIO_SCHEDULE_ERROR,
+    RADIO_SCHEDULE_FETCH,
 } from './constants';
-import { RadioStatusInfo, RadioPlaylistInfo } from './types';
+import {
+    RadioStatusInfo,
+    RadioPlaylistInfo,
+    RadioScheduleListInfo,
+} from './types';
 
 export interface RadioStatusFetch {
     type: typeof RADIO_STATUS_FETCH;
@@ -34,13 +41,29 @@ export interface RadioPlaylistError {
     type: typeof RADIO_PLAYLIST_ERROR;
 }
 
+export interface RadioScheduleListFetch {
+    type: typeof RADIO_SCHEDULE_FETCH;
+}
+
+export interface RadioScheduleListData {
+    type: typeof RADIO_SCHEDULE_DATA;
+    payload: RadioScheduleListInfo;
+}
+
+export interface RadioScheduleListError {
+    type: typeof RADIO_SCHEDULE_ERROR;
+}
+
 export type RadioStatusAction =
     | RadioStatusFetch
     | RadioStatusData
     | RadioStatusError
     | RadioPlaylistFetch
     | RadioPlaylistData
-    | RadioPlaylistError;
+    | RadioPlaylistError
+    | RadioScheduleListFetch
+    | RadioScheduleListData
+    | RadioScheduleListError;
 
 export const radioStatusFetch = (): RadioStatusFetch => ({
     type: RADIO_STATUS_FETCH,
@@ -70,4 +93,19 @@ export const radioPlaylistData = (
 
 export const radioPlaylistError = (): RadioPlaylistError => ({
     type: RADIO_PLAYLIST_ERROR,
+});
+
+export const radioScheduleListFetch = (): RadioScheduleListFetch => ({
+    type: RADIO_SCHEDULE_FETCH,
+});
+
+export const radioScheduleListData = (
+    payload: RadioScheduleListData['payload']
+): RadioScheduleListData => ({
+    type: RADIO_SCHEDULE_DATA,
+    payload,
+});
+
+export const radioScheduleListError = (): RadioScheduleListError => ({
+    type: RADIO_SCHEDULE_ERROR,
 });

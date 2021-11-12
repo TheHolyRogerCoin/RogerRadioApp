@@ -2,6 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import RadioIcon from '@mui/icons-material/Radio';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { makeStyles } from '@mui/styles';
@@ -27,6 +28,7 @@ const NavBarComponent: React.FC = () => {
             <BottomNavigation className={classes.mainNav} value={activeTab} onChange={handleNav}>
                 <BottomNavigationAction component={Link} to="/" icon={<RadioIcon />} />
                 <BottomNavigationAction component={Link} to="/playlist" icon={<QueueMusicIcon />} />
+                <BottomNavigationAction component={Link} to="/schedule" icon={<EventNoteIcon />} />
             </BottomNavigation>
         </Box>
     );

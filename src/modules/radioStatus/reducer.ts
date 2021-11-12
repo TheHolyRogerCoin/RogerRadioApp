@@ -7,18 +7,25 @@ import {
     RADIO_PLAYLIST_DATA,
     RADIO_PLAYLIST_ERROR,
     RADIO_PLAYLIST_FETCH,
+    RADIO_SCHEDULE_DATA,
+    RADIO_SCHEDULE_ERROR,
+    RADIO_SCHEDULE_FETCH,
 } from './constants';
-import { RadioStatusInfo, RadioPlaylistInfo } from './types';
+import { RadioStatusInfo, RadioPlaylistInfo, ScheduleEvent } from './types';
 
 export interface RadioStatusState extends CommonState {
     status: RadioStatusInfo;
     playlist: RadioPlaylistInfo['playlist'];
+    scheduleList: ScheduleEvent[];
     loadingStatus: boolean;
     timestampStatus?: number;
     timestampStatusData?: number;
     loadingPlaylist: boolean;
     timestampPlaylist?: number;
     timestampPlaylistData?: number;
+    loadingScheduleList: boolean;
+    timestampScheduleList?: number;
+    timestampScheduleListData?: number;
 }
 
 export const initialRadioStatusState: RadioStatusState = {
@@ -37,7 +44,9 @@ export const initialRadioStatusState: RadioStatusState = {
         },
     },
     playlist: [],
+    scheduleList: [],
     loadingPlaylist: false,
+    loadingScheduleList: false,
     loadingStatus: false,
 };
 
@@ -81,6 +90,24 @@ export const radioStatusReducer = (
             return {
                 ...state,
                 loadingPlaylist: false,
+            };
+        case RADIO_SCHEDULE_FETCH:
+            return {
+                ...state,
+                loadingScheduleList: true,
+                timestampScheduleList: Math.floor(Date.now() / 1000),
+            };
+        case RADIO_SCHEDULE_DATA:
+            return {
+                ...state,
+                loadingScheduleList: false,
+                scheduleList: action.payload.schedulelist,
+                timestampScheduleListData: Math.floor(Date.now() / 1000),
+            };
+        case RADIO_SCHEDULE_ERROR:
+            return {
+                ...state,
+                loadingScheduleList: false,
             };
         default:
             return state;
