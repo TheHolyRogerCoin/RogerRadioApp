@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ForegroundService } from '@ionic-native/foreground-service';
+// import { ForegroundService } from '@ionic-native/foreground-service';
 import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Media, MediaObject } from '@ionic-native/media';
@@ -46,7 +46,7 @@ const PlayerInterfaceComponent: React.FC = () => {
                 setMediaEnded(true);
                 setMedia(undefined);
                 LocalNotifications && LocalNotifications.clearAll();
-                ForegroundService && ForegroundService.stop();
+                // ForegroundService && ForegroundService.stop();
                 BackgroundMode && BackgroundMode.disable();
             }
         });
@@ -70,7 +70,7 @@ const PlayerInterfaceComponent: React.FC = () => {
             media && media.stop();
             media && media.release();
             LocalNotifications && LocalNotifications.clearAll();
-            ForegroundService && ForegroundService.stop();
+            // ForegroundService && ForegroundService.stop();
             BackgroundMode && BackgroundMode.disable();
             setMedia(undefined);
         }
@@ -96,13 +96,13 @@ const PlayerInterfaceComponent: React.FC = () => {
                     actions: 'radioStopGrp',
                     priority: 2,
                 } as any);
-            ForegroundService.start('RogerRadio', 'RogerRadio running in background.', 'notification_logo');
+            // ForegroundService.start('RogerRadio', 'RogerRadio running in background.', 'notification_logo');
             BackgroundMode && BackgroundMode.enable();
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
             window.console.log('stopping');
             media.stop();
             LocalNotifications && LocalNotifications.clearAll();
-            ForegroundService && ForegroundService.stop();
+            // ForegroundService && ForegroundService.stop();
             BackgroundMode && BackgroundMode.disable();
             setMediaIsPlaying(false);
         }
@@ -134,7 +134,7 @@ const PlayerInterfaceComponent: React.FC = () => {
                 mRef.stop();
                 mRef.release();
                 LocalNotifications && LocalNotifications.clearAll();
-                ForegroundService && ForegroundService.stop();
+                // ForegroundService && ForegroundService.stop();
                 BackgroundMode && BackgroundMode.disable();
             }
         };

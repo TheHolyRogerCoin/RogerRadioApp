@@ -543,13 +543,6 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/foreground-service@^5.36.0":
-  version "5.36.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/foreground-service/-/foreground-service-5.36.0.tgz#41dd28516945df366d1c37490c41508ab5eead99"
-  integrity sha512-2kQz+81Q8gyPIS+X7mt5Eth6HmeAmSBdRf04CWyO6lZwHneW9nRLlFwJBKlhISqLSxeJGpUGPwVc6E4QC70XBA==
-  dependencies:
-    "@types/cordova" latest
-
 "@ionic-native/local-notifications@^5.36.0":
   version "5.36.0"
   resolved "https://registry.yarnpkg.com/@ionic-native/local-notifications/-/local-notifications-5.36.0.tgz#0df56f0632768a40886f4a266258a9e948f4b79a"
@@ -3035,11 +3028,6 @@ cordova-plugin-file@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/cordova-plugin-file/-/cordova-plugin-file-6.0.2.tgz#f3911479f8357e9aacb5576674f8d95b31a1fb20"
   integrity sha512-m7cughw327CjONN/qjzsTpSesLaeybksQh420/gRuSXJX5Zt9NfgsSbqqKDon6jnQ9Mm7h7imgyO2uJ34XMBtA==
-
-cordova-plugin-foreground-service@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/cordova-plugin-foreground-service/-/cordova-plugin-foreground-service-1.1.3.tgz#06a7a7f52b2ec33c108dce2fd0fbe67f084abc8c"
-  integrity sha512-/C2Z8w9JIfAaLeXP290msQP9jcHR+CAJYbp6/x+mS21VtvS2Ug0upKsgjEzzSzRnt08Mr8kuwCV7juUd6eCWcw==
 
 "cordova-plugin-local-notification@git://github.com/codeluggage/cordova-plugin-local-notifications.git#cordova-guard-against-webview-crash":
   version "0.9.0-beta.4"
