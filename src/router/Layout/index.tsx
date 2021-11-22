@@ -4,6 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import classNames from 'classnames';
 import * as React from 'react';
 import { NavBar } from '../../components/NavBar/NavBar';
+import { useHideSplash } from '../../hooks/useHideSplash';
 
 declare module '@mui/styles' {
     interface DefaultTheme extends Theme {}
@@ -211,6 +212,9 @@ interface OwnProps {
 const LayoutWrapComponent: React.FC<OwnProps> = ({ children }) => {
     const classes = useStyles();
     const open = false;
+
+    useHideSplash();
+
     return (
         <div className={classes.root}>
             <CssBaseline />
