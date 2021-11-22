@@ -12,7 +12,7 @@ export declare class MediaObject {
     /**
      * An observable that notifies you when an error occurs
      */
-    onError: Observable<MEDIA_ERROR>;
+    onError: Observable<MediaError>;
     /**
      * An observable that notifies you when the file status changes
      */
