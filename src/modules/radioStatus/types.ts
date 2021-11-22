@@ -4,6 +4,7 @@ interface NextTrack {
 }
 
 export interface NowPlayingInfo {
+    event_timestamp?: number;
     Artist: string;
     Duration: string;
     Listeners: string;

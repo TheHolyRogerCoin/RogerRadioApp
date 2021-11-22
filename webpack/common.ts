@@ -85,6 +85,7 @@ const config: webpack.Configuration = {
                     name: 'common',
                     chunks: 'all',
                     minSize: 800000,
+                    maxSize: 1200000,
                     minChunks: 1,
                     reuseExistingChunk: true,
                 },

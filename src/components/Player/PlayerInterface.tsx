@@ -4,6 +4,7 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Media, MediaObject } from '@ionic-native/media';
 import { useDispatch, useSelector } from 'react-redux';
+import { useDeviceReady } from '../../hooks/useDeviceReady';
 import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
 import {
     playerStop,
@@ -33,23 +34,7 @@ const PlayerInterfaceComponent: React.FC = () => {
 
     useSetPlayerUrl();
 
-    document.addEventListener(
-        'deviceready',
-        () => {
-            window.console.log('Device ready.');
-            window.console.log(LocalNotifications);
-            window.console.log((LocalNotifications as any).launchDetails);
-            LocalNotifications.addActions('radioStopGrp', [{ id: 'radioStop', title: 'Stop' }]);
-
-            LocalNotifications.on('radioStop').subscribe((notification) => {
-                dispatch(playerStop());
-            });
-
-            LocalNotifications.fireQueuedEvents();
-            BackgroundMode.setDefaults({ silent: true });
-        },
-        false
-    );
+    useDeviceReady();
 
     const loadPlayer = React.useCallback((mediaUrl) => {
         window.console.log('loading player');
@@ -108,11 +93,10 @@ const PlayerInterfaceComponent: React.FC = () => {
                     icon: 'res://main_logo_transparent',
                     smallIcon: 'res://notification_logo',
                     sticky: true,
-                    sound: false,
                     actions: 'radioStopGrp',
                     priority: 2,
                 } as any);
-            ForegroundService.start('RogerRadio', 'RogerRadio is streaming.', 'notification_logo');
+            ForegroundService.start('RogerRadio', 'RogerRadio running in background.', 'notification_logo');
             BackgroundMode && BackgroundMode.enable();
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
             window.console.log('stopping');

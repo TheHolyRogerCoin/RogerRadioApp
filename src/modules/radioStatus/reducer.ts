@@ -66,7 +66,7 @@ export const radioStatusReducer = (
                 ...state,
                 loadingStatus: false,
                 status: action.payload,
-                timestampStatusData: Math.floor(Date.now() / 1000),
+                timestampStatusData: action.payload.now_playing.event_timestamp,
             };
         case RADIO_STATUS_ERROR:
             return {

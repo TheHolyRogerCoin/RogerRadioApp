@@ -11,15 +11,11 @@ const AlertsContainer = React.lazy(() =>
 );
 
 const LayoutContainer = React.lazy(() => import('./router/Layout').then(({ Layout }) => ({ default: Layout })));
-const PlayerInterfaceContainer = React.lazy(() =>
-    import('./components/Player/PlayerInterface').then(({ PlayerInterface }) => ({ default: PlayerInterface }))
-);
 
 export const App: React.FC = () => {
     return (
         <Router history={browserHistory}>
             <React.Suspense fallback={null}>
-                <PlayerInterfaceContainer />
                 <LayoutContainer>
                     <AlertsContainer />
                     <RouterContainer />
