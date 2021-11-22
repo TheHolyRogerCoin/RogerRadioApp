@@ -42,6 +42,7 @@ const PlayerInterfaceComponent: React.FC = () => {
         mObj.onStatusUpdate.subscribe((status) => {
             setMediaIsPlaying(status === 2);
             if (status === 4) {
+                window.console.log(`Media status update ended.`);
                 mObj.release();
                 setMediaEnded(true);
                 setMedia(undefined);
@@ -49,6 +50,16 @@ const PlayerInterfaceComponent: React.FC = () => {
                 // ForegroundService && ForegroundService.stop();
                 BackgroundMode && BackgroundMode.disable();
             }
+        });
+
+        mObj.onError.subscribe((err) => {
+            window.console.log(`Media error: ${JSON.stringify(err)}`);
+            mObj.release();
+            setMediaEnded(true);
+            setMedia(undefined);
+            LocalNotifications && LocalNotifications.clearAll();
+            // ForegroundService && ForegroundService.stop();
+            BackgroundMode && BackgroundMode.disable();
         });
         setMedia(mObj);
         setMediaReloading(false);
@@ -81,7 +92,7 @@ const PlayerInterfaceComponent: React.FC = () => {
         const vRef = volRef.current;
         if (!mediaReloading && playing && media && !mediaIsPlaying) {
             window.console.log('playing');
-            media.play({ playAudioWhenScreenIsLocked: true });
+            media.playInBackground({ playAudioWhenScreenIsLocked: true });
             media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
             LocalNotifications &&
                 LocalNotifications.schedule({
@@ -95,7 +106,8 @@ const PlayerInterfaceComponent: React.FC = () => {
                     sticky: true,
                     actions: 'radioStopGrp',
                     priority: 2,
-                } as any);
+                    sound: true,
+                });
             // ForegroundService.start('RogerRadio', 'RogerRadio running in background.', 'notification_logo');
             BackgroundMode && BackgroundMode.enable();
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
