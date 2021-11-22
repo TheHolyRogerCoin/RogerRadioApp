@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { BackgroundMode } from '@ionic-native/background-mode';
-import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Media, MediaObject } from '@ionic-native/media';
 import { useSelector } from 'react-redux';
 import { useDeviceReady } from '../../hooks/useDeviceReady';
+import { useMediaControls } from '../../hooks/useMediaControls';
 import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
 import { selectPlayerMuted, selectPlayerUrl, selectPlayerPlaying, selectPlayerVolume } from '../../modules/player';
+import { selectNowPlaying } from '../../modules/radioStatus';
 
 const PlayerInterfaceComponent: React.FC = () => {
     const [media, setMedia] = React.useState<MediaObject | undefined>(undefined);
@@ -15,6 +16,8 @@ const PlayerInterfaceComponent: React.FC = () => {
     const [mediaEnded, setMediaEnded] = React.useState(false);
     const [mediaErrored, setMediaErrored] = React.useState(false);
 
+    const { Artist, Title } = useSelector(selectNowPlaying);
+
     const volume: number = useSelector(selectPlayerVolume);
     const muted: boolean = useSelector(selectPlayerMuted);
     const playing: boolean = useSelector(selectPlayerPlaying);
@@ -23,7 +26,7 @@ const PlayerInterfaceComponent: React.FC = () => {
     const volRef = React.useRef(volume);
 
     useSetPlayerUrl();
-
+    useMediaControls({ Title: Title, Artist: Artist, isPlaying: mediaIsPlaying });
     useDeviceReady();
 
     const loadPlayer = React.useCallback((mediaUrl) => {
@@ -37,8 +40,6 @@ const PlayerInterfaceComponent: React.FC = () => {
                 mObj.release();
                 setMediaEnded(true);
                 setMedia(undefined);
-                LocalNotifications && LocalNotifications.clearAll();
-                // ForegroundService && ForegroundService.stop();
                 BackgroundMode && BackgroundMode.disable();
             }
         });
@@ -68,7 +69,6 @@ const PlayerInterfaceComponent: React.FC = () => {
             window.console.log('reloading');
             media && media.stop();
             media && media.release();
-            LocalNotifications && LocalNotifications.clearAll();
             BackgroundMode && BackgroundMode.disable();
             setMedia(undefined);
         }
@@ -83,25 +83,10 @@ const PlayerInterfaceComponent: React.FC = () => {
             window.console.log('playing');
             media.playInBackground({ playAudioWhenScreenIsLocked: true });
             media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
-            LocalNotifications &&
-                LocalNotifications.schedule({
-                    autoLaunch: true,
-                    channelId: 1696912,
-                    channelName: 'rogerradio.notifications',
-                    title: 'RogerRadio',
-                    text: 'RogerRadio is streaming.',
-                    icon: 'res://main_logo_transparent',
-                    smallIcon: 'res://notification_logo',
-                    sticky: true,
-                    actions: 'radioStopGrp',
-                    priority: 2,
-                    sound: true,
-                });
             BackgroundMode && BackgroundMode.enable();
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
             window.console.log('stopping');
             media.stop();
-            LocalNotifications && LocalNotifications.clearAll();
             BackgroundMode && BackgroundMode.disable();
             setMediaIsPlaying(false);
         }
@@ -138,7 +123,6 @@ const PlayerInterfaceComponent: React.FC = () => {
             if (media) {
                 media.stop();
                 media.release();
-                LocalNotifications && LocalNotifications.clearAll();
                 BackgroundMode && BackgroundMode.disable();
             }
         };

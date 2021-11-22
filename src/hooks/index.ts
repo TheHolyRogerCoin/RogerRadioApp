@@ -4,5 +4,6 @@ export * from './useFetchRadioStatus';
 export * from './useFetchScheduleListUpdateInterval';
 export * from './useFetchStatusUpdateInterval';
 export * from './useHideSplash';
+export * from './useMediaControls';
 export * from './usePrevious';
 export * from './useSetPlayerUrl';

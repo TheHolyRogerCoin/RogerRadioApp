@@ -15,8 +15,6 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(appReducer, composeEnhancer(applyMiddleware(sagaMiddleware)));
 
-(window as any).skipLocalNotificationReady = true;
-
 sagaMiddleware.run(rootSaga);
 
 const render = () =>
