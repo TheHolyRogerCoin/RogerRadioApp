@@ -16,20 +16,19 @@ export const useMediaControls = (params: Params) => {
 
     const subControls = React.useCallback(() => {
         MusicControls.subscribe().subscribe((action) => {
-            window.console.log(action);
             const message = JSON.parse(action).message;
-            window.console.log(message);
-            window.console.log(action);
             switch (message) {
                 case 'music-controls-pause':
                 case 'music-controls-destroy':
                 case 'music-controls-headset-unplugged':
                 case 'music-controls-media-button-pause':
                 case 'music-controls-media-button-stop':
+                case 'music-controls-stop-listening':
                     dispatch(playerStop());
                     MusicControls.destroy();
                     break;
                 default:
+                    window.console.log(`MusicControls: ${message}`);
                     break;
             }
         });
@@ -55,11 +54,13 @@ export const useMediaControls = (params: Params) => {
     }, [params.Title, params.Artist]);
 
     React.useEffect(() => {
+        window.console.log(`media controls effect playing: ${params.isPlaying}, active: ${controlsActive.current}`);
         if (params.isPlaying && !controlsActive.current) {
             controlsActive.current = true;
             createControls();
             subControls();
-        } else if (!params.isPlaying && controlsActive.current) {
+        } else if (!params.isPlaying) {
+            window.console.log(`media controls effect closing`);
             controlsActive.current = false;
             MusicControls.destroy();
         } else if (params.isPlaying && controlsActive.current) {

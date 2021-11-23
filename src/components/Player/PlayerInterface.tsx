@@ -26,7 +26,7 @@ const PlayerInterfaceComponent: React.FC = () => {
     const volRef = React.useRef(volume);
 
     useSetPlayerUrl();
-    useMediaControls({ Title: Title, Artist: Artist, isPlaying: mediaIsPlaying });
+    useMediaControls({ Title: Title, Artist: Artist, isPlaying: playing });
     useDeviceReady();
 
     const loadPlayer = React.useCallback((mediaUrl) => {
