@@ -7,6 +7,7 @@ import {
     radioStatusReducer,
     rootRadioStatusSaga,
 } from './radioStatus';
+import { websocketsReducer, WebsocketsState } from './websockets';
 
 export * from './alert';
 export * from './player';
@@ -17,12 +18,14 @@ export interface AppState {
     radioStatus: RadioStatusState;
     alert: AlertState;
     player: PlayerState;
+    websockets: WebsocketsState;
 }
 
 export const appReducer = combineReducers({
     radioStatus: radioStatusReducer,
     alert: alertReducer,
     player: playerReducer,
+    websockets: websocketsReducer,
 });
 
 export function* rootSaga() {

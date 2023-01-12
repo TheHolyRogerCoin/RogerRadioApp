@@ -38,11 +38,14 @@ if (process.env.ANALYZE === '1') {
 }
 
 const config = merge(commonConfig, {
+    entry: {
+        bundle: [path.resolve(rootDir, 'src/index_web.tsx')],
+    },
     mode: 'production',
     output: {
         path: BUILD_DIR,
         filename: '[name].[fullhash].js',
-        globalObject: 'this',
+        globalObject: 'self',
         publicPath: '/',
     },
     optimization: {

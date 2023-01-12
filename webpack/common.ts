@@ -52,61 +52,7 @@ const config: webpack.Configuration = {
         usedExports: true,
         sideEffects: false,
         chunkIds: 'deterministic',
-        moduleIds: 'deterministic',
-        splitChunks: {
-            chunks: 'all',
-            maxAsyncSize: 50000,
-            maxSize: 900000,
-            enforceSizeThreshold: 500000,
-            maxAsyncRequests: 50,
-            maxInitialRequests: 50,
-            cacheGroups: {
-                styles: {
-                    name: 'style',
-                    test: /\.(css|sass|scss|pcss)$/,
-                    chunks: 'all',
-                    minSize: 400000,
-                    minChunks: 1,
-                    reuseExistingChunk: true,
-                },
-                vendor: {
-                    // test: function (module) {
-                    //     console.log(module);
-                    // },
-                    test: /[\\/]node_modules[\\/](react|react-dom|react-intl|react-redux|react-router|react-bootstrap|history|@formatjs)[\\/]/,
-                    name: 'vendor',
-                    chunks: 'all',
-                    minSize: 400000,
-                    minChunks: 1,
-                    reuseExistingChunk: true,
-                },
-                common: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'common',
-                    chunks: 'all',
-                    minSize: 800000,
-                    maxSize: 1200000,
-                    minChunks: 1,
-                    reuseExistingChunk: true,
-                },
-                modules: {
-                    test: /[\\/]src[\\/](api|modules|routes|store)[\\/]/,
-                    name: 'bundlem',
-                    chunks: 'all',
-                    minSize: 400000,
-                    minChunks: 1,
-                    reuseExistingChunk: true,
-                },
-                ui: {
-                    test: /[\\/]src[\\/](assets|components|containers|custom|helpers|hooks|mobile|screens|translations)[\\/]/,
-                    name: 'bundleu',
-                    chunks: 'all',
-                    minSize: 400000,
-                    minChunks: 1,
-                    reuseExistingChunk: true,
-                },
-            },
-        },
+        moduleIds: 'deterministic'
     },
     module: {
         rules: [

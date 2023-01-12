@@ -9,13 +9,13 @@ const useStyles = makeStyles((theme) => ({
         zIndex: 10000,
         display: 'flex',
         margin: 10,
-        backgroundColor: 'transparent',
+        backgroundColor: '#fd7604 !important',
     },
     error: {
         background: '#d32f2f !important',
     },
     success: {
-        backgroundColor: '#43a047',
+        background: '#43a047 !important',
     },
     message: {
         display: 'flex',

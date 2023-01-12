@@ -7,7 +7,6 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { TabPanel } from '../../components/TabPanel/TabPanel';
 import { a11yProps } from '../../helpers/a11yProps';
-import { useFetchScheduleListUpdateInterval } from '../../hooks/useFetchScheduleListUpdateInterval';
 import { selectRadioScheduleList } from '../../modules/radioStatus';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +44,6 @@ const useStyles = makeStyles((theme) => ({
 const ScheduleListComp: React.FC = () => {
     const classes = useStyles();
     const [activeTab, setActiveTab] = React.useState(0);
-
-    useFetchScheduleListUpdateInterval();
 
     // const [curTime, setCurTime] = React.useState(Math.floor(Date.now() / 1000));
 
@@ -94,7 +91,6 @@ const ScheduleListComp: React.FC = () => {
                 <TabPanel key={`${index}-tbPnl`} value={activeTab} index={index}>
                     <Grid className={classes.slItems} container spacing={1} alignItems="center">
                         {sched.map((itm, itmIdx) => {
-                            window.console.log(dayName);
                             if (itm.DayName === dayName) {
                                 return renderPlaylistItem(itm, itmIdx);
                             }
@@ -109,8 +105,6 @@ const ScheduleListComp: React.FC = () => {
     const handleChange = React.useCallback((event, newVal: number) => {
         setActiveTab(newVal);
     }, []);
-
-    window.console.log(blockGroups());
 
     return (
         <div className={classes.schedule}>

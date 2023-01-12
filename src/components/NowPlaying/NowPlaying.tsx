@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { useFetchStatusUpdateInterval } from '../../hooks/useFetchStatusUpdateInterval';
 import { selectNowPlaying, selectRadioStatusTimestampData } from '../../modules/radioStatus';
 
 const useStyles = makeStyles((theme) => ({
@@ -45,8 +44,6 @@ const useStyles = makeStyles((theme) => ({
 
 const NowPlayingComponent: React.FC = () => {
     const classes = useStyles();
-
-    useFetchStatusUpdateInterval();
 
     const [curTime, setCurTime] = React.useState(Math.floor(Date.now() / 1000));
     const [timer, setTimer] = React.useState<ReturnType<typeof setInterval> | undefined>(

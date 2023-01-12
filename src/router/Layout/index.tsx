@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavBar } from '../../components/NavBar/NavBar';
 import { useHideSplash } from '../../hooks/useHideSplash';
+import { useWebsocketsConnectFetch } from '../../hooks/useWebsocketsConnectFetch';
 
 declare module '@mui/styles' {
     interface DefaultTheme extends Theme {}
@@ -214,6 +215,7 @@ const LayoutWrapComponent: React.FC<OwnProps> = ({ children }) => {
     const open = false;
 
     useHideSplash();
+    useWebsocketsConnectFetch();
 
     return (
         <div className={classes.root}>

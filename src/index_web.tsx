@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { App } from './App';
-import { PlayerInterface } from './components/Player/PlayerInterface';
+import { PlayerInterface_Browser } from './components/Player/PlayerInterface_Browser';
 import { appReducer, rootSaga } from './modules';
 import { websocketsSagas } from './modules/websockets';
 
@@ -23,7 +23,7 @@ websocketsMiddleware.run(websocketsSagas);
 const render = () =>
     ReactDOM.render(
         <Provider store={store}>
-            <PlayerInterface />
+            <PlayerInterface_Browser />
             <App />
         </Provider>,
         document.getElementById('root') as HTMLElement

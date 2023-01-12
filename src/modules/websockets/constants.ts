@@ -1,0 +1,6 @@
+export const WEBSOCKETS_CONNECT_FETCH = 'websockets/CONNECT_FETCH';
+export const WEBSOCKETS_CONNECT_DATA = 'websockets/CONNECT_DATA';
+export const WEBSOCKETS_CONNECT_ERROR = 'websockets/CONNECT_ERROR';
+export const WEBSOCKETS_DISCONNECT_FETCH = 'websockets/DISCONNECT_FETCH';
+export const WEBSOCKETS_DISCONNECT_DATA = 'websockets/DISCONNECT_DATA';
+export const WEBSOCKETS_DIRECT_WRITE = 'websockets/DIRECT_WRITE';

@@ -7,7 +7,12 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
 import commonConfig from './common';
 
+const rootDir = path.resolve(__dirname, '..');
+
 const config = merge(commonConfig, {
+    entry: {
+        bundle: [path.resolve(rootDir, 'src/index_web.tsx')],
+    },
     mode: 'development',
     devtool: 'eval-cheap-module-source-map',
     plugins: [

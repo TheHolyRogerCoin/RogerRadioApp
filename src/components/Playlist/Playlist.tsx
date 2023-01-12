@@ -2,7 +2,6 @@ import { makeStyles } from '@mui/styles';
 import Grid from '@mui/material/Grid';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { useFetchPlaylistUpdateInterval } from '../../hooks/useFetchPlaylistUpdateInterval';
 import { selectRadioPlaylist } from '../../modules/radioStatus';
 
 const useStyles = makeStyles((theme) => ({
@@ -22,8 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 const PlaylistComponent: React.FC = () => {
     const classes = useStyles();
-
-    useFetchPlaylistUpdateInterval();
 
     // const [curTime, setCurTime] = React.useState(Math.floor(Date.now() / 1000));
 
