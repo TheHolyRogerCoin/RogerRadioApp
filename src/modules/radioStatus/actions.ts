@@ -8,10 +8,14 @@ import {
     RADIO_SCHEDULE_DATA,
     RADIO_SCHEDULE_ERROR,
     RADIO_SCHEDULE_FETCH,
+    RADIO_RECENT_REQUESTS_DATA,
+    RADIO_RECENT_REQUESTS_ERROR,
+    RADIO_RECENT_REQUESTS_FETCH,
 } from './constants';
 import {
     RadioStatusInfo,
     RadioPlaylistInfo,
+    RadioRecentRequestsInfo,
     RadioScheduleListInfo,
 } from './types';
 
@@ -54,6 +58,19 @@ export interface RadioScheduleListError {
     type: typeof RADIO_SCHEDULE_ERROR;
 }
 
+export interface RadioRecentRequestsFetch {
+    type: typeof RADIO_RECENT_REQUESTS_FETCH;
+}
+
+export interface RadioRecentRequestsData {
+    type: typeof RADIO_RECENT_REQUESTS_DATA;
+    payload: RadioRecentRequestsInfo;
+}
+
+export interface RadioRecentRequestsError {
+    type: typeof RADIO_RECENT_REQUESTS_ERROR;
+}
+
 export type RadioStatusAction =
     | RadioStatusFetch
     | RadioStatusData
@@ -63,7 +80,10 @@ export type RadioStatusAction =
     | RadioPlaylistError
     | RadioScheduleListFetch
     | RadioScheduleListData
-    | RadioScheduleListError;
+    | RadioScheduleListError
+    | RadioRecentRequestsFetch
+    | RadioRecentRequestsData
+    | RadioRecentRequestsError;
 
 export const radioStatusFetch = (): RadioStatusFetch => ({
     type: RADIO_STATUS_FETCH,
@@ -108,4 +128,19 @@ export const radioScheduleListData = (
 
 export const radioScheduleListError = (): RadioScheduleListError => ({
     type: RADIO_SCHEDULE_ERROR,
+});
+
+export const radioRecentRequestsFetch = (): RadioRecentRequestsFetch => ({
+    type: RADIO_RECENT_REQUESTS_FETCH,
+});
+
+export const radioRecentRequestsData = (
+    payload: RadioRecentRequestsData['payload']
+): RadioRecentRequestsData => ({
+    type: RADIO_RECENT_REQUESTS_DATA,
+    payload,
+});
+
+export const radioRecentRequestsError = (): RadioRecentRequestsError => ({
+    type: RADIO_RECENT_REQUESTS_ERROR,
 });

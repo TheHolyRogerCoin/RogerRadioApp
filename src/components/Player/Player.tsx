@@ -12,6 +12,7 @@ import { makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RogerRadioStatic from '../../assets/images/rogerradiostatic.gif';
+import { getBase64ImageString } from '../../helpers/getBase64ImageString';
 import {
     playerSetUrl,
     playerSetVolume,
@@ -22,6 +23,7 @@ import {
     selectPlayerPlaying,
     selectPlayerVolume,
 } from '../../modules/player';
+import { selectNowPlaying } from '../../modules/radioStatus';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
         position: 'relative',
     },
     splashImg: {
+        maxWidth: '100%',
         maxHeight: '39vh',
         position: 'relative',
     },
@@ -62,6 +65,7 @@ const PlayerComponent: React.FC = () => {
     const volume: number = useSelector(selectPlayerVolume);
     const isMuted: boolean = useSelector(selectPlayerMuted);
     const isPlaying: boolean = useSelector(selectPlayerPlaying);
+    const nowPlaying = useSelector(selectNowPlaying);
 
     const togglePlay = React.useCallback(() => {
         dispatch(playerTogglePlay());
@@ -91,10 +95,18 @@ const PlayerComponent: React.FC = () => {
         dispatch(playerSetVolume(Math.min(Number(volume) + 0.01, 1.0)));
     }, [dispatch, volume]);
 
+    const getImgSrc = React.useCallback(() => {
+        if (nowPlaying.Artwork.length) {
+            return getBase64ImageString(nowPlaying.Artwork);
+        } else {
+            return RogerRadioStatic;
+        }
+    }, [nowPlaying.Artwork]);
+
     return (
         <div className={classes.radioPlayer}>
             <div className={classes.splash}>
-                <img className={classes.splashImg} src={RogerRadioStatic} alt="" />
+                <img className={classes.splashImg} src={getImgSrc()} alt="" />
             </div>
             <div className={classes.volControl}>
                 <Grid container spacing={2} alignItems="center">
@@ -130,7 +142,7 @@ const PlayerComponent: React.FC = () => {
                     )}
                 </Button>
                 <Button variant="contained" onClick={toggleMute}>
-                    {!isMuted ? <VolumeOffIcon className={classes.btnIcn} /> : <VolumeUp className={classes.btnIcn} />}
+                    {isMuted ? <VolumeOffIcon className={classes.btnIcn} /> : <VolumeUp className={classes.btnIcn} />}
                 </Button>
                 <Button variant="contained" onClick={handleReload}>
                     <CachedIcon className={classes.btnIcn} />

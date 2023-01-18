@@ -71,3 +71,27 @@ export const selectShouldFetchRadioScheduleList = (
 ): boolean => {
     return !selectRadioScheduleListLoading(state);
 };
+
+export const selectRadioRecentRequests = (
+    state: AppState
+): RadioStatusState['recentRequests'] =>
+    selectRadioStatusState(state).recentRequests;
+
+export const selectRadioRecentRequestsLoading = (
+    state: AppState
+): boolean | undefined => selectRadioStatusState(state).loadingRecentRequests;
+
+export const selectRadioRecentRequestsTimestamp = (
+    state: AppState
+): number | undefined => selectRadioStatusState(state).timestampRecentRequests;
+
+export const selectRadioRecentRequestsTimestampData = (
+    state: AppState
+): number | undefined =>
+    selectRadioStatusState(state).timestampRecentRequestsData;
+
+export const selectShouldFetchRadioRecentRequests = (
+    state: AppState
+): boolean => {
+    return !selectRadioRecentRequestsLoading(state);
+};

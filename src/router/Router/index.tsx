@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { Dashboard } from '../../screens/Dashboard/Dashboard';
 import { PlaylistPage } from '../../screens/Playlist/Playlist';
+import { RecentRequestsPage } from '../../screens/RecentRequests/RecentRequests';
 import { Schedule } from '../../screens/Schedule/Schedule';
 
 const renderLoader = () => {
@@ -25,6 +26,7 @@ const Router: React.FC = () => {
             <AppRoute path="/" component={Dashboard} loading={false} exact={true} />
             <AppRoute path="/playlist" component={PlaylistPage} loading={false} exact={true} />
             <AppRoute path="/schedule" component={Schedule} loading={false} exact={true} />
+            <AppRoute path="/recent_requests" component={RecentRequestsPage} loading={false} exact={true} />
             <Route path="**">
                 <Redirect to="/" />
             </Route>

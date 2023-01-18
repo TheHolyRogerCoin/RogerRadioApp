@@ -13,13 +13,20 @@ declare module '@mui/styles' {
 
 const drawerWidth = 240;
 
-const colourActive = '#fd7604';
-const colourHover = '#ce5e00';
+const colourActivePri = '#fd0000';
+const colourActiveSec = '#ac0000';
+const colourBarMax = '#ad0000';
+const colourBarMin = '#930000';
+const colourBarBg = '#4b0000';
+const colourHoverTop = '#ac0000';
+const colourHoverBottom = '#780000';
+const colourNavButton = '#ac0000';
 
 const mainTheme = createTheme({
     palette: {
         primary: {
-            main: colourActive,
+            main: colourActivePri,
+            dark: colourActiveSec,
         },
         background: {
             paper: 'var(--body-background-color)',
@@ -31,8 +38,15 @@ const mainTheme = createTheme({
             styleOverrides: {
                 root: {
                     padding: '6px 12px 4px',
+                    '& .MuiSvgIcon-root': {
+                        fill: `${colourNavButton} !important`,
+                    },
                     '&.Mui-selected': {
+                        justifyContent: 'start',
                         paddingTop: '0px',
+                        '& .MuiSvgIcon-root': {
+                            fill: `${colourActivePri} !important`,
+                        },
                     },
                 },
             },
@@ -50,13 +64,14 @@ const mainTheme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    background: colourActive,
+                    // background: colourActivePri,
+                    background: `linear-gradient(0deg, ${colourActiveSec} 0%, ${colourActivePri} 100%);`,
                     '&:hover': {
-                        backgroundColor: colourHover,
+                        background: `linear-gradient(0deg, ${colourHoverBottom} 0%, ${colourHoverTop} 100%);`,
                     },
                     '@media (hover: none)': {
                         '&:hover': {
-                            backgroundColor: `${colourHover} !important`,
+                            background: `linear-gradient(0deg, ${colourHoverBottom} 0%, ${colourHoverTop} 100%);`,
                         },
                     },
                 },
@@ -75,10 +90,10 @@ const mainTheme = createTheme({
                     height: '8px',
                 },
                 colorPrimary: {
-                    backgroundColor: colourHover,
+                    backgroundColor: colourBarBg,
                 },
                 barColorPrimary: {
-                    backgroundColor: colourActive,
+                    background: `linear-gradient(90deg, ${colourBarMin} 0%, ${colourBarMax} 98%, ${colourActivePri} 100%);`,
                 },
             },
         },
@@ -160,7 +175,7 @@ const mainTheme = createTheme({
         MuiSlider: {
             styleOverrides: {
                 root: {
-                    color: colourActive,
+                    color: colourActivePri,
                 },
             },
         },
@@ -170,7 +185,7 @@ const mainTheme = createTheme({
                     color: '#000',
                 },
                 root: {
-                    fill: colourActive,
+                    fill: colourActivePri,
                     fontSize: '2.2rem',
                 },
             },

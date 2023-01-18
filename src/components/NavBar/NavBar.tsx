@@ -5,6 +5,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import RadioIcon from '@mui/icons-material/Radio';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
 import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ const NavBarComponent: React.FC = () => {
             <BottomNavigation className={classes.mainNav} value={activeTab} onChange={handleNav}>
                 <BottomNavigationAction component={Link} to="/" icon={<RadioIcon />} />
                 <BottomNavigationAction component={Link} to="/playlist" icon={<QueueMusicIcon />} />
+                <BottomNavigationAction component={Link} to="/recent_requests" icon={<SubscriptionsIcon />} />
                 <BottomNavigationAction component={Link} to="/schedule" icon={<EventNoteIcon />} />
             </BottomNavigation>
         </Box>

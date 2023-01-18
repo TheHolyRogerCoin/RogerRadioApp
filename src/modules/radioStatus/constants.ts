@@ -7,3 +7,6 @@ export const RADIO_PLAYLIST_ERROR = 'radioStatus/PLAYLIST_ERROR';
 export const RADIO_SCHEDULE_FETCH = 'radioStatus/SCHEDULE_FETCH';
 export const RADIO_SCHEDULE_DATA = 'radioStatus/SCHEDULE_DATA';
 export const RADIO_SCHEDULE_ERROR = 'radioStatus/SCHEDULE_ERROR';
+export const RADIO_RECENT_REQUESTS_FETCH = 'radioStatus/RECENT_REQUESTS_FETCH';
+export const RADIO_RECENT_REQUESTS_DATA = 'radioStatus/RECENT_REQUESTS_DATA';
+export const RADIO_RECENT_REQUESTS_ERROR = 'radioStatus/RECENT_REQUESTS_ERROR';

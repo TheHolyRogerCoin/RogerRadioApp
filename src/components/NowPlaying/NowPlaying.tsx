@@ -48,8 +48,8 @@ const NowPlayingComponent: React.FC = () => {
     const [curTime, setCurTime] = React.useState(Math.floor(Date.now() / 1000));
     const [timer, setTimer] = React.useState<ReturnType<typeof setInterval> | undefined>(
         setInterval(() => {
-            setCurTime(Math.floor(Date.now() / 1000));
-        }, 1000)
+            setCurTime(Date.now() / 1000);
+        }, 500)
     );
 
     const timerRef = React.useRef(timer);
@@ -67,7 +67,7 @@ const NowPlayingComponent: React.FC = () => {
 
     const getProgress = React.useCallback(() => {
         const now = curTime;
-        const drift = now - (timestamp || now);
+        const drift = now - ((timestamp || now) + 1);
         const durn = Number(nowPlaying.Duration);
         const tLleft = Number(nowPlaying.TimeLeft) - drift;
         const prog = ((durn - tLleft) / durn) * 100;

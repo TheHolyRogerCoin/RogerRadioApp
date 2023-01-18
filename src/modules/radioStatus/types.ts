@@ -5,6 +5,7 @@ interface NextTrack {
 
 export interface NowPlayingInfo {
     event_timestamp?: number;
+    Artwork: string;
     Artist: string;
     Duration: string;
     Listeners: string;
@@ -34,6 +35,13 @@ export interface ScheduleEvent {
     Active: boolean;
 }
 
+export interface RecentRequestsItem {
+    TrkPretty: string;
+    FromUser: string;
+    Action: string;
+    Date: string;
+}
+
 export interface RadioStatusInfo {
     now_playing: NowPlayingInfo;
 }
@@ -44,4 +52,8 @@ export interface RadioPlaylistInfo {
 
 export interface RadioScheduleListInfo {
     schedulelist: ScheduleEvent[];
+}
+
+export interface RadioRecentRequestsInfo {
+    recent_requests: RecentRequestsItem[];
 }

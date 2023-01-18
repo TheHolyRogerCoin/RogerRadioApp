@@ -26,6 +26,7 @@ const sendEvent = (ws, routingKey, event) => {
 const nowPlayingMock = (ws) => () => {
   const statusData = {
     event_timestamp: 2234567890,
+    Artwork: "",
     Artist: "Test Artist",
     Duration: "1200",
     Listeners: "15",
@@ -43,8 +44,7 @@ const nowPlayingMock = (ws) => () => {
 const errorMock = (ws) => () => {
   const data = {
     event_timestamp: 2234567890,
-    code: "Test Title",
-    message: "Test Message",
+    message: "Error: Some long error message goes in here",
     type: "error",
   };
   sendEvent(ws, "alert", data);
@@ -53,7 +53,7 @@ const errorMock = (ws) => () => {
 const successMock = (ws) => () => {
   const data = {
     event_timestamp: 2234567890,
-    message: "Test Message",
+    message: "Success: Some long success message goes in this fella",
     type: "success",
   };
   sendEvent(ws, "alert", data);
@@ -62,7 +62,7 @@ const successMock = (ws) => () => {
 const snackbarMock = (ws) => () => {
   const data = {
     event_timestamp: 2234567890,
-    message: "Test Message",
+    message: "Test Message - Test Message - Test Message",
     type: "snackbar",
   };
   sendEvent(ws, "alert", data);

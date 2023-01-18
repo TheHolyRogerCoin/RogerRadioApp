@@ -7,3 +7,4 @@ export * from './useHideSplash';
 export * from './useMediaControls';
 export * from './usePrevious';
 export * from './useSetPlayerUrl';
+export * from './useViewportSize';

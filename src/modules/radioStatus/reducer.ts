@@ -10,13 +10,22 @@ import {
     RADIO_SCHEDULE_DATA,
     RADIO_SCHEDULE_ERROR,
     RADIO_SCHEDULE_FETCH,
+    RADIO_RECENT_REQUESTS_DATA,
+    RADIO_RECENT_REQUESTS_ERROR,
+    RADIO_RECENT_REQUESTS_FETCH,
 } from './constants';
-import { RadioStatusInfo, RadioPlaylistInfo, ScheduleEvent } from './types';
+import {
+    RadioStatusInfo,
+    RadioPlaylistInfo,
+    RadioRecentRequestsInfo,
+    ScheduleEvent,
+} from './types';
 
 export interface RadioStatusState extends CommonState {
     status: RadioStatusInfo;
     playlist: RadioPlaylistInfo['playlist'];
     scheduleList: ScheduleEvent[];
+    recentRequests: RadioRecentRequestsInfo['recent_requests'];
     loadingStatus: boolean;
     timestampStatus?: number;
     timestampStatusData?: number;
@@ -26,11 +35,15 @@ export interface RadioStatusState extends CommonState {
     loadingScheduleList: boolean;
     timestampScheduleList?: number;
     timestampScheduleListData?: number;
+    loadingRecentRequests: boolean;
+    timestampRecentRequests?: number;
+    timestampRecentRequestsData?: number;
 }
 
 export const initialRadioStatusState: RadioStatusState = {
     status: {
         now_playing: {
+            Artwork: '',
             Artist: '',
             Duration: '1',
             Listeners: '',
@@ -45,8 +58,10 @@ export const initialRadioStatusState: RadioStatusState = {
     },
     playlist: [],
     scheduleList: [],
+    recentRequests: [],
     loadingPlaylist: false,
     loadingScheduleList: false,
+    loadingRecentRequests: false,
     loadingStatus: false,
 };
 
@@ -108,6 +123,24 @@ export const radioStatusReducer = (
             return {
                 ...state,
                 loadingScheduleList: false,
+            };
+        case RADIO_RECENT_REQUESTS_FETCH:
+            return {
+                ...state,
+                loadingRecentRequests: true,
+                timestampRecentRequests: Math.floor(Date.now() / 1000),
+            };
+        case RADIO_RECENT_REQUESTS_DATA:
+            return {
+                ...state,
+                loadingRecentRequests: false,
+                recentRequests: action.payload.recent_requests,
+                timestampRecentRequestsData: Math.floor(Date.now() / 1000),
+            };
+        case RADIO_RECENT_REQUESTS_ERROR:
+            return {
+                ...state,
+                loadingRecentRequests: false,
             };
         default:
             return state;

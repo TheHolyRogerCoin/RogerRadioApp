@@ -14,6 +14,7 @@ import { alertPush } from '../../alert';
 import {
     radioPlaylistData,
     radioScheduleListData,
+    radioRecentRequestsData,
     radioStatusData,
 } from '../../radioStatus/actions';
 import {
@@ -90,6 +91,10 @@ const initWebsockets = (
 
                         case 'schedulelist':
                             emitter(radioScheduleListData(event));
+                            return;
+
+                        case 'recent_requests':
+                            emitter(radioRecentRequestsData(event));
                             return;
 
                         case 'alert':

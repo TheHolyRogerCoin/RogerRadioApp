@@ -4,12 +4,16 @@ import classNames from 'classnames';
 import * as React from 'react';
 
 const useStyles = makeStyles((theme) => ({
-    snackbar: {
+    alertMessage: {
         position: 'relative',
         zIndex: 10000,
         display: 'flex',
         margin: 10,
-        backgroundColor: '#fd7604 !important',
+        fontWeight: '900!important' as any,
+    },
+    snackbar: {
+        background: `linear-gradient(0deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%) !important`,
+        color: '#fff !important',
     },
     error: {
         background: '#d32f2f !important',
@@ -32,7 +36,7 @@ const AlertMessageComponent: React.FC<Props> = ({ message, type }) => {
     const classes = useStyles();
 
     const cx = React.useCallback(() => {
-        return classNames(classes[type], classes.snackbar);
+        return classNames(classes[type], classes.alertMessage);
     }, [classes, type]);
 
     return (
