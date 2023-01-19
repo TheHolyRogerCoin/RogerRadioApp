@@ -47,6 +47,8 @@ const PlayerInterfaceComponent: React.FC = () => {
         mObj.onError.subscribe((err) => {
             window.console.log(`Media error: ${JSON.stringify(err)}`);
             if (err.code > 0) {
+                BackgroundMode && BackgroundMode.unlock();
+                BackgroundMode && BackgroundMode.moveToForeground();
                 setMediaErrored(true);
             }
         });
