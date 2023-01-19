@@ -13,7 +13,7 @@
     "@typescript-eslint/parser": "^5.1.0",
     "axios": "^0.21.1",
     "cordova-plugin-file": "^6.0.2",
-    "cordova-plugin-media": "git://github.com/TheHolyRoger/cordova-plugin-media#dev",
+    "cordova-plugin-media": "https://github.com/TheHolyRoger/cordova-plugin-media#dev_v6",
     "history": "^4.7.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
