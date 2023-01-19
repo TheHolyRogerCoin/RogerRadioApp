@@ -194,6 +194,21 @@ const mainTheme = createTheme({
 });
 
 const useStyles = makeStyles((theme) => ({
+    '@global': {
+        '*::-webkit-scrollbar': {
+            width: '0.4em',
+        },
+        '*::-webkit-scrollbar-track': {
+            '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+        },
+        '*::-webkit-scrollbar-thumb': {
+            backgroundColor: `${colourActivePri}1a`,
+        },
+        html: {
+            'scrollbar-color': `${colourActivePri}1a`,
+            'scrollbar-width': 'thin',
+        },
+    },
     root: {
         backgroundColor: 'var(--main-background-color)',
         display: 'flex',
