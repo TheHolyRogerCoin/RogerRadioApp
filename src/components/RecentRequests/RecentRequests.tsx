@@ -1,5 +1,14 @@
 import { makeStyles } from '@mui/styles';
+import AccessibleIcon from '@mui/icons-material/Accessible';
+import AudiotrackIcon from '@mui/icons-material/Audiotrack';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 import Grid from '@mui/material/Grid';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import TimeAgo from 'javascript-time-ago';
 import en from 'javascript-time-ago/locale/en.json';
 import * as React from 'react';
@@ -24,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     plItems: {
         fontSize: '0.75em',
     },
+    headImg: {
+        fontSize: '1.5rem !important',
+    },
 }));
 
 const checkSmallSize = (width) => {
@@ -41,21 +53,19 @@ const RecentRequestsComponent: React.FC = () => {
     const renderRecentRequestsItem = React.useCallback(
         (plItem: RecentRequestsItem, index: number) => {
             return (
-                <React.Fragment key={`${index}`}>
-                    <Grid key={`${index}-pos`} item xs={4}>
+                <TableRow key={`${index}`}>
+                    <TableCell component="th" scope="row">
                         {truncateString(plItem.FromUser, checkSmallSize(viewport_width) ? 15 : -1)}
-                    </Grid>
-                    <Grid key={`${index}-tit`} item xs={7} sm={6}>
-                        {truncateString(plItem.TrkPretty, checkSmallSize(viewport_width) ? 35 : -1)}
-                    </Grid>
-                    <Grid key={`${index}-dat`} item xs={1} sm={2}>
+                    </TableCell>
+                    <TableCell>{truncateString(plItem.TrkPretty, checkSmallSize(viewport_width) ? 60 : -1)}</TableCell>
+                    <TableCell align="right">
                         <ReactTimeAgo
                             date={Date.parse(plItem.Date)}
                             locale="en-US"
                             timeStyle={checkSmallSize(viewport_width) ? 'mini-now' : 'round-minute'}
                         />
-                    </Grid>
-                </React.Fragment>
+                    </TableCell>
+                </TableRow>
             );
         },
         [viewport_width]
@@ -68,9 +78,24 @@ const RecentRequestsComponent: React.FC = () => {
                     <span className={classes.title}>Recent requests...</span>
                 </Grid>
                 <Grid item xs={12}>
-                    <Grid className={classes.plItems} container spacing={1} alignItems="center">
-                        {recentRequests.map(renderRecentRequestsItem)}
-                    </Grid>
+                    <TableContainer className={classes.plItems}>
+                        <Table padding="none" size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="center">
+                                        <AccessibleIcon className={classes.headImg} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <AudiotrackIcon className={classes.headImg} />
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        <ScheduleIcon className={classes.headImg} />
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>{recentRequests.map(renderRecentRequestsItem)}</TableBody>
+                        </Table>
+                    </TableContainer>
                 </Grid>
             </Grid>
         </div>

@@ -54,7 +54,7 @@ const mainTheme = createTheme({
         MuiTableCell: {
             styleOverrides: {
                 root: {
-                    padding: '6px 16px',
+                    padding: '4px 8px',
                 },
                 stickyHeader: {
                     backgroundColor: 'var(--body-background-color)',
