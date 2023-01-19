@@ -42,13 +42,13 @@ const RecentRequestsComponent: React.FC = () => {
         (plItem: RecentRequestsItem, index: number) => {
             return (
                 <React.Fragment key={`${index}`}>
-                    <Grid key={`${index}-pos`} item xs={3}>
+                    <Grid key={`${index}-pos`} item xs={4}>
                         {truncateString(plItem.FromUser, checkSmallSize(viewport_width) ? 15 : -1)}
                     </Grid>
-                    <Grid key={`${index}-tit`} item xs={checkSmallSize(viewport_width) ? 8 : 7}>
-                        {truncateString(plItem.TrkPretty, checkSmallSize(viewport_width) ? 42 : -1)}
+                    <Grid key={`${index}-tit`} item xs={7} sm={6}>
+                        {truncateString(plItem.TrkPretty, checkSmallSize(viewport_width) ? 35 : -1)}
                     </Grid>
-                    <Grid key={`${index}-dat`} item xs={checkSmallSize(viewport_width) ? 1 : 2}>
+                    <Grid key={`${index}-dat`} item xs={1} sm={2}>
                         <ReactTimeAgo
                             date={Date.parse(plItem.Date)}
                             locale="en-US"
