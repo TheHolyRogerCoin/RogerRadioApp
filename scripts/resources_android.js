@@ -67,6 +67,10 @@ function copyImages(sourcePath, targetPath, images) {
   for (const icon of images) {
     let source = sourcePath + icon.source;
     let target = targetPath + icon.target;
+    let par_dir = target.substring(0, target.lastIndexOf("/") + 1);
+    if (!fs.existsSync(par_dir)){
+      fs.mkdirSync(par_dir, { recursive: true });
+    }
     fs.copyFile(source, target, err => {
       if (err) throw err;
       console.log(`${source} >> ${target}`);
