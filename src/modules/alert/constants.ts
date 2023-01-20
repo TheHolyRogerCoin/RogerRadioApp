@@ -2,3 +2,4 @@ export const ALERT_DELETE = 'ALERT_DELETE';
 export const ALERT_DATA = 'ALERT_DATA';
 export const ALERT_PUSH = 'ALERT_PUSH';
 export const ALERT_DELETE_BY_INDEX = 'ALERT_DELETE_BY_INDEX';
+export const ALERTS_DISABLE = 'ALERTS_DISABLE';

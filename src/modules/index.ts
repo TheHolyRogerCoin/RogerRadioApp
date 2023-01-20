@@ -12,9 +12,10 @@ import { websocketsReducer, WebsocketsState } from './websockets';
 export * from './alert';
 export * from './player';
 export * from './radioStatus';
+export * from './websockets';
 
 export interface AppState {
-    ready: boolean;
+    ready?: boolean;
     radioStatus: RadioStatusState;
     alert: AlertState;
     player: PlayerState;

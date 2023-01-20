@@ -34,6 +34,9 @@ if (process.env.ANALYZE === '1') {
 }
 
 const config = merge(commonConfig, {
+    entry: {
+        bundle: [path.resolve(rootDir, 'src/index_mobile.tsx')],
+    },
     mode: 'production',
     output: {
         path: BUILD_DIR,

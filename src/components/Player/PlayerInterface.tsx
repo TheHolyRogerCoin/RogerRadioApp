@@ -15,6 +15,7 @@ const PlayerInterfaceComponent: React.FC = () => {
     const [mediaIsPlaying, setMediaIsPlaying] = React.useState(false);
     const [mediaEnded, setMediaEnded] = React.useState(false);
     const [mediaErrored, setMediaErrored] = React.useState(false);
+    const [shouldEnterBackground, setShouldEnterBackground] = React.useState(false);
 
     const { Artist, Title } = useSelector(selectNowPlaying);
 
@@ -24,6 +25,7 @@ const PlayerInterfaceComponent: React.FC = () => {
     const url: string | undefined = useSelector(selectPlayerUrl);
 
     const volRef = React.useRef(volume);
+    const shouldEnterBackgroundRef = React.useRef(shouldEnterBackground);
 
     useSetPlayerUrl();
     useMediaControls({ Title: Title, Artist: Artist, isPlaying: playing });
@@ -47,8 +49,14 @@ const PlayerInterfaceComponent: React.FC = () => {
         mObj.onError.subscribe((err) => {
             window.console.log(`Media error: ${JSON.stringify(err)}`);
             if (err.code > 0) {
-                BackgroundMode && BackgroundMode.unlock();
-                BackgroundMode && BackgroundMode.moveToForeground();
+                if (BackgroundMode) {
+                    if (BackgroundMode.isActive()) {
+                        setShouldEnterBackground(true);
+                    }
+                    BackgroundMode.unlock();
+                    BackgroundMode.moveToForeground();
+                    BackgroundMode.disable();
+                }
                 setMediaErrored(true);
             }
         });
@@ -81,11 +89,18 @@ const PlayerInterfaceComponent: React.FC = () => {
             `play effect, media: ${media}, playing: ${playing}, media playing: ${mediaIsPlaying}, media reloading: ${mediaReloading}`
         );
         const vRef = volRef.current;
+        const enterBackground = shouldEnterBackgroundRef.current;
         if (!mediaReloading && playing && media && !mediaIsPlaying) {
             window.console.log('playing');
             media.playInBackground({ playAudioWhenScreenIsLocked: true });
             media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
-            BackgroundMode && BackgroundMode.enable();
+            if (BackgroundMode) {
+                BackgroundMode.enable();
+                if (enterBackground) {
+                    setShouldEnterBackground(false);
+                    BackgroundMode.moveToBackground();
+                }
+            }
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
             window.console.log('stopping');
             media.stop();

@@ -3415,9 +3415,9 @@ cordova-androidx-build@^1.0.4:
   resolved "https://registry.yarnpkg.com/cordova-androidx-build/-/cordova-androidx-build-1.0.4.tgz#caaf2bf59dcc82f4d12b4c384e1deafce6ba3ca4"
   integrity sha512-ZC+NHOA4WPI8qV+YyvBba/XokF169tpc9X08fbov6zNXwczeA0w+9lqq+E5Nyp+hX4OX/r8p3q1MSPPYLDa8tA==
 
-"cordova-plugin-background-mode@https://github.com/TheHolyRoger/cordova-plugin-background-mode#dev":
+"cordova-plugin-background-mode@https://github.com/TheHolyRoger/cordova-plugin-background-mode#4040ae358f3a66408d02c74b97d4bc66eac0f9c9":
   version "0.8.0"
-  resolved "https://github.com/TheHolyRoger/cordova-plugin-background-mode#e11ee4f4324cb1f67db093d2c7a815ea23bc48bb"
+  resolved "https://github.com/TheHolyRoger/cordova-plugin-background-mode#4040ae358f3a66408d02c74b97d4bc66eac0f9c9"
 
 "cordova-plugin-badge@https://github.com/TheHolyRoger/cordova-plugin-badge#master":
   version "0.8.8"

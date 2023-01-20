@@ -10,7 +10,8 @@ import {
     take,
 } from 'redux-saga/effects';
 import { radioApiKey, websocketsUrl } from '../../../api';
-import { alertPush } from '../../alert';
+import { store } from '../../../store';
+import { alertPush, selectAlertsDisabled } from '../../alert';
 import {
     radioPlaylistData,
     radioScheduleListData,
@@ -98,7 +99,12 @@ const initWebsockets = (
                             return;
 
                         case 'alert':
-                            emitter(alertPush(event.alert));
+                            const alertsDisabled = selectAlertsDisabled(
+                                store.getState()
+                            );
+                            if (!alertsDisabled) {
+                                emitter(alertPush(event.alert));
+                            }
                             return;
 
                         default:

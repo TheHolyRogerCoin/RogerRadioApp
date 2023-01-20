@@ -12,9 +12,6 @@ const rootDir = path.resolve(__dirname, '..');
 const BUILD_DIR = path.resolve(rootDir, 'public');
 
 const config: webpack.Configuration = {
-    entry: {
-        bundle: [path.resolve(rootDir, 'src/index.tsx')],
-    },
     output: {
         path: BUILD_DIR,
         filename: '[name].js',

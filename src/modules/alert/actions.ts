@@ -2,6 +2,7 @@ import {
     ALERT_DATA,
     ALERT_DELETE,
     ALERT_DELETE_BY_INDEX,
+    ALERTS_DISABLE,
     ALERT_PUSH,
 } from './constants';
 
@@ -31,11 +32,17 @@ export interface AlertDeleteByIndex {
     index: number;
 }
 
+export interface AlertsDisable {
+    type: typeof ALERTS_DISABLE;
+    disabled: boolean;
+}
+
 export type AlertAction =
     | AlertPush
     | AlertData
     | AlertDelete
-    | AlertDeleteByIndex;
+    | AlertDeleteByIndex
+    | AlertsDisable;
 
 export const alertPush = (payload: AlertPush['payload']): AlertPush => ({
     type: ALERT_PUSH,
@@ -54,4 +61,9 @@ export const alertDelete = (): AlertDelete => ({
 export const alertDeleteByIndex = (index: number): AlertDeleteByIndex => ({
     type: ALERT_DELETE_BY_INDEX,
     index,
+});
+
+export const alertsDisable = (disabled: boolean): AlertsDisable => ({
+    type: ALERTS_DISABLE,
+    disabled,
 });

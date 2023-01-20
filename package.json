@@ -85,7 +85,7 @@
     "classnames": "^2.3.1",
     "copy-webpack-plugin": "^9.0.1",
     "cordova-androidx-build": "^1.0.4",
-    "cordova-plugin-background-mode": "https://github.com/TheHolyRoger/cordova-plugin-background-mode#dev",
+    "cordova-plugin-background-mode": "https://github.com/TheHolyRoger/cordova-plugin-background-mode#4040ae358f3a66408d02c74b97d4bc66eac0f9c9",
     "cordova-plugin-badge": "https://github.com/TheHolyRoger/cordova-plugin-badge#master",
     "cordova-plugin-device": "^2.0.3",
     "cordova-plugin-music-controls2": "^3.0.7",
