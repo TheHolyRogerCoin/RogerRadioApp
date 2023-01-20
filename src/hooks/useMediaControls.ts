@@ -1,3 +1,4 @@
+import { BackgroundMode } from '@ionic-native/background-mode';
 import { MusicControls } from '@ionic-native/music-controls';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
@@ -24,6 +25,8 @@ export const useMediaControls = (params: Params) => {
                 case 'music-controls-media-button-pause':
                 case 'music-controls-media-button-stop':
                 case 'music-controls-stop-listening':
+                    BackgroundMode && BackgroundMode.unlock();
+                    BackgroundMode && BackgroundMode.moveToForeground();
                     dispatch(playerStop());
                     MusicControls.destroy();
                     break;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import ReactAudioPlayer from 'react-audio-player';
 import { useSelector } from 'react-redux';
-import { useDeviceReady } from '../../hooks/useDeviceReady';
 import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
 import { selectPlayerMuted, selectPlayerUrl, selectPlayerPlaying, selectPlayerVolume } from '../../modules/player';
 
@@ -23,7 +22,6 @@ const PlayerInterfaceComponent: React.FC = () => {
     const volRef = React.useRef(volume);
 
     useSetPlayerUrl();
-    useDeviceReady();
 
     React.useEffect(() => {
         if (!mediaShouldRender && url && url.length) {

@@ -7,7 +7,8 @@ export const useDeviceReady = () => {
     const onDvcRdy = React.useCallback((e) => {
         document.removeEventListener('deviceready', onDvcRdy, false);
         window.console.log(`Device ready. - ${e} - ${e?.currentTarget}`);
-        BackgroundMode.setDefaults({ silent: true });
+        BackgroundMode && BackgroundMode.setDefaults({ silent: true });
+        BackgroundMode && BackgroundMode.disableBatteryOptimizations();
     }, []);
 
     React.useEffect(() => {

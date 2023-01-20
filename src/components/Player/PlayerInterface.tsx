@@ -86,6 +86,7 @@ const PlayerInterfaceComponent: React.FC = () => {
             media.playInBackground({ playAudioWhenScreenIsLocked: true });
             media.setVolume(Math.max(Math.min(vRef, 1.0), 0));
             BackgroundMode && BackgroundMode.enable();
+            BackgroundMode && BackgroundMode.disableWebViewOptimizations();
         } else if (!mediaReloading && !playing && media && mediaIsPlaying) {
             window.console.log('stopping');
             media.stop();
