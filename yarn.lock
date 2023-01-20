@@ -780,10 +780,8 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@ionic-native/background-mode@^5.36.0":
+"@ionic-native/background-mode@./lib-ionic/background-mode":
   version "5.36.0"
-  resolved "https://registry.yarnpkg.com/@ionic-native/background-mode/-/background-mode-5.36.0.tgz#9d67c13c4b5bffe408fc78d45782e2ef888cf24c"
-  integrity sha512-ODKQW5F0EgKkiw6LDlbZugcCjfqwVN2198S7JLzAaN7WW6HT74gRiSox1x4a92jrFQCaGWfehXAb688I8RUCng==
   dependencies:
     "@types/cordova" latest
 

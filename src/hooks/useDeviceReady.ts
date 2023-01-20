@@ -9,6 +9,15 @@ export const useDeviceReady = () => {
         window.console.log(`Device ready. - ${e} - ${e?.currentTarget}`);
         BackgroundMode && BackgroundMode.setDefaults({ silent: true });
         BackgroundMode && BackgroundMode.disableBatteryOptimizations();
+        BackgroundMode && BackgroundMode.requestForegroundPermission();
+        BackgroundMode &&
+            BackgroundMode.on('activate').subscribe((action) => {
+                try {
+                    BackgroundMode.disableWebViewOptimizations();
+                } catch (e: any) {
+                    window.console.log(`Unable to diable webview optimisations - ${e}`);
+                }
+            });
     }, []);
 
     React.useEffect(() => {
