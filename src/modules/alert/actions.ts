@@ -9,6 +9,7 @@ export interface Alert {
     type: string;
     code?: number;
     message: string[];
+    display_ms?: string;
 }
 
 export interface AlertPush {
