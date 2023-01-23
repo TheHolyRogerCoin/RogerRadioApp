@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -18,15 +20,21 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.util.Base64;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.media.MediaBrowserServiceCompat;
 
+import dev.gustavoavila.websocketclient.WebSocketClient;
+
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.O;
@@ -53,8 +61,12 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     private Handler handler;
     private Resources resources;
     private MediaPlayer mediaPlayer;
+    private String lastWsDataNowplayingArtist;
+    private String lastWsDataNowplayingTitle;
     private List<MediaBrowserCompat.MediaItem> loadedMediaItems = new ArrayList<>();
     private static final String MY_MEDIA_ROOT_ID = "cordovaAndroidAutoRoot";
+
+    private WebSocketClient webSocketClient;
 
     public void setMediaItems(JSONArray mediaItems) {
         loadedMediaItems = new ArrayList<>();
@@ -217,6 +229,12 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
 
     private void playMedia() {
         setMediaPlaybackState(BUFFERING);
+        mSession.setMetadata(new MediaMetadataCompat.Builder()
+                .putText(MediaMetadataCompat.METADATA_KEY_TITLE, "Roger Radio")
+                .putText(MediaMetadataCompat.METADATA_KEY_ARTIST, "Roger Radio")
+                .putText(MediaMetadataCompat.METADATA_KEY_GENRE, "Radio")
+                .build()
+        );
         if( mediaPlayer != null )
             try {
                 mediaPlayer.reset();
@@ -270,7 +288,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
                 return false;
             }
         });
-
+        createWebSocketClient();
     }
 
     private final Runnable playRunnable = new Runnable() {
@@ -293,6 +311,8 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     private void pauseMedia() {
         if( mediaPlayer != null ) {
             mediaPlayer.pause();
+            webSocketClient.close(2, 1000, null);
+            webSocketClient = null;
         }
     }
 
@@ -316,13 +336,9 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         @Override
         public void onPlayFromMediaId(String mediaId, Bundle extras) {
             super.onPlayFromMediaId(mediaId, extras);
-            mSession.setMetadata(new MediaMetadataCompat.Builder()
-                    .putText(MediaMetadataCompat.METADATA_KEY_TITLE, "Roger Radio")
-                    .putText(MediaMetadataCompat.METADATA_KEY_ARTIST, "Roger Radio")
-                    .putText(MediaMetadataCompat.METADATA_KEY_GENRE, "Radio")
-                    .build()
-            );
-            playMedia();
+            if(mAudioFocusHelper.requestAudioFocus()) {
+                playMedia();
+            }
         }
 
         @Override
@@ -438,5 +454,96 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
                     Log.d("CordovaAndroidAutoPlugin", "AUDIOFOCUS_???");
             }
         }
+    }
+
+    private void processWsMsg(JSONObject jsonMsg) {
+        JSONObject payload = jsonMsg.optJSONObject("payload");
+        if (payload == null) return;
+
+        Iterator<String> iter = payload.keys();
+        while(iter.hasNext()){
+            String routingKey = iter.next();
+            switch (routingKey) {
+                case "now_playing":
+                    JSONObject data = payload.optJSONObject("now_playing");
+                    if (data == null) continue;
+
+                    String mArtist = data.optString("Artist");
+                    String mTitle = data.optString("Title");
+                    if (mArtist != lastWsDataNowplayingArtist && mTitle != lastWsDataNowplayingTitle) {
+                        lastWsDataNowplayingArtist = mArtist;
+                        lastWsDataNowplayingTitle = mTitle;
+                        MediaMetadataCompat.Builder mBuilder = new MediaMetadataCompat.Builder()
+                            .putText(MediaMetadataCompat.METADATA_KEY_TITLE, mTitle)
+                            .putText(MediaMetadataCompat.METADATA_KEY_ARTIST, mArtist)
+                            .putText(MediaMetadataCompat.METADATA_KEY_GENRE, "Radio");
+                        String imgString = data.optString("Artwork");
+                        if (imgString != null && imgString.length() > 0) {
+                            try {
+                                byte[] imageBytes = Base64.decode(imgString, Base64.DEFAULT);
+                                Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                                mBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, decodedImage);
+                            } catch (Exception e) {}
+                        }
+
+                        mSession.setMetadata(mBuilder.build());
+                    }
+                default:
+            }
+        }
+
+    }
+
+    private void createWebSocketClient() {
+        if (webSocketClient != null) return;
+
+        URI uri;
+        try {
+            uri = new URI("wss://rogerradio.theholyroger.com/wss/ws_stats_public/all_public_stats?pub-api-key=hello-from-roger-radio-app");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        webSocketClient = new WebSocketClient(uri) {
+            @Override
+            public void onTextReceived(String message) {
+                try {
+                    JSONObject jsonMsg = new JSONObject(message);
+                    processWsMsg(jsonMsg);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                    System.out.print("onTextReceived err processing: ");
+                    System.out.println(message);
+                }
+            }
+
+            @Override
+            public void onOpen() {}
+
+            @Override
+            public void onBinaryReceived(byte[] data) {}
+
+            @Override
+            public void onPingReceived(byte[] data) {}
+
+            @Override
+            public void onPongReceived(byte[] data) {}
+
+            @Override
+            public void onException(Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            @Override
+            public void onCloseReceived(int reason, String description) {}
+        };
+
+        webSocketClient.setConnectTimeout(10000);
+        webSocketClient.setReadTimeout(60000);
+        webSocketClient.addHeader("Origin", "https://rogerradio.app.local");
+        webSocketClient.enableAutomaticReconnection(5000);
+        webSocketClient.connect();
     }
 }
