@@ -780,7 +780,7 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@ionic-native/background-mode@./lib-ionic/background-mode":
+"@ionic-native/background-mode@./lib-ionic/background-mode_230123":
   version "5.36.0"
   dependencies:
     "@types/cordova" latest
@@ -792,15 +792,18 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/media@./lib-ionic/media":
+"@ionic-native/media@./lib-ionic/media_230123":
   version "5.36.0"
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/music-controls@./lib-ionic/music-controls":
+"@ionic-native/music-controls@./lib-ionic/music-controls_230123":
   version "5.36.0"
   dependencies:
     "@types/cordova" latest
+
+"@ionic-native/rogerradio-auto@./lib-ionic/rogerradio-auto_230123":
+  version "0.0.0"
 
 "@ionic/cli-framework-output@^2.2.5":
   version "2.2.5"
@@ -3441,6 +3444,9 @@ cordova-plugin-music-controls2@^3.0.7:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/cordova-plugin-music-controls2/-/cordova-plugin-music-controls2-3.0.7.tgz#71378cd1e7a90f0af87b3c34535d5f958808fb67"
   integrity sha512-XnbMwcVv1lZSdV78DQqxTJ22/290G+Ks0kn36NJrLT6GF6+5L11L3pf2Hey+e8LoqObPcXy4uTANc+ToADanlg==
+
+cordova-plugin-rogerradio-auto@./lib-cordova/cordova-plugin-rogerradio-auto_230123:
+  version "0.0.1"
 
 core-util-is@1.0.2:
   version "1.0.2"

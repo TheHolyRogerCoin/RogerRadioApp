@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-rogerradio-auto" version="0.0.1">
+    <name>AndroidAutoPlugin</name>
+
+    <description>An Android Cordova plugin for Android Auto.</description>
+    <license>MIT</license>
+
+    <keywords>cordova,android auto,audio</keywords>
+    <repo>https://github.com/TheHolyRogerCoin/RogerRadioApp.git</repo>
+    <issue>https://github.com/TheHolyRogerCoin/RogerRadioApp/issues</issue>
+  
+    <engines>
+        <engine name="cordova" version=">=3.0.0"/>
+    </engines>
+  
+    <js-module src="www/cordova-plugin-rogerradio-auto.js" name="cordova-plugin-rogerradio-auto">
+        <clobbers target="window.plugins.rogerradioAuto" />
+    </js-module>
+    <platform name="android">
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data
+                android:name="com.google.android.gms.car.application"
+                android:resource="@xml/automotive_app_desc" />
+
+            <service
+            android:name="com.theholyroger.CordovaAndroidAutoPlugin.CordovaAndroidAutoPlugin"
+            android:exported="true">
+                <intent-filter>
+                    <action android:name="android.media.browse.MediaBrowserService" />
+                </intent-filter>
+            </service>
+        </config-file>
+
+
+        <source-file src="src/android/CordovaAndroidAutoPlugin.java" target-dir="src/com/theholyroger/CordovaAndroidAutoPlugin/" />
+        <source-file src="src/android/AndroidAutoPlugin.java" target-dir="src/com/theholyroger/CordovaAndroidAutoPlugin/" />
+        <resource-file src="src/android/automotive_app_desc.xml" target="res/xml/automotive_app_desc.xml" />
+
+        <framework src="src/android/AndroidAuto.gradle" custom="true" type="gradleReference"/>
+    </platform>
+
+</plugin>

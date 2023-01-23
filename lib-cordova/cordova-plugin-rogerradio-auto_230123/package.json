@@ -1,0 +1,28 @@
+{
+    "name": "cordova-plugin-rogerradio-auto",
+    "version": "0.0.1",
+    "description": "Cordova plugin for Android Auto.",
+    "cordova": {
+      "id": "cordova-plugin-rogerradio-auto",
+      "platforms": [
+        "android"
+      ]
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/TheHolyRogerCoin/RogerRadioApp.git"
+    },
+    "keywords": [
+      "Android Auto",
+      "Automotive",
+      "ecosystem:cordova",
+      "cordova-android"
+    ],
+    "engines": [
+      {
+        "name": "cordova",
+        "version": ">=3.0.0"
+      }
+    ],
+    "author": "TheHoliestRoger"
+  }
