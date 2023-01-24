@@ -802,6 +802,9 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/roger-radio-player@./lib-ionic/roger-radio-player_230124":
+  version "0.0.0"
+
 "@ionic-native/rogerradio-auto@./lib-ionic/rogerradio-auto_230123":
   version "0.0.0"
 
@@ -3418,9 +3421,9 @@ cordova-androidx-build@^1.0.4:
   resolved "https://registry.yarnpkg.com/cordova-androidx-build/-/cordova-androidx-build-1.0.4.tgz#caaf2bf59dcc82f4d12b4c384e1deafce6ba3ca4"
   integrity sha512-ZC+NHOA4WPI8qV+YyvBba/XokF169tpc9X08fbov6zNXwczeA0w+9lqq+E5Nyp+hX4OX/r8p3q1MSPPYLDa8tA==
 
-"cordova-plugin-background-mode@https://github.com/TheHolyRoger/cordova-plugin-background-mode#4040ae358f3a66408d02c74b97d4bc66eac0f9c9":
+"cordova-plugin-background-mode@https://github.com/TheHolyRoger/cordova-plugin-background-mode#be33f6f0b98cfae17d0dd669a272dab17664be5c":
   version "0.8.0"
-  resolved "https://github.com/TheHolyRoger/cordova-plugin-background-mode#4040ae358f3a66408d02c74b97d4bc66eac0f9c9"
+  resolved "https://github.com/TheHolyRoger/cordova-plugin-background-mode#be33f6f0b98cfae17d0dd669a272dab17664be5c"
 
 "cordova-plugin-badge@https://github.com/TheHolyRoger/cordova-plugin-badge#master":
   version "0.8.8"
@@ -3445,7 +3448,10 @@ cordova-plugin-music-controls2@^3.0.7:
   resolved "https://registry.yarnpkg.com/cordova-plugin-music-controls2/-/cordova-plugin-music-controls2-3.0.7.tgz#71378cd1e7a90f0af87b3c34535d5f958808fb67"
   integrity sha512-XnbMwcVv1lZSdV78DQqxTJ22/290G+Ks0kn36NJrLT6GF6+5L11L3pf2Hey+e8LoqObPcXy4uTANc+ToADanlg==
 
-cordova-plugin-rogerradio-auto@./lib-cordova/cordova-plugin-rogerradio-auto_230123:
+cordova-plugin-roger-radio-player@./lib-cordova/cordova-plugin-roger-radio-player_230124:
+  version "0.0.1"
+
+cordova-plugin-rogerradio-auto@./lib-cordova/cordova-plugin-rogerradio-auto_230125:
   version "0.0.1"
 
 core-util-is@1.0.2:

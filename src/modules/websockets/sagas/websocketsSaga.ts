@@ -103,7 +103,12 @@ const initWebsockets = (
                                 store.getState()
                             );
                             if (!alertsDisabled) {
-                                emitter(alertPush(event.alert));
+                                emitter(
+                                    alertPush({
+                                        ...event.alert,
+                                        receive_timestamp: Date.now(),
+                                    })
+                                );
                             }
                             return;
 

@@ -1,0 +1,28 @@
+{
+    "name": "cordova-plugin-roger-radio-player",
+    "version": "0.0.1",
+    "description": "Cordova plugin for Roger Radio player.",
+    "cordova": {
+      "id": "cordova-plugin-roger-radio-player",
+      "platforms": [
+        "android"
+      ]
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/TheHolyRogerCoin/RogerRadioApp.git"
+    },
+    "keywords": [
+      "Android Auto",
+      "Automotive",
+      "ecosystem:cordova",
+      "cordova-android"
+    ],
+    "engines": [
+      {
+        "name": "cordova",
+        "version": ">=3.0.0"
+      }
+    ],
+    "author": "TheHoliestRoger"
+  }

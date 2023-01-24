@@ -11,6 +11,7 @@ export interface Alert {
     code?: number;
     message: string[];
     display_ms?: string;
+    receive_timestamp?: number;
 }
 
 export interface AlertPush {
@@ -25,6 +26,7 @@ export interface AlertData {
 
 export interface AlertDelete {
     type: typeof ALERT_DELETE;
+    payload: Alert;
 }
 
 export interface AlertDeleteByIndex {
@@ -54,8 +56,9 @@ export const alertData = (payload: AlertData['payload']): AlertData => ({
     payload,
 });
 
-export const alertDelete = (): AlertDelete => ({
+export const alertDelete = (payload: AlertDelete['payload']): AlertDelete => ({
     type: ALERT_DELETE,
+    payload,
 });
 
 export const alertDeleteByIndex = (index: number): AlertDeleteByIndex => ({

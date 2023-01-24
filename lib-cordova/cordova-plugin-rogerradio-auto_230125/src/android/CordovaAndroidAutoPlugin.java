@@ -124,8 +124,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     public void onLoadChildren(@NonNull final String parentMediaId,
                                @NonNull final Result<List<MediaBrowserCompat.MediaItem>> result) {
 
-        Log.d("MediaPlayer","Load Children");
-        Log.d("MediaPlayer", parentMediaId);
+        Log.d("MediaPlayer","Load Children for " + parentMediaId);
 
         List<MediaBrowserCompat.MediaItem> resultMediaItems = new ArrayList<>();
 

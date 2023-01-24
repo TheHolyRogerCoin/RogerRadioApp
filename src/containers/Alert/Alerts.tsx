@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AlertMessage } from '../../components/AlertMessage/AlertMessage';
 import { convertError } from '../../helpers/convertError';
-import { alertDeleteByIndex, AlertState, selectAlertState } from '../../modules';
+import { alertDeleteByIndex, Alert, selectAlertsList } from '../../modules';
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -18,7 +18,7 @@ const AlertComponent: React.FC = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const alerts: AlertState = useSelector(selectAlertState);
+    const alerts: Alert[] = useSelector(selectAlertsList);
 
     const deleteAlertByIndex = React.useCallback(
         (key: number) => {
@@ -41,7 +41,7 @@ const AlertComponent: React.FC = () => {
 
     return (
         <div className={classes.wrapper}>
-            {alerts.alerts.map((w, k) => (
+            {alerts.map((w, k) => (
                 <div key={k} onClick={() => deleteAlertByIndex(k)}>
                     {w.message && renderMessage(w)}
                 </div>

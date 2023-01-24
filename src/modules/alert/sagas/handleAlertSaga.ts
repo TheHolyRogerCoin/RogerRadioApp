@@ -11,5 +11,5 @@ export function* handleAlertSaga(action: AlertPush) {
                 : msAlertDisplayTime()
         )
     );
-    yield put(alertDelete());
+    yield put(alertDelete(action.payload));
 }
