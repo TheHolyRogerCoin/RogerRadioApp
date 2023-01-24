@@ -28,6 +28,7 @@ export const useMediaControls = (params: Params) => {
                     BackgroundMode && BackgroundMode.unlock();
                     BackgroundMode && BackgroundMode.moveToForeground();
                     dispatch(playerStop());
+                    controlsActive.current = false;
                     MusicControls.destroy();
                     break;
                 default:
