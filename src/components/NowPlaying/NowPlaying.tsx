@@ -45,29 +45,38 @@ const useStyles = makeStyles((theme) => ({
 const NowPlayingComponent: React.FC = () => {
     const classes = useStyles();
 
-    const [curTime, setCurTime] = React.useState(Math.floor(Date.now() / 1000));
-    const [timer, setTimer] = React.useState<ReturnType<typeof setInterval> | undefined>(
-        setInterval(() => {
-            setCurTime(Date.now() / 1000);
-        }, 500)
-    );
+    const isSet = React.useRef(false);
 
-    const timerRef = React.useRef(timer);
+    const [curTime, setCurTime] = React.useState(0);
+
+    const timerRef = React.useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
     const nowPlaying = useSelector(selectNowPlaying);
     const timestamp = useSelector(selectRadioStatusTimestampData);
 
     React.useEffect(() => {
+        if (isSet.current) {
+            return;
+        }
+        isSet.current = true;
+        setCurTime(Date.now() / 1000);
+        timerRef.current = setInterval(() => {
+            setCurTime(Date.now() / 1000);
+        }, 500);
+    }, []);
+
+    React.useEffect(() => {
         const tRef = timerRef.current;
         return () => {
             tRef && clearInterval(tRef);
-            setTimer(undefined);
+            setCurTime(0);
+            isSet.current = false;
         };
     }, []);
 
     const getProgress = React.useCallback(() => {
         const now = curTime;
-        const drift = now - ((timestamp || now) + 1);
+        const drift = now > 0 ? now - ((timestamp || now) + 1) : 1;
         const durn = Number(nowPlaying.Duration);
         const tLleft = Number(nowPlaying.TimeLeft) - drift;
         const prog = ((durn - tLleft) / durn) * 100;
