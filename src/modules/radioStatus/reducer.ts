@@ -80,7 +80,20 @@ export const radioStatusReducer = (
             return {
                 ...state,
                 loadingStatus: false,
-                status: action.payload,
+                status: {
+                    now_playing: {
+                        ...action.payload.now_playing,
+                        Artwork:
+                            action.payload.now_playing.Artwork.length == 0 &&
+                            state.status.now_playing.Artwork.length > 0 &&
+                            action.payload.now_playing.Artist ==
+                                state.status.now_playing.Artist &&
+                            action.payload.now_playing.Title ==
+                                state.status.now_playing.Title
+                                ? state.status.now_playing.Artwork
+                                : action.payload.now_playing.Artwork,
+                    },
+                },
                 timestampStatusData: action.payload.now_playing.event_timestamp,
             };
         case RADIO_STATUS_ERROR:
