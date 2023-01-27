@@ -24,6 +24,7 @@ import {
     selectPlayerVolume,
 } from '../../modules/player';
 import { selectNowPlaying } from '../../modules/radioStatus';
+import { ImgWithFallback } from '../ImgWithFallback/ImgWithFallback';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -106,7 +107,7 @@ const PlayerComponent: React.FC = () => {
     return (
         <div className={classes.radioPlayer}>
             <div className={classes.splash}>
-                <img className={classes.splashImg} src={getImgSrc()} alt="" />
+                <ImgWithFallback className={classes.splashImg} src={getImgSrc()} alt="" errSrc={RogerRadioStatic} />
             </div>
             <div className={classes.volControl}>
                 <Grid container spacing={2} alignItems="center">
