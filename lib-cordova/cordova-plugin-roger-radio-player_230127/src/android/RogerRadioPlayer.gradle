@@ -1,0 +1,9 @@
+repositories {
+    jcenter()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.TheHolyRoger:java-android-websocket-client:feb0a100a3cbe124527c07bd4ba52961b88663ca'
+}

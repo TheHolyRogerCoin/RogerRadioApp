@@ -25,7 +25,11 @@
                 <param name="android-package" value="com.theholyroger.RogerRadioPlayer.RogerRadioPlayer"/>
             </feature>
         </config-file>
+        <source-file src="src/android/RogerRadioConfig.java" target-dir="src/com/theholyroger/RogerRadioConfig/" />
+        <source-file src="src/android/WSProcessor.java" target-dir="src/com/theholyroger/WSProcessor/" />
+        <source-file src="src/android/WSClient.java" target-dir="src/com/theholyroger/WSClient/" />
         <source-file src="src/android/RogerRadioPlayer.java" target-dir="src/com/theholyroger/RogerRadioPlayer/" />
+        <framework src="src/android/RogerRadioPlayer.gradle" custom="true" type="gradleReference"/>
     </platform>
 
 </plugin>

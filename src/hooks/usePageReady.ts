@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { alertsDisable } from '../modules/alert';
+import { appTasksDisable } from '../modules/appStatus';
 
 interface Params {
     isVisible: boolean;
@@ -11,9 +11,9 @@ export const usePageReady = (params: Params) => {
 
     React.useEffect(() => {
         if (!params.isVisible) {
-            dispatch(alertsDisable(true));
+            dispatch(appTasksDisable(true));
         } else {
-            dispatch(alertsDisable(false));
+            dispatch(appTasksDisable(false));
         }
     }, [dispatch, params.isVisible]);
 };

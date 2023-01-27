@@ -78,7 +78,68 @@ function copyImages(sourcePath, targetPath, images) {
   }
 }
 
+
+function getBuildString(key, value) {
+  return '\n            type.buildConfigField "String", "' + key + '", "\\"' + value + '\\""'
+}
+
+
+function editGradle() {
+  let gradleFile = 'android/app/build.gradle';
+  const envFile = 'public/env.js';
+  fs.readFile(gradleFile, 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    fs.readFile(envFile, 'utf8', function (err,eD) {
+      var aK = '';
+      var wU = '';
+      var sU = '';
+      if (err) {
+        return console.log(err);
+      }
+
+      for (const line of eD.split("\n")) {
+        if (line.startsWith("    radioApiKey:")) {
+          const sL = line.split("'")
+          aK = sL[1];
+        }
+        if (line.startsWith("    websocketsUrl:")) {
+          const sL = line.split("'")
+          wU = sL[1];
+        }
+        if (line.startsWith("    streamUrl:")) {
+          const sL = line.split("'")
+          sU = sL[1];
+        }
+      }
+      const prefixData = "proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\n        }";
+      const suffixData = "\n    }\n}";
+      const replaceData = prefixData + suffixData;
+      const buildOpen = "\n        android.buildTypes.each { type ->";
+      const buildClose = "\n        }";
+      const newData = (
+        prefixData +
+        buildOpen +
+        getBuildString("PUB_API_KEY", aK) +
+        getBuildString("URL_WS", wU) +
+        getBuildString("URL_STREAM", sU) +
+        buildClose +
+        suffixData
+      );
+
+      var result = data.replace(replaceData, newData);
+
+      fs.writeFile(gradleFile, result, 'utf8', function (err) {
+         if (err) return console.log(err);
+         console.log("Edited build.gradle");
+      });
+    });
+  });
+}
+
 copyImages(SOURCE_ANDROID_ICON, TARGET_ANDROID_ICON, ANDROID_ICONS);
 copyImages(SOURCE_ANDROID_SPLASH, TARGET_ANDROID_SPLASH, ANDROID_SPLASHES);
 copyImages(SOURCE_ANDROID_RESOURCES, TARGET_ANDROID_RESOURCES, ANDROID_RESOURCES);
 deleteFiles(TARGET_ANDROID_ICON, ANDROID_DELETIONS);
+editGradle();

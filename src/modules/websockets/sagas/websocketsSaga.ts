@@ -12,6 +12,7 @@ import {
 import { radioApiKey, websocketsUrl } from '../../../api';
 import { store } from '../../../store';
 import { alertPush, selectAlertsDisabled } from '../../alert';
+import { selectAppTasksDisabled } from '../../appStatus';
 import {
     radioPlaylistData,
     radioScheduleListData,
@@ -39,7 +40,11 @@ interface WebsocketsBuffer {
 const initWebsockets = (
     { withAuth }: WebsocketsConnectFetch['payload'],
     buffer: WebsocketsBuffer
-): [EventChannel<any>, WebSocket] => {
+): [EventChannel<any> | undefined, WebSocket | undefined] => {
+    const tasksDisabled = selectAppTasksDisabled(store.getState());
+    if (tasksDisabled) {
+        return [undefined, undefined];
+    }
     const baseUrl = `${websocketsUrl()}/ws_stats_${
         withAuth ? 'private' : 'public'
     }`;
@@ -170,6 +175,14 @@ function* bindSocket(
     ]);
 }
 
+function* sendDisconnect() {
+    yield put(websocketsDisconnectData());
+}
+
+function* bindDisabled() {
+    return yield all([call(sendDisconnect)]);
+}
+
 export function* websocketsSagas() {
     let initialized = false;
     let connectFetchPayload: WebsocketsConnectFetch['payload'] | undefined;
@@ -197,16 +210,21 @@ export function* websocketsSagas() {
         }
 
         if (connectFetchPayload) {
-            const [channel, socket] = yield call(
-                initWebsockets,
-                connectFetchPayload,
-                buffer
-            );
-            initialized = true;
-            if (pipes) {
-                yield cancel(pipes);
+            const [chan, sock]: [
+                EventChannel<any> | undefined,
+                WebSocket | undefined
+            ] = yield call(initWebsockets, connectFetchPayload, buffer);
+            if (sock && chan) {
+                const channel: Channel<{}> = chan as Channel<{}>;
+                const socket: WebSocket = sock;
+                initialized = true;
+                if (pipes) {
+                    yield cancel(pipes);
+                }
+                pipes = yield fork(bindSocket, channel, socket, buffer);
+            } else {
+                yield fork(bindDisabled);
             }
-            pipes = yield fork(bindSocket, channel, socket, buffer);
         }
     }
 }

@@ -1,5 +1,9 @@
 package com.theholyroger.RogerRadioPlayer;
 
+import com.theholyroger.RogerRadioConfig.RogerRadioConfig;
+import com.theholyroger.WSClient.WSClient;
+import com.theholyroger.WSProcessor.WSProcessor;
+
 import com.homerours.musiccontrols.MusicControls;
 
 import de.appplant.cordova.plugin.background.BackgroundMode;
@@ -8,6 +12,7 @@ import de.appplant.cordova.plugin.background.BackgroundModeExt;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.Iterator;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -37,12 +42,19 @@ public class RogerRadioPlayer extends CordovaPlugin {
     private String playMetaTitle;
     private String playMetaArtist;
     private CallbackContext callbackStop;
-    private CallbackContext callbackAlertsEnable;
-    private CallbackContext callbackAlertsDisable;
+    private CallbackContext callbackTasksEnable;
+    private CallbackContext callbackTasksDisable;
     private int reconnectTries = 0;
     private final int maxReconnects = 10;
 
+    private String lastWsDataNowplayingArtist;
+    private String lastWsDataNowplayingTitle;
+
+    private RogerRadioConfig radioConfig = new RogerRadioConfig();
+
     private Handler handler;
+    private String urlStatWs;
+    private WSClient webSocketClient;
 
     @Override
     protected void pluginInitialize() {
@@ -62,6 +74,8 @@ public class RogerRadioPlayer extends CordovaPlugin {
                 }
             });
         } catch (JSONException e){ e.printStackTrace(); }
+
+        createWebSocketClient();
     }
 
     /**
@@ -83,11 +97,11 @@ public class RogerRadioPlayer extends CordovaPlugin {
             case "setCallbackStopped":
                 callbackStop = callback;
                 break;
-            case "setCallbackAlertsEnable":
-                callbackAlertsEnable = callback;
+            case "setCallbackTasksEnable":
+                callbackTasksEnable = callback;
                 break;
-            case "setCallbackAlertsDisable":
-                callbackAlertsDisable = callback;
+            case "setCallbackTasksDisable":
+                callbackTasksDisable = callback;
                 break;
             case "onDeviceReady":
                 onDeviceReady();
@@ -404,8 +418,9 @@ public class RogerRadioPlayer extends CordovaPlugin {
     private final Runnable onCallbackActivate = new Runnable() {
         public void run() {
             try {
-                callbackAlertsDisable.success();
+                callbackTasksDisable.success();
                 pluginBgMode.execute("webview", (JSONArray)null, emptyCbBackground());
+                connectWebSocketClient();
             } catch (Exception e){ e.printStackTrace(); }
             backgroundSetCallbackActivate();
         }
@@ -414,9 +429,25 @@ public class RogerRadioPlayer extends CordovaPlugin {
     private final Runnable onCallbackDeactivate = new Runnable() {
         public void run() {
             try {
-                callbackAlertsEnable.success();
+                callbackTasksEnable.success();
+                closeWebSocketClient();
             } catch (Exception e){ e.printStackTrace(); }
             backgroundSetCallbackDeactivate();
+        }
+    };
+
+    private final Runnable onCallbackBeforeExit = new Runnable() {
+        public void run() {
+            backgroundSetCallbackBeforeExit();
+        }
+    };
+
+    private final Runnable onCallbackAfterResume = new Runnable() {
+        public void run() {
+            try {
+                callbackTasksEnable.success();
+            } catch (Exception e){ e.printStackTrace(); }
+            backgroundSetCallbackAfterResume();
         }
     };
 
@@ -466,6 +497,37 @@ public class RogerRadioPlayer extends CordovaPlugin {
         });
     }
 
+    private void backgroundSetCallbackBeforeExit() {
+        pluginBgMode.execute("setCallbackBeforeExit", (JSONArray)null, new CallbackContext(null, null) {
+            @Override
+            public void success() {
+                Log.d("RRP","backgroundSetCallbackBeforeExit called");
+                try {
+                    callbackTasksDisable.success();
+                    handler.postDelayed(onCallbackBeforeExit, 2);
+                } catch (Exception e){ e.printStackTrace(); }
+            }
+
+            @Override
+            public void error(String message) {}
+        });
+    }
+
+    private void backgroundSetCallbackAfterResume() {
+        pluginBgMode.execute("setCallbackAfterResume", (JSONArray)null, new CallbackContext(null, null) {
+            @Override
+            public void success() {
+                Log.d("RRP","backgroundSetCallbackAfterResume called");
+                try {
+                    handler.postDelayed(onCallbackAfterResume, 100);
+                } catch (Exception e){ e.printStackTrace(); }
+            }
+
+            @Override
+            public void error(String message) {}
+        });
+    }
+
     private void backgroundSetup() {
         Log.d("RRP","backgroundSetup");
         try {
@@ -492,6 +554,8 @@ public class RogerRadioPlayer extends CordovaPlugin {
             pluginBgMode.execute("configure", conf, emptyCbBackground());
             backgroundSetCallbackActivate();
             backgroundSetCallbackDeactivate();
+            backgroundSetCallbackBeforeExit();
+            backgroundSetCallbackAfterResume();
             pluginBgMode.execute("battery", (JSONArray)null, emptyCbBackground());
             pluginBgMode.execute("requestTopPermissions", (JSONArray)null, emptyCbBackground());
         } catch (JSONException e){ e.printStackTrace(); }
@@ -540,5 +604,56 @@ public class RogerRadioPlayer extends CordovaPlugin {
             @Override
             public void error(String message) {}
         };
+    }
+
+    private void onWsMsg(JSONObject jsonMsg) {
+        JSONObject payload = jsonMsg.optJSONObject("payload");
+        if (payload == null) return;
+
+        Iterator<String> iter = payload.keys();
+        while(iter.hasNext()){
+            String routingKey = iter.next();
+            switch (routingKey) {
+                case "now_playing":
+                    JSONObject data = payload.optJSONObject("now_playing");
+                    if (data == null) continue;
+
+                    String mArtist = data.optString("Artist");
+                    String mTitle = data.optString("Title");
+                    if (!mArtist.equals(lastWsDataNowplayingArtist) && !mTitle.equals(lastWsDataNowplayingTitle)) {
+                        lastWsDataNowplayingArtist = mArtist;
+                        lastWsDataNowplayingTitle = mTitle;
+                        updateMetadata(mArtist, mTitle);
+                    }
+                default:
+            }
+        }
+
+    }
+
+    private void createWebSocketClient() {
+        Log.d("RRP","createWebSocketClient");
+        if (urlStatWs == null) {
+            urlStatWs = radioConfig.getUrlStatWs(this.cordova.getActivity().getApplicationContext());
+        }
+        webSocketClient = new WSClient(
+                urlStatWs,
+                new WSProcessor() {
+                    @Override
+                    public void processWsMsg(JSONObject jsonMsg) {
+                        onWsMsg(jsonMsg);
+                    }
+                }
+        );
+    }
+
+    private void connectWebSocketClient() {
+        Log.d("RRP","connectWebSocketClient");
+        webSocketClient.connect();
+    }
+
+    private void closeWebSocketClient() {
+        Log.d("RRP","closeWebSocketClient");
+        webSocketClient.close();
     }
 }

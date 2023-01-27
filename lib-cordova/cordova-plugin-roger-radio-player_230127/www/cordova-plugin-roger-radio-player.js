@@ -8,19 +8,19 @@ var exec    = require('cordova/exec'),
  */
 var rrPlayer = {
     callbackStopped: function() {},
-    callbackAlertsEnable: function() {},
-    callbackAlertsDisable: function() {},
+    callbackTasksEnable: function() {},
+    callbackTasksDisable: function() {},
     wrapCallbackStopped: function() {
         rrPlayer.callbackStopped();
         exec(rrPlayer.wrapCallbackStopped, null, 'RogerRadioPlayer', 'setCallbackStopped', []);
     },
-    wrapCallbackAlertsEnable: function() {
-        rrPlayer.callbackAlertsEnable();
-        exec(rrPlayer.wrapCallbackAlertsEnable, null, 'RogerRadioPlayer', 'setCallbackAlertsEnable', []);
+    wrapCallbackTasksEnable: function() {
+        rrPlayer.callbackTasksEnable();
+        exec(rrPlayer.wrapCallbackTasksEnable, null, 'RogerRadioPlayer', 'setCallbackTasksEnable', []);
     },
-    wrapCallbackAlertsDisable: function() {
-        rrPlayer.callbackAlertsDisable();
-        exec(rrPlayer.wrapCallbackAlertsDisable, null, 'RogerRadioPlayer', 'setCallbackAlertsDisable', []);
+    wrapCallbackTasksDisable: function() {
+        rrPlayer.callbackTasksDisable();
+        exec(rrPlayer.wrapCallbackTasksDisable, null, 'RogerRadioPlayer', 'setCallbackTasksDisable', []);
     }
 };
 
@@ -30,16 +30,16 @@ exports.setCallbackStopped = function(callback)
     exec(rrPlayer.wrapCallbackStopped, null, 'RogerRadioPlayer', 'setCallbackStopped', []);
 };
 
-exports.setCallbackAlertsEnable = function(callback)
+exports.setCallbackTasksEnable = function(callback)
 {
-    rrPlayer.callbackAlertsEnable = callback;
-    exec(rrPlayer.wrapCallbackAlertsEnable, null, 'RogerRadioPlayer', 'setCallbackAlertsEnable', []);
+    rrPlayer.callbackTasksEnable = callback;
+    exec(rrPlayer.wrapCallbackTasksEnable, null, 'RogerRadioPlayer', 'setCallbackTasksEnable', []);
 };
 
-exports.setCallbackAlertsDisable = function(callback)
+exports.setCallbackTasksDisable = function(callback)
 {
-    rrPlayer.callbackAlertsDisable = callback;
-    exec(rrPlayer.wrapCallbackAlertsDisable, null, 'RogerRadioPlayer', 'setCallbackAlertsDisable', []);
+    rrPlayer.callbackTasksDisable = callback;
+    exec(rrPlayer.wrapCallbackTasksDisable, null, 'RogerRadioPlayer', 'setCallbackTasksDisable', []);
 };
 
 exports.playerLoad = function(url)

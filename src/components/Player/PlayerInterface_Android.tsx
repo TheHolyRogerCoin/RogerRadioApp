@@ -2,7 +2,7 @@ import * as React from 'react';
 import { RogerRadioPlayer } from '@ionic-native/roger-radio-player';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
-import { alertsDisable } from '../../modules/alert';
+import { appTasksDisable } from '../../modules/appStatus';
 import {
     playerStop,
     selectPlayerMuted,
@@ -26,12 +26,12 @@ const PlayerInterfaceComponent: React.FC = () => {
 
     useSetPlayerUrl();
 
-    const enableAlerts = React.useCallback(() => {
-        dispatch(alertsDisable(false));
+    const enableTasks = React.useCallback(() => {
+        dispatch(appTasksDisable(false));
     }, [dispatch]);
 
-    const disableAlerts = React.useCallback(() => {
-        dispatch(alertsDisable(true));
+    const disableTasks = React.useCallback(() => {
+        dispatch(appTasksDisable(true));
     }, [dispatch]);
 
     const dispatchPlayerStop = React.useCallback(() => {
@@ -41,9 +41,9 @@ const PlayerInterfaceComponent: React.FC = () => {
 
     React.useEffect(() => {
         RogerRadioPlayer && RogerRadioPlayer.setCallbackStopped(dispatchPlayerStop);
-        RogerRadioPlayer && RogerRadioPlayer.setCallbackAlertsEnable(enableAlerts);
-        RogerRadioPlayer && RogerRadioPlayer.setCallbackAlertsDisable(disableAlerts);
-    }, [disableAlerts, dispatchPlayerStop, enableAlerts]);
+        RogerRadioPlayer && RogerRadioPlayer.setCallbackTasksEnable(enableTasks);
+        RogerRadioPlayer && RogerRadioPlayer.setCallbackTasksDisable(disableTasks);
+    }, [disableTasks, dispatchPlayerStop, enableTasks]);
 
     React.useEffect(() => {
         RogerRadioPlayer && RogerRadioPlayer.updateMetadata(Artist, Title);

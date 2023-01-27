@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid';
 import LinearProgress from '@mui/material/LinearProgress';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+import { selectAppTasksDisabled } from '../../modules/appStatus';
 import { selectNowPlaying, selectRadioStatusTimestampData } from '../../modules/radioStatus';
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +53,19 @@ const NowPlayingComponent: React.FC = () => {
     const timerRef = React.useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
     const nowPlaying = useSelector(selectNowPlaying);
+    const tasksDisabled = useSelector(selectAppTasksDisabled);
     const timestamp = useSelector(selectRadioStatusTimestampData);
+
+    React.useEffect(() => {
+        if (timerRef.current && tasksDisabled) {
+            clearInterval(timerRef.current);
+            timerRef.current = undefined;
+        } else if (!timerRef.current && !tasksDisabled) {
+            timerRef.current = setInterval(() => {
+                setCurTime(Date.now() / 1000);
+            }, 500);
+        }
+    }, [tasksDisabled]);
 
     React.useEffect(() => {
         if (isSet.current) {
@@ -60,15 +73,15 @@ const NowPlayingComponent: React.FC = () => {
         }
         isSet.current = true;
         setCurTime(Date.now() / 1000);
-        timerRef.current = setInterval(() => {
-            setCurTime(Date.now() / 1000);
-        }, 500);
     }, []);
 
     React.useEffect(() => {
         const tRef = timerRef.current;
         return () => {
-            tRef && clearInterval(tRef);
+            if (tRef) {
+                clearInterval(tRef);
+                timerRef.current = undefined;
+            }
             setCurTime(0);
             isSet.current = false;
         };

@@ -15,7 +15,7 @@ import { IonicNativePlugin } from '@ionic-native/core';
  * ```
  *
  */
-export declare class RogerRadioPlayer extends IonicNativePlugin {
+export declare class RogerRadioPlayerOriginal extends IonicNativePlugin {
     /**
      * setCallbackStopped
      *
@@ -25,21 +25,21 @@ export declare class RogerRadioPlayer extends IonicNativePlugin {
      */
     setCallbackStopped(callback: (...args: any[]) => void): void;
     /**
-     * setCallbackAlertsEnable
+     * setCallbackTasksEnable
      *
      * @param callback {function}
      *
      * @return {void}
      */
-    setCallbackAlertsEnable(callback: (...args: any[]) => void): void;
+    setCallbackTasksEnable(callback: (...args: any[]) => void): void;
     /**
-     * setCallbackAlertsDisable
+     * setCallbackTasksDisable
      *
      * @param callback {function}
      *
      * @return {void}
      */
-    setCallbackAlertsDisable(callback: (...args: any[]) => void): void;
+    setCallbackTasksDisable(callback: (...args: any[]) => void): void;
     /**
      * playerLoad
      *
@@ -120,3 +120,5 @@ export declare class RogerRadioPlayer extends IonicNativePlugin {
      */
     controlsCreate(): void;
 }
+
+export declare const RogerRadioPlayer: RogerRadioPlayerOriginal;
