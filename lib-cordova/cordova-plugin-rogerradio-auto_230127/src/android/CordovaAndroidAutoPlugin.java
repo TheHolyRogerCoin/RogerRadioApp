@@ -197,7 +197,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         switch (state) {
             case PLAY:
                 playbackState = new PlaybackStateCompat.Builder()
-                        .setActions( PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS )
+                        .setActions( PlaybackStateCompat.ACTION_STOP )
                         .setState( PlaybackStateCompat.STATE_PLAYING, 0, 1 )
                         .build();
                 break;
@@ -311,7 +311,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         }
         mAudioFocusHelper.abandonAudioFocus();
 
-        handler.postDelayed(playRunnable, 1000);
+        handler.postDelayed(playRunnable, 2000);
     }
 
     private void pauseMedia() {
@@ -350,7 +350,9 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         public void onPause() {
             super.onPause();
             setMediaPlaybackState(PAUSE);
-            pauseMedia();
+            if( mediaPlayer != null ) {
+                pauseMedia();
+            }
         }
 
         @Override
