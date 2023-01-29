@@ -55,6 +55,9 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     private static final int CONNECTING = 4;
     private static final int STOPPED = 5;
 
+    private int reconnectTries = 0;
+    private final int maxReconnects = 10;
+
     private RogerRadioConfig radioConfig = new RogerRadioConfig();
     private String urlStatWs;
 
@@ -110,12 +113,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     @Override
     public void onDestroy() {
         mSession.release();
-        if( mediaPlayer != null ) {
-            pauseMedia();
-            mediaPlayer.release();
-        }
-        mAudioFocusHelper.abandonAudioFocus();
-        closeWebSocketClient();
+        playerStop();
         super.onDestroy();
     }
 
@@ -196,6 +194,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         PlaybackStateCompat playbackState = null;
         switch (state) {
             case PLAY:
+                reconnectTries = 0;
                 playbackState = new PlaybackStateCompat.Builder()
                         .setActions( PlaybackStateCompat.ACTION_STOP )
                         .setState( PlaybackStateCompat.STATE_PLAYING, 0, 1 )
@@ -304,21 +303,33 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     };
 
     private void reloadPlayerOnError() {
-        setMediaPlaybackState(STOPPED);
-        if( mediaPlayer != null ) {
-            pauseMedia();
-            mediaPlayer.release();
-        }
-        mAudioFocusHelper.abandonAudioFocus();
+        playerStop();
 
-        handler.postDelayed(playRunnable, 2000);
+        if (reconnectTries >= maxReconnects) {
+            return;
+        }
+        int adjustedTime = ((reconnectTries * 2) * 1000) + 2000;
+        Log.d("MediaPlayer","Reload delaying for " + String.valueOf(adjustedTime));
+        reconnectTries++;
+
+        handler.postDelayed(playRunnable, adjustedTime);
     }
 
-    private void pauseMedia() {
+    private void playerPause() {
+        setMediaPlaybackState(PAUSE);
         if( mediaPlayer != null ) {
             mediaPlayer.pause();
+        }
+    }
+
+    private void playerStop() {
+        setMediaPlaybackState(STOPPED);
+        if( mediaPlayer != null ) {
+            mediaPlayer.pause();
+            mediaPlayer.release();
             closeWebSocketClient();
         }
+        mAudioFocusHelper.abandonAudioFocus();
     }
 
     private final class MediaSessionCallback extends MediaSessionCompat.Callback {
@@ -349,21 +360,13 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         @Override
         public void onPause() {
             super.onPause();
-            setMediaPlaybackState(PAUSE);
-            if( mediaPlayer != null ) {
-                pauseMedia();
-            }
+            playerPause();
         }
 
         @Override
         public void onStop() {
             super.onStop();
-            setMediaPlaybackState(STOPPED);
-            if( mediaPlayer != null ) {
-                pauseMedia();
-                mediaPlayer.release();
-            }
-            mAudioFocusHelper.abandonAudioFocus();
+            playerStop();
         }
 
         @Override
@@ -446,16 +449,13 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
                     Log.d("CordovaAndroidAutoPlugin", "AUDIOFOCUS_LOSS_TRANSIENT");
                     if (mediaPlayer.isPlaying()) {
                         mPlayOnAudioFocus = true;
-                        pauseMedia();
+                        playerPause();
                     }
                     break;
                 case AudioManager.AUDIOFOCUS_LOSS:
                     Log.d("CordovaAndroidAutoPlugin", "AUDIOFOCUS_LOSS");
-                    mAudioManager.abandonAudioFocus(this);
-                    if (mediaPlayer.isPlaying()) {
-                        pauseMedia();
-                        mPlayOnAudioFocus = false;
-                    }
+                    mPlayOnAudioFocus = false;
+                    playerStop();
                     break;
                 default:
                     Log.d("CordovaAndroidAutoPlugin", "AUDIOFOCUS_???");
