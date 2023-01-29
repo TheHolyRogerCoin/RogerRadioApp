@@ -61,6 +61,8 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
     private RogerRadioConfig radioConfig = new RogerRadioConfig();
     private String urlStatWs;
 
+    private int currentPlaybackState;
+
     private AudioManager mAudioManager;
     private MediaSessionCompat mSession;
     private CordovaAndroidAutoPlugin.AudioFocusHelper mAudioFocusHelper;
@@ -230,6 +232,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
                 break;
         }
         mSession.setPlaybackState( playbackState );
+        currentPlaybackState = state;
     }
 
     private void playMedia() {
@@ -383,6 +386,9 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
 
         @Override
         public void onPlayFromSearch(final String query, final Bundle extras) {
+            if(currentPlaybackState != PLAY && mAudioFocusHelper.requestAudioFocus()) {
+                playMedia();
+            }
         }
     }
 
