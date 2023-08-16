@@ -255,10 +255,11 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
             mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource("https://rogerradio.theholyroger.com/live");
+            mediaPlayer.setDataSource(radioConfig.getUrlStream(this));
             mediaPlayer.prepareAsync();
         }
         catch (Exception e){
+            Log.e("MediaPlayer","Error during play.");
             e.printStackTrace();
         }
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {

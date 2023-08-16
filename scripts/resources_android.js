@@ -99,7 +99,8 @@ function editGradle() {
       fs.readFile(envFile, 'utf8', function (err,eD) {
         var aK = '';
         var wU = '';
-        var sU = '';
+        var sUMax = '';
+        var sUMed = '';
         if (err) {
           return console.log(err);
         }
@@ -115,7 +116,11 @@ function editGradle() {
           }
           if (line.startsWith("    streamUrlMp3Max:")) {
             const sL = line.split("'")
-            sU = sL[1];
+            sUMax = sL[1];
+          }
+          if (line.startsWith("    streamUrlMp3Med:")) {
+            const sL = line.split("'")
+            sUMed = sL[1];
           }
         }
         const prefixData = "proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\n        }";
@@ -128,7 +133,8 @@ function editGradle() {
           buildOpen +
           getBuildString("PUB_API_KEY", aK) +
           getBuildString("URL_WS", wU) +
-          getBuildString("URL_STREAM", sU) +
+          getBuildString("URL_STREAM_MP3_MAX", sUMax) +
+          getBuildString("URL_STREAM_MP3_MED", sUMed) +
           buildClose +
           suffixData
         );

@@ -1,6 +1,8 @@
 package com.theholyroger.RogerRadioConfig;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import java.lang.reflect.Field;
 
 
@@ -29,7 +31,29 @@ public class RogerRadioConfig {
 
     public String getUrlStream(Context context) {
         if (urlStream == null) {
-            urlStream = (String) getBuildConfigValue(context, "URL_STREAM");
+            try {
+                SharedPreferences pref = context
+                    .getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
+                if (pref != null) {
+                    String quality_setting = pref.getString("quality", null);
+                    switch (quality_setting) {
+                        case "mp3_max":
+                            urlStream = (String) getBuildConfigValue(context, "URL_STREAM_MP3_MAX");
+                            break;
+                        case "mp3_med":
+                            urlStream = (String) getBuildConfigValue(context, "URL_STREAM_MP3_MED");
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } catch (Exception e) {
+                Log.e("RRC","Error fetching pref");
+                e.printStackTrace();
+            }
+            if (urlStream == null) {
+                urlStream = (String) getBuildConfigValue(context, "URL_STREAM_MP3_MAX");
+            }
         }
         return urlStream;
     }
