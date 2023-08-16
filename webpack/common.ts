@@ -1,3 +1,4 @@
+import { DefinePlugin } from 'webpack';
 import webpack from 'webpack';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
@@ -19,6 +20,8 @@ const config: webpack.Configuration = {
         publicPath: '/',
     },
     plugins: [
+        new DefinePlugin({ 'process.env.BUILD_EXPIRE': JSON.stringify(process.env.BUILD_EXPIRE) }),
+        new DefinePlugin({ 'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION) }),
         new webpack.EnvironmentPlugin({
             envType: 'dev',
         }),

@@ -87,52 +87,61 @@ function getBuildString(key, value) {
 function editGradle() {
   let gradleFile = 'android/app/build.gradle';
   const envFile = 'public/env.js';
+  const verFile = 'VERSION';
   fs.readFile(gradleFile, 'utf8', function (err,data) {
     if (err) {
       return console.log(err);
     }
-    fs.readFile(envFile, 'utf8', function (err,eD) {
-      var aK = '';
-      var wU = '';
-      var sU = '';
+    fs.readFile(verFile, 'utf8', function (err,verData) {
       if (err) {
         return console.log(err);
       }
-
-      for (const line of eD.split("\n")) {
-        if (line.startsWith("    radioApiKey:")) {
-          const sL = line.split("'")
-          aK = sL[1];
+      fs.readFile(envFile, 'utf8', function (err,eD) {
+        var aK = '';
+        var wU = '';
+        var sU = '';
+        if (err) {
+          return console.log(err);
         }
-        if (line.startsWith("    websocketsUrl:")) {
-          const sL = line.split("'")
-          wU = sL[1];
-        }
-        if (line.startsWith("    streamUrlMp3Max:")) {
-          const sL = line.split("'")
-          sU = sL[1];
-        }
-      }
-      const prefixData = "proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\n        }";
-      const suffixData = "\n    }\n}";
-      const replaceData = prefixData + suffixData;
-      const buildOpen = "\n        android.buildTypes.each { type ->";
-      const buildClose = "\n        }";
-      const newData = (
-        prefixData +
-        buildOpen +
-        getBuildString("PUB_API_KEY", aK) +
-        getBuildString("URL_WS", wU) +
-        getBuildString("URL_STREAM", sU) +
-        buildClose +
-        suffixData
-      );
 
-      var result = data.replace(replaceData, newData);
+        for (const line of eD.split("\n")) {
+          if (line.startsWith("    radioApiKey:")) {
+            const sL = line.split("'")
+            aK = sL[1];
+          }
+          if (line.startsWith("    websocketsUrl:")) {
+            const sL = line.split("'")
+            wU = sL[1];
+          }
+          if (line.startsWith("    streamUrlMp3Max:")) {
+            const sL = line.split("'")
+            sU = sL[1];
+          }
+        }
+        const prefixData = "proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\n        }";
+        const suffixData = "\n    }\n}";
+        const replaceData = prefixData + suffixData;
+        const buildOpen = "\n        android.buildTypes.each { type ->";
+        const buildClose = "\n        }";
+        const newData = (
+          prefixData +
+          buildOpen +
+          getBuildString("PUB_API_KEY", aK) +
+          getBuildString("URL_WS", wU) +
+          getBuildString("URL_STREAM", sU) +
+          buildClose +
+          suffixData
+        );
 
-      fs.writeFile(gradleFile, result, 'utf8', function (err) {
-         if (err) return console.log(err);
-         console.log("Edited build.gradle");
+        const versionReplaceData = 'versionCode 1\n        versionName "1.0"';
+        const newVersionData = `versionCode ${parseInt(verData.replace(new RegExp(/[^\d]*/, 'g'), ''))}\n        versionName "${verData}"`
+
+        var result = data.replace(replaceData, newData).replace(versionReplaceData, newVersionData);
+
+        fs.writeFile(gradleFile, result, 'utf8', function (err) {
+           if (err) return console.log(err);
+           console.log("Edited build.gradle");
+        });
       });
     });
   });

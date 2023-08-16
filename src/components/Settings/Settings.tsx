@@ -50,6 +50,17 @@ const SettingsComponent: React.FC = () => {
         [dispatch]
     );
 
+    const renderSettingsAbout = React.useCallback(() => {
+        return (
+            <TableRow key="s_version">
+                <TableCell component="th" scope="row">
+                    App Version
+                </TableCell>
+                <TableCell>{process.env.APP_VERSION}</TableCell>
+            </TableRow>
+        );
+    }, []);
+
     const renderSettingsQuality = React.useCallback(() => {
         return (
             <TableRow key="s_quality">
@@ -77,7 +88,10 @@ const SettingsComponent: React.FC = () => {
                 <Grid item xs={12}>
                     <TableContainer className={classes.settingsItems}>
                         <Table padding="none" size="small">
-                            <TableBody>{renderSettingsQuality()}</TableBody>
+                            <TableBody>
+                                {renderSettingsAbout()}
+                                {renderSettingsQuality()}
+                            </TableBody>
                         </Table>
                     </TableContainer>
                 </Grid>

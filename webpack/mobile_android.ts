@@ -1,4 +1,3 @@
-import { DefinePlugin } from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import merge from 'webpack-merge';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
@@ -12,7 +11,6 @@ const BUILD_DIR = path.resolve(rootDir, 'build');
 import commonConfig from './common';
 
 const plugins = [
-    new DefinePlugin({ 'process.env.BUILD_EXPIRE': JSON.stringify(process.env.BUILD_EXPIRE) }),
     new CssMinimizerPlugin({
         test: /\.css$/g,
         minimizerOptions: [

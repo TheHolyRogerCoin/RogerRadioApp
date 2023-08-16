@@ -37,7 +37,8 @@ const mainTheme = createTheme({
         MuiBottomNavigationAction: {
             styleOverrides: {
                 root: {
-                    padding: '6px 12px 4px',
+                    padding: '6px 4px 4px',
+                    minWidth: '50px',
                     '& .MuiSvgIcon-root': {
                         fill: `${colourNavButton} !important`,
                     },

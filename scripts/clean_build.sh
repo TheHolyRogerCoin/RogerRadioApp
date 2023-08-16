@@ -1,1 +1,1 @@
-rm -r android build
+rm -rf android build
