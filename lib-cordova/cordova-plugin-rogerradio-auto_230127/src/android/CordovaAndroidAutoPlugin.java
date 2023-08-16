@@ -292,7 +292,7 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
             @Override
             public boolean onError(MediaPlayer mediaPlayer, int state, int extra) {
                 Log.e("MediaPlayer Error", String.valueOf(state));
-                reloadPlayerOnError();
+                handler.postDelayed(onErrorRunnable, 100);
                 return false;
             }
         });
@@ -305,13 +305,19 @@ public class CordovaAndroidAutoPlugin extends MediaBrowserServiceCompat {
         }
     };
 
+    private final Runnable onErrorRunnable = new Runnable() {
+        public void run() {
+            reloadPlayerOnError();
+        }
+    };
+
     private void reloadPlayerOnError() {
         playerStop();
 
         if (reconnectTries >= maxReconnects) {
             return;
         }
-        int adjustedTime = ((reconnectTries * 2) * 1000) + 2000;
+        int adjustedTime = ((reconnectTries * 2) * 1000) + 3000;
         Log.d("MediaPlayer","Reload delaying for " + String.valueOf(adjustedTime));
         reconnectTries++;
 
