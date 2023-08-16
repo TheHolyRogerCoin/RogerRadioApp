@@ -1,0 +1,1 @@
+rm -r android build

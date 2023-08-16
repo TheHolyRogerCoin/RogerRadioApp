@@ -1,5 +1,6 @@
 export interface Config {
-    streamUrl: string;
+    streamUrlMp3Max: string;
+    streamUrlMp3Med: string;
     radioUrl: string;
     websocketsUrl: string;
     msAlertDisplayTime: string;

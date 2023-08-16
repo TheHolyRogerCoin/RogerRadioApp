@@ -4,6 +4,7 @@ import { Dashboard } from '../../screens/Dashboard/Dashboard';
 import { PlaylistPage } from '../../screens/Playlist/Playlist';
 import { RecentRequestsPage } from '../../screens/RecentRequests/RecentRequests';
 import { Schedule } from '../../screens/Schedule/Schedule';
+import { SettingsPage } from '../../screens/Settings/Settings';
 
 const renderLoader = () => {
     return <div>Loading...</div>;
@@ -27,6 +28,7 @@ const Router: React.FC = () => {
             <AppRoute path="/playlist" component={PlaylistPage} loading={false} exact={true} />
             <AppRoute path="/schedule" component={Schedule} loading={false} exact={true} />
             <AppRoute path="/recent_requests" component={RecentRequestsPage} loading={false} exact={true} />
+            <AppRoute path="/settings" component={SettingsPage} loading={false} exact={true} />
             <Route path="**">
                 <Redirect to="/" />
             </Route>

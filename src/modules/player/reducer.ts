@@ -1,4 +1,3 @@
-import { streamUrl } from '../../api';
 import {
     PLAYER_PLAY_TOGGLE,
     PLAYER_MUTE_TOGGLE,
@@ -19,7 +18,7 @@ export const initialPlayerState: PlayerState = {
     playing: false,
     muted: false,
     volume: 1.0,
-    url: streamUrl(),
+    url: undefined,
 };
 
 export const playerReducer = (

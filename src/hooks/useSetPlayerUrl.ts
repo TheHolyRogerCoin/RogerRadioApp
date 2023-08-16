@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { streamUrl } from '../api';
+import { streamUrlMp3Max } from '../api';
+import { getPlayerStreamUrl } from '../helpers/playerStreamUrl';
 import { playerSetUrl, selectPlayerUrl } from '../modules/player';
 
 export const useSetPlayerUrl = () => {
@@ -9,7 +10,13 @@ export const useSetPlayerUrl = () => {
 
     React.useEffect(() => {
         if (!playerUrl) {
-            dispatch(playerSetUrl(streamUrl()));
+            getPlayerStreamUrl()
+                .then((sUrl) => {
+                    dispatch(playerSetUrl(sUrl));
+                })
+                .catch((err) => {
+                    dispatch(playerSetUrl(streamUrlMp3Max()));
+                });
         }
     }, [dispatch, playerUrl]);
 };

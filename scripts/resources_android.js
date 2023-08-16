@@ -108,7 +108,7 @@ function editGradle() {
           const sL = line.split("'")
           wU = sL[1];
         }
-        if (line.startsWith("    streamUrl:")) {
+        if (line.startsWith("    streamUrlMp3Max:")) {
           const sL = line.split("'")
           sU = sL[1];
         }
