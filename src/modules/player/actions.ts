@@ -1,10 +1,20 @@
 import {
+    PLAYER_CLEAR_RELOAD,
     PLAYER_PLAY_TOGGLE,
     PLAYER_MUTE_TOGGLE,
+    PLAYER_RELOAD,
     PLAYER_SET_URL,
     PLAYER_SET_VOLUME,
     PLAYER_STOP,
 } from './constants';
+
+export interface PlayerClearReload {
+    type: typeof PLAYER_CLEAR_RELOAD;
+}
+
+export interface PlayerReload {
+    type: typeof PLAYER_RELOAD;
+}
 
 export interface PlayerStop {
     type: typeof PLAYER_STOP;
@@ -29,11 +39,21 @@ export interface PlayerSetVolume {
 }
 
 export type PlayerAction =
+    | PlayerClearReload
+    | PlayerReload
     | PlayerStop
     | PlayerTogglePlay
     | PlayerToggleMute
     | PlayerSetUrl
     | PlayerSetVolume;
+
+export const playerClearReload = (): PlayerClearReload => ({
+    type: PLAYER_CLEAR_RELOAD,
+});
+
+export const playerReload = (): PlayerReload => ({
+    type: PLAYER_RELOAD,
+});
 
 export const playerStop = (): PlayerStop => ({
     type: PLAYER_STOP,

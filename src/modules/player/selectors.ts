@@ -9,6 +9,10 @@ export const selectPlayerPlaying = (
     return selectPlayerState(state).playing;
 };
 
+export const selectPlayerReload = (state: AppState): PlayerState['reload'] => {
+    return selectPlayerState(state).reload;
+};
+
 export const selectPlayerUrl = (state: AppState): PlayerState['url'] => {
     return selectPlayerState(state).url;
 };

@@ -1,6 +1,8 @@
 import {
+    PLAYER_CLEAR_RELOAD,
     PLAYER_PLAY_TOGGLE,
     PLAYER_MUTE_TOGGLE,
+    PLAYER_RELOAD,
     PLAYER_SET_URL,
     PLAYER_SET_VOLUME,
     PLAYER_STOP,
@@ -8,6 +10,7 @@ import {
 import { PlayerAction } from './actions';
 
 export interface PlayerState {
+    reload: boolean;
     playing: boolean;
     muted: boolean;
     volume: number;
@@ -15,6 +18,7 @@ export interface PlayerState {
 }
 
 export const initialPlayerState: PlayerState = {
+    reload: false,
     playing: false,
     muted: false,
     volume: 1.0,
@@ -26,6 +30,16 @@ export const playerReducer = (
     action: PlayerAction
 ) => {
     switch (action.type) {
+        case PLAYER_CLEAR_RELOAD:
+            return {
+                ...state,
+                reload: false,
+            };
+        case PLAYER_RELOAD:
+            return {
+                ...state,
+                reload: true,
+            };
         case PLAYER_STOP:
             return {
                 ...state,

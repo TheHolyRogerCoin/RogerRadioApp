@@ -14,9 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import RogerRadioStatic from '../../assets/images/rogerradiostatic.gif';
 import { getBase64ImageString } from '../../helpers/getBase64ImageString';
 import {
-    playerSetUrl,
+    playerReload,
     playerSetVolume,
-    playerStop,
     playerToggleMute,
     playerTogglePlay,
     selectPlayerMuted,
@@ -77,8 +76,7 @@ const PlayerComponent: React.FC = () => {
     }, [dispatch]);
 
     const handleReload = React.useCallback(() => {
-        dispatch(playerStop());
-        dispatch(playerSetUrl(undefined));
+        dispatch(playerReload());
     }, [dispatch]);
 
     const handleVolChange = React.useCallback(

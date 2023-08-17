@@ -164,6 +164,10 @@ public class RogerRadioPlayer extends CordovaPlugin {
     public void playerLoad(String pURL) {
         Log.d("RRP","playerLoad");
         playerURL = pURL;
+        if (stateIsPlaying && !lockReloading) {
+            playerReload();
+            return;
+        }
         setStateIsStopped();
         playerUUID = UUID.randomUUID().toString();
         JSONArray createArgs = new JSONArray();
@@ -175,9 +179,13 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     public void playerReload() {
+        handler.postDelayed(runnablePlayerReload, 500);
+    }
+
+    public void playerFullReload() {
         if (lockReloading) return;
         lockForReload();
-        Log.d("RRP","playerReload");
+        Log.d("RRP","playerFullReload");
         pluginMedia.stopPlayingAudio(playerUUID);
         playerRelease();
         backgroundDisable();
@@ -377,7 +385,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
         backgroundUnlock();
         backgroundMoveForeground();
         backgroundDisable();
-        playerReload();
+        playerFullReload();
     }
 
     private void onMediaStatus(int status) {
@@ -399,6 +407,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void onMessageFromMedia(PluginResult pluginResult) {
+        if (lockReloading) return;
         String sMsg = pluginResult.getMessage();
         // Log.d("RRP","onMessageFromMedia: " + sMsg);
         try {
@@ -460,11 +469,19 @@ public class RogerRadioPlayer extends CordovaPlugin {
 
     private final Runnable runnablePlayerLoad = new Runnable() {
         public void run() {
+            Log.d("RRP","runnablePlayerLoad");
             boolean shouldPlay = false;
             if (stateIsPlaying) shouldPlay = true;
             playerLoad(playerURL);
             if (shouldPlay) playerPlay();
             unlockForReload();
+        }
+    };
+
+    private final Runnable runnablePlayerReload = new Runnable() {
+        public void run() {
+            Log.d("RRP","runnablePlayerReload");
+            playerFullReload();
         }
     };
 

@@ -3,6 +3,7 @@ import ReactAudioPlayer from 'react-audio-player';
 import { useSelector } from 'react-redux';
 import { usePageReady } from '../../hooks/usePageReady';
 import { usePageVisibility } from '../../hooks/usePageVisibility';
+import { usePlayerReload_Browser } from '../../hooks/usePlayerReload_Browser';
 import { useSetPlayerUrl } from '../../hooks/useSetPlayerUrl';
 import { selectPlayerMuted, selectPlayerUrl, selectPlayerPlaying, selectPlayerVolume } from '../../modules/player';
 
@@ -23,6 +24,7 @@ const PlayerInterfaceComponent: React.FC = () => {
 
     const volRef = React.useRef(volume);
 
+    usePlayerReload_Browser();
     useSetPlayerUrl();
     const isVisible = usePageVisibility();
     usePageReady({ isVisible: isVisible });
