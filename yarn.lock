@@ -807,7 +807,7 @@
   dependencies:
     "@types/cordova" latest
 
-"@ionic-native/roger-radio-player@./lib-ionic/roger-radio-player_230127":
+"@ionic-native/roger-radio-player@./lib-ionic/roger-radio-player_230816":
   version "0.0.0"
 
 "@ionic-native/rogerradio-auto@./lib-ionic/rogerradio-auto_230123":
@@ -3453,7 +3453,7 @@ cordova-plugin-music-controls2@^3.0.7:
   resolved "https://registry.yarnpkg.com/cordova-plugin-music-controls2/-/cordova-plugin-music-controls2-3.0.7.tgz#71378cd1e7a90f0af87b3c34535d5f958808fb67"
   integrity sha512-XnbMwcVv1lZSdV78DQqxTJ22/290G+Ks0kn36NJrLT6GF6+5L11L3pf2Hey+e8LoqObPcXy4uTANc+ToADanlg==
 
-cordova-plugin-roger-radio-player@./lib-cordova/cordova-plugin-roger-radio-player_230127:
+cordova-plugin-roger-radio-player@./lib-cordova/cordova-plugin-roger-radio-player_230816:
   version "0.0.1"
 
 cordova-plugin-rogerradio-auto@./lib-cordova/cordova-plugin-rogerradio-auto_230127:

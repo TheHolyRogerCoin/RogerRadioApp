@@ -106,6 +106,9 @@ public class RogerRadioPlayer extends CordovaPlugin {
             case "onDeviceReady":
                 onDeviceReady();
                 break;
+            case "clearCachedStreamUrl":
+                clearCachedStreamUrl();
+                break;
             case "playerLoad":
                 playerLoad(args.getString(0));
                 break;
@@ -152,6 +155,10 @@ public class RogerRadioPlayer extends CordovaPlugin {
 
     public void onDeviceReady() {
         backgroundSetup();
+    }
+
+    public void clearCachedStreamUrl() {
+        radioConfig.clearCachedStreamUrl();
     }
 
     public void playerLoad(String pURL) {

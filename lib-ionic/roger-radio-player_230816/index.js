@@ -1,0 +1,45 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+import { IonicNativePlugin, cordova } from '@ionic-native/core';
+var RogerRadioPlayerOriginal = /** @class */ (function (_super) {
+    __extends(RogerRadioPlayerOriginal, _super);
+    function RogerRadioPlayerOriginal() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RogerRadioPlayerOriginal.prototype.setCallbackStopped = function (callback) { return cordova(this, "setCallbackStopped", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.setCallbackTasksEnable = function (callback) { return cordova(this, "setCallbackTasksEnable", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.setCallbackTasksDisable = function (callback) { return cordova(this, "setCallbackTasksDisable", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.clearCachedStreamUrl = function () { return cordova(this, "clearCachedStreamUrl", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerLoad = function (url) { return cordova(this, "playerLoad", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerReload = function () { return cordova(this, "playerReload", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerPlay = function () { return cordova(this, "playerPlay", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerStop = function () { return cordova(this, "playerStop", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerSetVolume = function (vol) { return cordova(this, "playerSetVolume", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerUnmute = function () { return cordova(this, "playerUnmute", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerMute = function () { return cordova(this, "playerMute", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.playerExit = function () { return cordova(this, "playerExit", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.updateMetadata = function (artist, title) { return cordova(this, "updateMetadata", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.controlsDestroy = function () { return cordova(this, "controlsDestroy", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.controlsSubscribe = function () { return cordova(this, "controlsSubscribe", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.prototype.controlsCreate = function () { return cordova(this, "controlsCreate", { "sync": true }, arguments); };
+    RogerRadioPlayerOriginal.pluginName = "RogerRadioPlayer";
+    RogerRadioPlayerOriginal.plugin = "cordova-plugin-roger-radio-player";
+    RogerRadioPlayerOriginal.pluginRef = "cordova.plugins.rogerRadioPlayer";
+    RogerRadioPlayerOriginal.repo = "https://github.com/TheHolyRogerCoin/RogerRadioApp";
+    RogerRadioPlayerOriginal.platforms = ["Android"];
+    return RogerRadioPlayerOriginal;
+}(IonicNativePlugin));
+var RogerRadioPlayer = new RogerRadioPlayerOriginal();
+export { RogerRadioPlayer };
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvQGlvbmljLW5hdGl2ZS9wbHVnaW5zL3JvZ2VyLXJhZGlvLXBsYXllci9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7O0FBQ0EsT0FBTyw4QkFBc0MsTUFBTSxvQkFBb0IsQ0FBQzs7SUEwQmxDLG9DQUFpQjs7OztJQVdyRCw2Q0FBa0IsYUFBQyxRQUFrQztJQVlyRCxpREFBc0IsYUFBQyxRQUFrQztJQVl6RCxrREFBdUIsYUFBQyxRQUFrQztJQVUxRCwrQ0FBb0I7SUFZcEIscUNBQVUsYUFBQyxHQUFXO0lBVXRCLHVDQUFZO0lBVVoscUNBQVU7SUFVVixxQ0FBVTtJQVlWLDBDQUFlLGFBQUMsR0FBVztJQVUzQix1Q0FBWTtJQVVaLHFDQUFVO0lBVVYscUNBQVU7SUFhVix5Q0FBYyxhQUFDLE1BQWMsRUFBRSxLQUFhO0lBVTVDLDBDQUFlO0lBVWYsNENBQWlCO0lBVWpCLHlDQUFjOzs7Ozs7MkJBdk1oQjtFQTJCc0MsaUJBQWlCO1NBQTFDLGdCQUFnQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEluamVjdGFibGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7IENvcmRvdmEsIElvbmljTmF0aXZlUGx1Z2luLCBQbHVnaW4gfSBmcm9tICdAaW9uaWMtbmF0aXZlL2NvcmUnO1xuXG4vKipcbiAqIEBuYW1lIFJvZ2VyUmFkaW9QbGF5ZXJcbiAqIEBkZXNjcmlwdGlvblxuICogQ29yZG92YSBwbHVnaW4gZm9yIFJvZ2VyUmFkaW8gUGxheWVyLlxuICogUmVxdWlyZXMgQ29yZG92YSBwbHVnaW46IGNvcmRvdmEtcGx1Z2luLXJvZ2VyLXJhZGlvLXBsYXllci5cbiAqIEB1c2FnZVxuICogYGBgdHlwZXNjcmlwdFxuICogaW1wb3J0IHsgUm9nZXJSYWRpb1BsYXllciB9IGZyb20gJ0Bpb25pYy1uYXRpdmUvcm9nZXItcmFkaW8tcGxheWVyL25neCc7XG4gKlxuICogY29uc3RydWN0b3IocHJpdmF0ZSByb2dlclJhZGlvUGxheWVyOiBSb2dlclJhZGlvUGxheWVyKSB7IH1cbiAqXG4gKiAuLi5cbiAqXG4gKiBgYGBcbiAqXG4gKi9cbkBQbHVnaW4oe1xuICBwbHVnaW5OYW1lOiAnUm9nZXJSYWRpb1BsYXllcicsXG4gIHBsdWdpbjogJ2NvcmRvdmEtcGx1Z2luLXJvZ2VyLXJhZGlvLXBsYXllcicsXG4gIHBsdWdpblJlZjogJ2NvcmRvdmEucGx1Z2lucy5yb2dlclJhZGlvUGxheWVyJyxcbiAgcmVwbzogJ2h0dHBzOi8vZ2l0aHViLmNvbS9UaGVIb2x5Um9nZXJDb2luL1JvZ2VyUmFkaW9BcHAnLFxuICBwbGF0Zm9ybXM6IFsnQW5kcm9pZCddLFxufSlcbkBJbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBSb2dlclJhZGlvUGxheWVyIGV4dGVuZHMgSW9uaWNOYXRpdmVQbHVnaW4ge1xuICAvKipcbiAgICogc2V0Q2FsbGJhY2tTdG9wcGVkXG4gICAqXG4gICAqIEBwYXJhbSBjYWxsYmFjayB7ZnVuY3Rpb259XG4gICAqXG4gICAqIEByZXR1cm4ge3ZvaWR9XG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgc3luYzogdHJ1ZSxcbiAgfSlcbiAgc2V0Q2FsbGJhY2tTdG9wcGVkKGNhbGxiYWNrOiAoLi4uYXJnczogYW55W10pID0+IHZvaWQpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIHNldENhbGxiYWNrVGFza3NFbmFibGVcbiAgICpcbiAgICogQHBhcmFtIGNhbGxiYWNrIHtmdW5jdGlvbn1cbiAgICpcbiAgICogQHJldHVybiB7dm9pZH1cbiAgICovXG4gIEBDb3Jkb3ZhKHtcbiAgICBzeW5jOiB0cnVlLFxuICB9KVxuICBzZXRDYWxsYmFja1Rhc2tzRW5hYmxlKGNhbGxiYWNrOiAoLi4uYXJnczogYW55W10pID0+IHZvaWQpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIHNldENhbGxiYWNrVGFza3NEaXNhYmxlXG4gICAqXG4gICAqIEBwYXJhbSBjYWxsYmFjayB7ZnVuY3Rpb259XG4gICAqXG4gICAqIEByZXR1cm4ge3ZvaWR9XG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgc3luYzogdHJ1ZSxcbiAgfSlcbiAgc2V0Q2FsbGJhY2tUYXNrc0Rpc2FibGUoY2FsbGJhY2s6ICguLi5hcmdzOiBhbnlbXSkgPT4gdm9pZCk6IHZvaWQge31cblxuICAvKipcbiAgICogY2xlYXJDYWNoZWRTdHJlYW1VcmxcbiAgICpcbiAgICogQHJldHVybiB7dm9pZH1cbiAgICovXG4gIEBDb3Jkb3ZhKHtcbiAgICBzeW5jOiB0cnVlLFxuICB9KVxuICBjbGVhckNhY2hlZFN0cmVhbVVybCgpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIHBsYXllckxvYWRcbiAgICpcbiAgICogQHBhcmFtIHVybCB7c3RyaW5nfVxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIHBsYXllckxvYWQodXJsOiBzdHJpbmcpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIHBsYXllclJlbG9hZFxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIHBsYXllclJlbG9hZCgpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIHBsYXllclBsYXlcbiAgICpcbiAgICogQHJldHVybiB7dm9pZH1cbiAgICovXG4gIEBDb3Jkb3ZhKHtcbiAgICBzeW5jOiB0cnVlLFxuICB9KVxuICBwbGF5ZXJQbGF5KCk6IHZvaWQge31cblxuICAvKipcbiAgICogcGxheWVyU3RvcFxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIHBsYXllclN0b3AoKTogdm9pZCB7fVxuXG4gIC8qKlxuICAgKiBwbGF5ZXJTZXRWb2x1bWVcbiAgICpcbiAgICogQHBhcmFtIHZvbCB7bnVtYmVyfVxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIHBsYXllclNldFZvbHVtZSh2b2w6IG51bWJlcik6IHZvaWQge31cblxuICAvKipcbiAgICogcGxheWVyVW5tdXRlXG4gICAqXG4gICAqIEByZXR1cm4ge3ZvaWR9XG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgc3luYzogdHJ1ZSxcbiAgfSlcbiAgcGxheWVyVW5tdXRlKCk6IHZvaWQge31cblxuICAvKipcbiAgICogcGxheWVyTXV0ZVxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIHBsYXllck11dGUoKTogdm9pZCB7fVxuXG4gIC8qKlxuICAgKiBwbGF5ZXJFeGl0XG4gICAqXG4gICAqIEByZXR1cm4ge3ZvaWR9XG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgc3luYzogdHJ1ZSxcbiAgfSlcbiAgcGxheWVyRXhpdCgpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIHVwZGF0ZU1ldGFkYXRhXG4gICAqXG4gICAqIEBwYXJhbSBhcnRpc3Qge3N0cmluZ31cbiAgICogQHBhcmFtIHRpdGxlIHtzdHJpbmd9XG4gICAqXG4gICAqIEByZXR1cm4ge3ZvaWR9XG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgc3luYzogdHJ1ZSxcbiAgfSlcbiAgdXBkYXRlTWV0YWRhdGEoYXJ0aXN0OiBzdHJpbmcsIHRpdGxlOiBzdHJpbmcpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIGNvbnRyb2xzRGVzdHJveVxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIGNvbnRyb2xzRGVzdHJveSgpOiB2b2lkIHt9XG5cbiAgLyoqXG4gICAqIGNvbnRyb2xzU3Vic2NyaWJlXG4gICAqXG4gICAqIEByZXR1cm4ge3ZvaWR9XG4gICAqL1xuICBAQ29yZG92YSh7XG4gICAgc3luYzogdHJ1ZSxcbiAgfSlcbiAgY29udHJvbHNTdWJzY3JpYmUoKTogdm9pZCB7fVxuXG4gIC8qKlxuICAgKiBjb250cm9sc0NyZWF0ZVxuICAgKlxuICAgKiBAcmV0dXJuIHt2b2lkfVxuICAgKi9cbiAgQENvcmRvdmEoe1xuICAgIHN5bmM6IHRydWUsXG4gIH0pXG4gIGNvbnRyb2xzQ3JlYXRlKCk6IHZvaWQge31cbn1cbiJdfQ==

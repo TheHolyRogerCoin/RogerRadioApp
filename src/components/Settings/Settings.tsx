@@ -12,6 +12,8 @@ import { makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 
+import { RogerRadioPlayer } from '@ionic-native/roger-radio-player';
+
 import { setQuality, quality_mp3_max, quality_mp3_med } from '../../helpers/preferences';
 import { usePrefFetchQuality } from '../../hooks/usePrefFetchQuality';
 import { playerSetUrl } from '../../modules/player';
@@ -43,6 +45,7 @@ const SettingsComponent: React.FC = () => {
     const handleChange = React.useCallback(
         (event: SelectChangeEvent) => {
             setQuality(event.target.value as string).then(() => {
+                RogerRadioPlayer && RogerRadioPlayer.clearCachedStreamUrl();
                 dispatch(playerSetUrl(undefined));
             });
             setPlayerQuality(event.target.value as string);

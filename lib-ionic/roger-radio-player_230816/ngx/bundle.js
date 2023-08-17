@@ -14,6 +14,7 @@ var RogerRadioPlayer = /** @class */ (function (_super) {
     RogerRadioPlayer.prototype.setCallbackStopped = function (callback) { return core.cordova(this, "setCallbackStopped", { "sync": true }, arguments); };
     RogerRadioPlayer.prototype.setCallbackTasksEnable = function (callback) { return core.cordova(this, "setCallbackTasksEnable", { "sync": true }, arguments); };
     RogerRadioPlayer.prototype.setCallbackTasksDisable = function (callback) { return core.cordova(this, "setCallbackTasksDisable", { "sync": true }, arguments); };
+    RogerRadioPlayer.prototype.clearCachedStreamUrl = function () { return core.cordova(this, "clearCachedStreamUrl", { "sync": true }, arguments); };
     RogerRadioPlayer.prototype.playerLoad = function (url) { return core.cordova(this, "playerLoad", { "sync": true }, arguments); };
     RogerRadioPlayer.prototype.playerReload = function () { return core.cordova(this, "playerReload", { "sync": true }, arguments); };
     RogerRadioPlayer.prototype.playerPlay = function () { return core.cordova(this, "playerPlay", { "sync": true }, arguments); };

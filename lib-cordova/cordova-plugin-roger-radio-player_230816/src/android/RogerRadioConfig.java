@@ -11,6 +11,10 @@ public class RogerRadioConfig {
     private static String urlWs;
     private static String urlStream;
 
+    public void clearCachedStreamUrl() {
+        urlStream = null;
+    }
+
     public String getUrlStatWs(Context context) {
         return getUrlWs(context) + "/ws_stats_public/all_public_stats?pub-api-key=" + getApiKey(context);
     }

@@ -42,6 +42,11 @@ exports.setCallbackTasksDisable = function(callback)
     exec(rrPlayer.wrapCallbackTasksDisable, null, 'RogerRadioPlayer', 'setCallbackTasksDisable', []);
 };
 
+exports.clearCachedStreamUrl = function()
+{
+    exec(null, null, 'RogerRadioPlayer', 'clearCachedStreamUrl', []);
+};
+
 exports.playerLoad = function(url)
 {
     exec(null, null, 'RogerRadioPlayer', 'playerLoad', [url]);
