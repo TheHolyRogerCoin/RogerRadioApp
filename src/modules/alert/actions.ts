@@ -9,7 +9,7 @@ import {
 export interface Alert {
     type: string;
     code?: number;
-    message: string[];
+    message: string[] | string;
     display_ms?: string;
     receive_timestamp?: number;
 }

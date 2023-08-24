@@ -1,6 +1,7 @@
 import { Preferences } from '@capacitor/preferences';
 
 const pref_key_quality = 'quality';
+const pref_key_voucher_tokens = 'voucher_tokens';
 
 export const quality_mp3_max = 'mp3_max';
 export const quality_mp3_med = 'mp3_med';
@@ -33,4 +34,28 @@ export const getQuality = async (): Promise<string> => {
     }
 
     return allowedValue;
+};
+
+export const setVoucherTokens = async (newTokens: string[]) => {
+    await Preferences.set({
+        key: pref_key_voucher_tokens,
+        value: JSON.stringify(newTokens),
+    });
+};
+
+export const getVoucherTokens = async (): Promise<string[]> => {
+    const { value } = await Preferences.get({ key: pref_key_voucher_tokens });
+
+    return value ? JSON.parse(value) : [];
+};
+
+export const addVoucherToken = async (newToken: string) => {
+    const currentTokens = await getVoucherTokens();
+    const newTokens = [...currentTokens, newToken].filter((value, index, array) => {
+        return array.indexOf(value) === index;
+    });
+    await Preferences.set({
+        key: pref_key_voucher_tokens,
+        value: JSON.stringify(newTokens),
+    });
 };

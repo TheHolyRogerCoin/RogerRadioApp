@@ -3,6 +3,8 @@ export * from './useFetchPlaylistUpdateInterval';
 export * from './useFetchRadioStatus';
 export * from './useFetchScheduleListUpdateInterval';
 export * from './useFetchStatusUpdateInterval';
+export * from './useFetchUserBalance';
+export * from './useFetchUserPendingRequests';
 export * from './useHideSplash';
 export * from './useMediaControls';
 export * from './usePrevious';

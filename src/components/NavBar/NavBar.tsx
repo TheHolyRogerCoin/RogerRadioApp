@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import RadioIcon from '@mui/icons-material/Radio';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -32,6 +33,7 @@ const NavBarComponent: React.FC = () => {
                 <BottomNavigationAction component={Link} to="/playlist" icon={<QueueMusicIcon />} />
                 <BottomNavigationAction component={Link} to="/recent_requests" icon={<SubscriptionsIcon />} />
                 <BottomNavigationAction component={Link} to="/schedule" icon={<EventNoteIcon />} />
+                <BottomNavigationAction component={Link} to="/rogers_choice" icon={<LibraryMusicIcon />} />
                 <BottomNavigationAction component={Link} to="/settings" icon={<SettingsIcon />} />
             </BottomNavigation>
         </Box>

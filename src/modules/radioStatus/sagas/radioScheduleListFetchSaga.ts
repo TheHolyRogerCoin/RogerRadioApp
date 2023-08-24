@@ -24,6 +24,7 @@ export function* radioScheduleListFetchSaga() {
                 message: error.message,
                 code: error.code,
                 type: 'error',
+                receive_timestamp: Date.now(),
             })
         );
     }
