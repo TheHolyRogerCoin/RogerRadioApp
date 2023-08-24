@@ -11,6 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+import { checkViewportSmallSize } from '../../helpers/checkViewportSmallSize';
 import { truncateString } from '../../helpers/truncateString';
 import { useViewportSize } from '../../hooks/useViewportSize';
 import { selectRadioPlaylist } from '../../modules/radioStatus';
@@ -33,10 +34,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const checkSmallSize = (width) => {
-    return width < 600 ? true : false;
-};
-
 const PlaylistComponent: React.FC = () => {
     const classes = useStyles();
 
@@ -53,10 +50,10 @@ const PlaylistComponent: React.FC = () => {
                         {plItem.Position}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                        {truncateString(plItem.Artist, checkSmallSize(viewport_width) ? 50 : -1)}
+                        {truncateString(plItem.Artist, checkViewportSmallSize(viewport_width) ? 50 : -1)}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                        {truncateString(plItem.Title, checkSmallSize(viewport_width) ? 50 : -1)}
+                        {truncateString(plItem.Title, checkViewportSmallSize(viewport_width) ? 50 : -1)}
                     </TableCell>
                 </TableRow>
             );

@@ -14,6 +14,7 @@ import en from 'javascript-time-ago/locale/en.json';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import ReactTimeAgo from 'react-time-ago';
+import { checkViewportSmallSize } from '../../helpers/checkViewportSmallSize';
 import { truncateString } from '../../helpers/truncateString';
 import { useViewportSize } from '../../hooks/useViewportSize';
 import { RecentRequestsItem, selectRadioRecentRequests } from '../../modules/radioStatus';
@@ -38,10 +39,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const checkSmallSize = (width) => {
-    return width < 600 ? true : false;
-};
-
 const RecentRequestsComponent: React.FC = () => {
     const classes = useStyles();
 
@@ -55,14 +52,16 @@ const RecentRequestsComponent: React.FC = () => {
             return (
                 <TableRow key={`${index}`}>
                     <TableCell component="th" scope="row">
-                        {truncateString(plItem.FromUser, checkSmallSize(viewport_width) ? 15 : -1)}
+                        {truncateString(plItem.FromUser, checkViewportSmallSize(viewport_width) ? 15 : -1)}
                     </TableCell>
-                    <TableCell>{truncateString(plItem.TrkPretty, checkSmallSize(viewport_width) ? 60 : -1)}</TableCell>
+                    <TableCell>
+                        {truncateString(plItem.TrkPretty, checkViewportSmallSize(viewport_width) ? 60 : -1)}
+                    </TableCell>
                     <TableCell align="right">
                         <ReactTimeAgo
                             date={Date.parse(plItem.Date)}
                             locale="en-US"
-                            timeStyle={checkSmallSize(viewport_width) ? 'mini-now' : 'round-minute'}
+                            timeStyle={checkViewportSmallSize(viewport_width) ? 'mini-now' : 'round-minute'}
                         />
                     </TableCell>
                 </TableRow>
