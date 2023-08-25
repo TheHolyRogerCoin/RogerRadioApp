@@ -1,6 +1,8 @@
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -25,6 +27,7 @@ import { useViewportSize } from '../../hooks/useViewportSize';
 import {
     PendingRequestsItem,
     selectBalanceData,
+    selectCancelRequestLoading,
     selectCreateRequestLoading,
     selectPayRequestLoading,
     selectPendingRequestsData,
@@ -56,22 +59,37 @@ const useStyles = makeStyles((theme) => ({
         // maxWidth: '140px !important',
     },
     songPaymentButton: {
-        // minWidth: '50px !important',
+        minWidth: '35px !important',
         padding: '6px 6px !important',
     },
     songPaymentIcon: {
         fill: '#fff !important',
+        fontSize: '1.5rem !important',
     },
     songRequestButton: {
         minWidth: '50px !important',
         padding: '6px 6px !important',
     },
+    songPaymentCell: {
+        width: '60px',
+    },
     reqItems: {
         fontSize: '0.75em',
     },
     balanceBox: {
-        fontSize: '0.75em',
+        fontSize: '1.8em',
         textAlign: 'center',
+        // color: theme.palette.primary.main,
+        fontWeight: 900,
+    },
+    balanceIcon: {
+        marginRight: '2px',
+    },
+    backdropContainer: {
+        backdropFilter: 'blur(2px);',
+    },
+    backdropProgress: {
+        color: theme.palette.primary.main,
     },
 }));
 
@@ -86,6 +104,7 @@ const RogersChoiceComponent: React.FC = () => {
     const userBalance = useSelector(selectBalanceData);
     const userRequests = useSelector(selectPendingRequestsData);
     const createRequestLoading = useSelector(selectCreateRequestLoading);
+    const cancelRequestLoading = useSelector(selectCancelRequestLoading);
     const payRequestLoading = useSelector(selectPayRequestLoading);
 
     const { width: viewport_width, height: _ } = useViewportSize();
@@ -93,17 +112,6 @@ const RogersChoiceComponent: React.FC = () => {
     const prefVoucherTokens = usePrefFetchVoucherTokens({ lastChange });
     useFetchUserBalance({ tokens: prefVoucherTokens });
     useFetchUserPendingRequests({ tokens: prefVoucherTokens });
-
-    // const handleChange = React.useCallback(
-    //     (event: SelectChangeEvent) => {
-    //         setQuality(event.target.value as string).then(() => {
-    //             RogerRadioPlayer && RogerRadioPlayer.clearCachedStreamUrl();
-    //             dispatch(playerSetUrl(undefined));
-    //         });
-    //         setPlayerQuality(event.target.value as string);
-    //     },
-    //     [dispatch]
-    // );
 
     const handleSongRequestChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setSongRequestString(event.target.value);
@@ -153,7 +161,7 @@ const RogersChoiceComponent: React.FC = () => {
                             timeStyle={checkViewportSmallSize(viewport_width) ? 'mini-now' : 'round-minute'}
                         />
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" className={classes.songPaymentCell}>
                         <Button
                             fullWidth
                             className={classes.songPaymentButton}
@@ -166,12 +174,12 @@ const RogersChoiceComponent: React.FC = () => {
                             <CheckCircleIcon className={classes.songPaymentIcon} />
                         </Button>
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" className={classes.songPaymentCell}>
                         <Button
                             fullWidth
                             className={classes.songPaymentButton}
                             variant="failure"
-                            disabled={payRequestLoading}
+                            disabled={cancelRequestLoading}
                             onClick={() => {
                                 cancelSongRequest(uReq.TrkPretty);
                             }}
@@ -184,8 +192,10 @@ const RogersChoiceComponent: React.FC = () => {
         },
         [
             viewport_width,
+            classes.songPaymentCell,
             classes.songPaymentButton,
             classes.songPaymentIcon,
+            cancelRequestLoading,
             payRequestLoading,
             paySongRequest,
             cancelSongRequest,
@@ -255,19 +265,38 @@ const RogersChoiceComponent: React.FC = () => {
         return userBalance > 0 ? (
             <Grid item xs={12}>
                 <Box className={classes.balanceBox}>
-                    <LibraryMusicIcon />
+                    <LibraryMusicIcon className={classes.balanceIcon} />
                     {userBalance}
                 </Box>
             </Grid>
         ) : null;
-    }, [userBalance, classes.balanceBox]);
+    }, [userBalance, classes.balanceBox, classes.balanceIcon]);
 
     const renderMainRequestBox = React.useCallback(() => {
         return userBalance > 0 ? renderRequestBox() : renderNoBalanceBox();
     }, [userBalance, renderRequestBox, renderNoBalanceBox]);
 
+    const renderBackdrop = React.useCallback(() => {
+        return (
+            <Backdrop
+                className={classes.backdropContainer}
+                sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={cancelRequestLoading || createRequestLoading || payRequestLoading || false}
+            >
+                <CircularProgress thickness={5} size={130} className={classes.backdropProgress} color="inherit" />
+            </Backdrop>
+        );
+    }, [
+        classes.backdropProgress,
+        classes.backdropContainer,
+        cancelRequestLoading,
+        createRequestLoading,
+        payRequestLoading,
+    ]);
+
     return (
         <div className={classes.settingsContainer}>
+            {renderBackdrop()}
             <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
                     <span className={classes.title}>Roger's Choice</span>
