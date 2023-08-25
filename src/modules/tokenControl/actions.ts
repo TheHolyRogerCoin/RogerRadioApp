@@ -2,6 +2,9 @@ import {
     TOKENCONTROL_CREATEREQUEST_DATA,
     TOKENCONTROL_CREATEREQUEST_ERROR,
     TOKENCONTROL_CREATEREQUEST_FETCH,
+    TOKENCONTROL_CANCELREQUEST_DATA,
+    TOKENCONTROL_CANCELREQUEST_ERROR,
+    TOKENCONTROL_CANCELREQUEST_FETCH,
     TOKENCONTROL_PAYREQUEST_DATA,
     TOKENCONTROL_PAYREQUEST_ERROR,
     TOKENCONTROL_PAYREQUEST_FETCH,
@@ -15,6 +18,8 @@ import {
 import {
     BalanceFetchPayload,
     BalancePayload,
+    CancelRequestFetchPayload,
+    CancelRequestPayload,
     CreateRequestFetchPayload,
     CreateRequestPayload,
     PayRequestFetchPayload,
@@ -35,6 +40,20 @@ export interface TokenControlCreateRequestData {
 
 export interface TokenControlCreateRequestError {
     type: typeof TOKENCONTROL_CREATEREQUEST_ERROR;
+}
+
+export interface TokenControlCancelRequestFetch {
+    type: typeof TOKENCONTROL_CANCELREQUEST_FETCH;
+    payload: CancelRequestFetchPayload;
+}
+
+export interface TokenControlCancelRequestData {
+    type: typeof TOKENCONTROL_CANCELREQUEST_DATA;
+    payload: CancelRequestPayload;
+}
+
+export interface TokenControlCancelRequestError {
+    type: typeof TOKENCONTROL_CANCELREQUEST_ERROR;
 }
 
 export interface TokenControlPayRequestFetch {
@@ -83,6 +102,9 @@ export type TokenControlAction =
     | TokenControlCreateRequestFetch
     | TokenControlCreateRequestData
     | TokenControlCreateRequestError
+    | TokenControlCancelRequestFetch
+    | TokenControlCancelRequestData
+    | TokenControlCancelRequestError
     | TokenControlPayRequestFetch
     | TokenControlPayRequestData
     | TokenControlPayRequestError
@@ -110,6 +132,25 @@ export const tokenControlCreateRequestData = (
 export const tokenControlCreateRequestError =
     (): TokenControlCreateRequestError => ({
         type: TOKENCONTROL_CREATEREQUEST_ERROR,
+    });
+
+export const tokenControlCancelRequestFetch = (
+    payload: TokenControlCancelRequestFetch['payload']
+): TokenControlCancelRequestFetch => ({
+    type: TOKENCONTROL_CANCELREQUEST_FETCH,
+    payload,
+});
+
+export const tokenControlCancelRequestData = (
+    payload: TokenControlCancelRequestData['payload']
+): TokenControlCancelRequestData => ({
+    type: TOKENCONTROL_CANCELREQUEST_DATA,
+    payload,
+});
+
+export const tokenControlCancelRequestError =
+    (): TokenControlCancelRequestError => ({
+        type: TOKENCONTROL_CANCELREQUEST_ERROR,
     });
 
 export const tokenControlPayRequestFetch = (

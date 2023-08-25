@@ -24,12 +24,22 @@ export interface BalancePayload {
 
 export interface PayRequestFetchPayload {
     tokens: string[];
+    track_name?: string;
 }
 
 export interface PayRequestPayload {
     response: string;
     available_tokens: string[];
     available_balance: number;
+}
+
+export interface CancelRequestFetchPayload {
+    tokens: string[];
+    track_name?: string;
+}
+
+export interface CancelRequestPayload {
+    response: string;
 }
 
 export interface CreateRequestFetchPayload {

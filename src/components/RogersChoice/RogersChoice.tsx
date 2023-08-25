@@ -1,3 +1,5 @@
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -26,6 +28,7 @@ import {
     selectCreateRequestLoading,
     selectPayRequestLoading,
     selectPendingRequestsData,
+    tokenControlCancelRequestFetch,
     tokenControlCreateRequestFetch,
     tokenControlPayRequestFetch,
 } from '../../modules/tokenControl';
@@ -55,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
     songPaymentButton: {
         // minWidth: '50px !important',
         padding: '6px 6px !important',
+    },
+    songPaymentIcon: {
+        fill: '#fff !important',
     },
     songRequestButton: {
         minWidth: '50px !important',
@@ -113,12 +119,25 @@ const RogersChoiceComponent: React.FC = () => {
         }
     }, [dispatch, songRequestString, prefVoucherTokens]);
 
-    const paySongRequest = React.useCallback(() => {
-        if (userRequests.length > 0) {
-            dispatch(tokenControlPayRequestFetch({ tokens: prefVoucherTokens }));
-            setLastChange(Date.now());
-        }
-    }, [dispatch, userRequests, prefVoucherTokens]);
+    const paySongRequest = React.useCallback(
+        (track_name) => {
+            if (userRequests.length > 0) {
+                dispatch(tokenControlPayRequestFetch({ track_name: track_name, tokens: prefVoucherTokens }));
+                setLastChange(Date.now());
+            }
+        },
+        [dispatch, userRequests, prefVoucherTokens]
+    );
+
+    const cancelSongRequest = React.useCallback(
+        (track_name) => {
+            if (userRequests.length > 0) {
+                dispatch(tokenControlCancelRequestFetch({ track_name: track_name, tokens: prefVoucherTokens }));
+                setLastChange(Date.now());
+            }
+        },
+        [dispatch, userRequests, prefVoucherTokens]
+    );
 
     const renderUserRequestItem = React.useCallback(
         (uReq: PendingRequestsItem, index: number) => {
@@ -134,29 +153,44 @@ const RogersChoiceComponent: React.FC = () => {
                             timeStyle={checkViewportSmallSize(viewport_width) ? 'mini-now' : 'round-minute'}
                         />
                     </TableCell>
+                    <TableCell align="right">
+                        <Button
+                            fullWidth
+                            className={classes.songPaymentButton}
+                            variant="success"
+                            disabled={payRequestLoading}
+                            onClick={() => {
+                                paySongRequest(uReq.TrkPretty);
+                            }}
+                        >
+                            <CheckCircleIcon className={classes.songPaymentIcon} />
+                        </Button>
+                    </TableCell>
+                    <TableCell align="right">
+                        <Button
+                            fullWidth
+                            className={classes.songPaymentButton}
+                            variant="failure"
+                            disabled={payRequestLoading}
+                            onClick={() => {
+                                cancelSongRequest(uReq.TrkPretty);
+                            }}
+                        >
+                            <DeleteForeverIcon className={classes.songPaymentIcon} />
+                        </Button>
+                    </TableCell>
                 </TableRow>
             );
         },
-        [viewport_width]
+        [
+            viewport_width,
+            classes.songPaymentButton,
+            classes.songPaymentIcon,
+            payRequestLoading,
+            paySongRequest,
+            cancelSongRequest,
+        ]
     );
-
-    const renderPaymentBox = React.useCallback(() => {
-        return userRequests.length > 0 ? (
-            <Grid item xs={12}>
-                <Button
-                    fullWidth
-                    className={classes.songPaymentButton}
-                    variant="contained"
-                    disabled={payRequestLoading}
-                    onClick={() => {
-                        paySongRequest();
-                    }}
-                >
-                    Tip Request
-                </Button>
-            </Grid>
-        ) : null;
-    }, [payRequestLoading, userRequests, paySongRequest, classes.songPaymentButton]);
 
     const renderUserRequestBox = React.useCallback(() => {
         return (
@@ -242,7 +276,6 @@ const RogersChoiceComponent: React.FC = () => {
                     <Grid container spacing={2} alignItems="center">
                         {renderBalanceBox()}
                         {renderMainRequestBox()}
-                        {renderPaymentBox()}
                         {renderUserRequestBox()}
                     </Grid>
                 </Grid>

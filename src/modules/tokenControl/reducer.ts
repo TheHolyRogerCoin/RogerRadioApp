@@ -5,6 +5,9 @@ import {
     TOKENCONTROL_BALANCE_DATA,
     TOKENCONTROL_BALANCE_ERROR,
     TOKENCONTROL_BALANCE_FETCH,
+    TOKENCONTROL_CANCELREQUEST_DATA,
+    TOKENCONTROL_CANCELREQUEST_ERROR,
+    TOKENCONTROL_CANCELREQUEST_FETCH,
     TOKENCONTROL_CREATEREQUEST_DATA,
     TOKENCONTROL_CREATEREQUEST_ERROR,
     TOKENCONTROL_CREATEREQUEST_FETCH,
@@ -17,6 +20,7 @@ import {
 } from './constants';
 import {
     BalancePayload,
+    CancelRequestPayload,
     CreateRequestPayload,
     PayRequestPayload,
     PendingRequestsPayload,
@@ -31,6 +35,10 @@ export interface TokenControlState extends CommonState {
     createRequestLoading: boolean;
     createRequestTimestampFetch?: number;
     createRequestTimestampData?: number;
+    cancelRequestData: CancelRequestPayload['response'];
+    cancelRequestLoading: boolean;
+    cancelRequestTimestampFetch?: number;
+    cancelRequestTimestampData?: number;
     payRequestData: PayRequestPayload['response'];
     payRequestLoading: boolean;
     payRequestTimestampFetch?: number;
@@ -45,6 +53,8 @@ export interface TokenControlState extends CommonState {
 export const initialTokenControlState: TokenControlState = {
     createRequestData: '',
     createRequestLoading: false,
+    cancelRequestData: '',
+    cancelRequestLoading: false,
     payRequestData: '',
     payRequestLoading: false,
     pendingRequestsData: [],
@@ -76,6 +86,24 @@ export const tokenControlReducer = (
             return {
                 ...state,
                 createRequestLoading: false,
+            };
+        case TOKENCONTROL_CANCELREQUEST_FETCH:
+            return {
+                ...state,
+                cancelRequestLoading: true,
+                cancelRequestTimestampFetch: Math.floor(Date.now() / 1000),
+            };
+        case TOKENCONTROL_CANCELREQUEST_DATA:
+            return {
+                ...state,
+                cancelRequestLoading: false,
+                cancelRequestData: action.payload.response,
+                cancelRequestTimestampData: Math.floor(Date.now() / 1000),
+            };
+        case TOKENCONTROL_CANCELREQUEST_ERROR:
+            return {
+                ...state,
+                cancelRequestLoading: false,
             };
         case TOKENCONTROL_PAYREQUEST_FETCH:
             return {

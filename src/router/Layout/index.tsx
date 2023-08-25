@@ -11,6 +11,13 @@ declare module '@mui/styles' {
     interface DefaultTheme extends Theme {}
 }
 
+declare module '@mui/material/Button' {
+    interface ButtonPropsVariantOverrides {
+        success: true;
+        failure: true;
+    }
+}
+
 const drawerWidth = 240;
 
 const colourActivePri = '#fd0000';
@@ -21,6 +28,14 @@ const colourBarBg = '#4b0000';
 const colourHoverTop = '#ac0000';
 const colourHoverBottom = '#780000';
 const colourNavButton = '#ac0000';
+const colourSuccessPri = '#1ed826';
+const colourSuccessSec = '#077d0c';
+const colourSuccessHovPri = '#078f0d';
+const colourSuccessHovSec = '#077d0c';
+const colourFailurePri = '#d50000';
+const colourFailureSec = '#6c0303';
+const colourFailureHovPri = '#ac0000';
+const colourFailureHovSec = '#780000';
 
 const mainTheme = createTheme({
     palette: {
@@ -65,7 +80,6 @@ const mainTheme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    // background: colourActivePri,
                     background: `linear-gradient(0deg, ${colourActiveSec} 0%, ${colourActivePri} 100%);`,
                     '&:hover': {
                         background: `linear-gradient(0deg, ${colourHoverBottom} 0%, ${colourHoverTop} 100%);`,
@@ -84,6 +98,36 @@ const mainTheme = createTheme({
                     paddingRight: '22px',
                 },
             },
+            variants: [
+                {
+                    props: { variant: 'success' },
+                    style: {
+                        background: `linear-gradient(0deg, ${colourSuccessSec} 0%, ${colourSuccessPri} 100%);`,
+                        '&:hover': {
+                            background: `linear-gradient(0deg, ${colourSuccessHovSec} 0%, ${colourSuccessHovPri} 100%);`,
+                        },
+                        '@media (hover: none)': {
+                            '&:hover': {
+                                background: `linear-gradient(0deg, ${colourSuccessHovSec} 0%, ${colourSuccessHovPri} 100%);`,
+                            },
+                        },
+                    },
+                },
+                {
+                    props: { variant: 'failure' },
+                    style: {
+                        background: `linear-gradient(0deg, ${colourFailureSec} 0%, ${colourFailurePri} 100%);`,
+                        '&:hover': {
+                            background: `linear-gradient(0deg, ${colourFailureHovSec} 0%, ${colourFailureHovPri} 100%);`,
+                        },
+                        '@media (hover: none)': {
+                            '&:hover': {
+                                background: `linear-gradient(0deg, ${colourFailureHovSec} 0%, ${colourFailureHovPri} 100%);`,
+                            },
+                        },
+                    },
+                },
+            ],
         },
         MuiLinearProgress: {
             styleOverrides: {
