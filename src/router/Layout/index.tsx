@@ -36,6 +36,7 @@ const colourFailurePri = '#d50000';
 const colourFailureSec = '#6c0303';
 const colourFailureHovPri = '#ac0000';
 const colourFailureHovSec = '#780000';
+const colourBackground = '#121212';
 
 const mainTheme = createTheme({
     palette: {
@@ -44,11 +45,23 @@ const mainTheme = createTheme({
             dark: colourActiveSec,
         },
         background: {
-            paper: 'var(--body-background-color)',
+            paper: colourBackground,
         },
         mode: 'dark',
     },
     components: {
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    '&.Mui-selected': {
+                        backgroundColor: `${colourActivePri}80`,
+                        '&.Mui-focusVisible': {
+                            backgroundColor: `${colourActivePri}80`,
+                        },
+                    },
+                },
+            },
+        },
         MuiBottomNavigationAction: {
             styleOverrides: {
                 root: {
@@ -73,7 +86,7 @@ const mainTheme = createTheme({
                     padding: '4px 8px',
                 },
                 stickyHeader: {
-                    backgroundColor: 'var(--body-background-color)',
+                    backgroundColor: colourBackground,
                 },
             },
         },
@@ -180,7 +193,7 @@ const mainTheme = createTheme({
         MuiPaper: {
             styleOverrides: {
                 root: {
-                    backgroundColor: 'var(--body-background-color)',
+                    backgroundColor: colourBackground,
                     color: '#fff',
                 },
             },
@@ -195,9 +208,10 @@ const mainTheme = createTheme({
         MuiPopover: {
             styleOverrides: {
                 paper: {
-                    backgroundColor: 'var(--header-background-color)',
+                    background: `${colourBackground}03`,
                     paddingLeft: 'calc(var(--gap) * 2)',
                     paddingRight: 'calc(var(--gap) * 2)',
+                    backdropFilter: 'blur(10px);',
                 },
             },
         },
