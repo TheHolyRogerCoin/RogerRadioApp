@@ -1,4 +1,4 @@
-package com.theholyroger.CordovaAndroidAutoPlugin;
+package com.theholyroger.RogerRadioAndroidAuto;
 
 // Cordova-required packages
 import org.apache.cordova.CallbackContext;
@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.widget.Toast;
 
-public class AndroidAutoPlugin extends CordovaPlugin {
+public class RogerRadioAndroidAutoPlugin extends CordovaPlugin {
   private static final String DURATION_LONG = "long";
   @Override
   public boolean execute(String action, JSONArray args,

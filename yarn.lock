@@ -3456,8 +3456,8 @@ cordova-plugin-music-controls2@^3.0.7:
 cordova-plugin-roger-radio-player@./lib-cordova/cordova-plugin-roger-radio-player_230816:
   version "0.0.1"
 
-cordova-plugin-rogerradio-auto@./lib-cordova/cordova-plugin-rogerradio-auto_230127:
-  version "0.0.1"
+cordova-plugin-rogerradio-auto@./lib-cordova/cordova-plugin-rogerradio-auto_230829:
+  version "0.0.2"
 
 core-util-is@1.0.2:
   version "1.0.2"

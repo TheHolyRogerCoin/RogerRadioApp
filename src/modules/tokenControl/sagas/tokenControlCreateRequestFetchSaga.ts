@@ -33,9 +33,9 @@ export function* tokenControlCreateRequestFetchSaga(
         yield put(
             alertPush({
                 message: response.data.response,
-                type: response.data.response.includes('distracted')
-                    ? 'error'
-                    : 'success',
+                type: response.data.response.includes('Received request')
+                    ? 'success'
+                    : 'error',
                 receive_timestamp: Date.now(),
             })
         );

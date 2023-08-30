@@ -1,6 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import { API, radioApiKey, RequestOptions } from '../../../api';
 import { buildQueryString } from '../../../helpers/buildQueryString';
+import { alertPush } from '../../alert';
 import {
     tokenControlBalanceData,
     tokenControlBalanceError,
@@ -27,7 +28,17 @@ export function* tokenControlBalanceFetchSaga(
             API.get(tokenControlOptions),
             `/token_control?${params}`
         );
-        yield put(tokenControlBalanceData(response.data));
+        if (response.data.response) {
+            yield put(
+                alertPush({
+                    message: response.data.response,
+                    type: 'error',
+                    receive_timestamp: Date.now(),
+                })
+            );
+        } else {
+            yield put(tokenControlBalanceData(response.data));
+        }
     } catch (error: any) {
         yield put(tokenControlBalanceError());
     }

@@ -11,6 +11,7 @@ export interface PendingRequestsItem {
 
 export interface PendingRequestsPayload {
     user_requests: PendingRequestsItem[];
+    response?: string;
 }
 
 export interface BalanceFetchPayload {
@@ -20,6 +21,7 @@ export interface BalanceFetchPayload {
 export interface BalancePayload {
     available_tokens: string[];
     available_balance: number;
+    response?: string;
 }
 
 export interface PayRequestFetchPayload {
