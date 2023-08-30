@@ -101,6 +101,7 @@ function editGradle() {
         var wU = '';
         var sUMax = '';
         var sUMed = '';
+        var sUTrash = '';
         if (err) {
           return console.log(err);
         }
@@ -122,6 +123,10 @@ function editGradle() {
             const sL = line.split("'")
             sUMed = sL[1];
           }
+          if (line.startsWith("    streamUrlMp3Trash:")) {
+            const sL = line.split("'")
+            sUTrash = sL[1];
+          }
         }
         const prefixData = "proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'\n        }";
         const suffixData = "\n    }\n}";
@@ -135,6 +140,7 @@ function editGradle() {
           getBuildString("URL_WS", wU) +
           getBuildString("URL_STREAM_MP3_MAX", sUMax) +
           getBuildString("URL_STREAM_MP3_MED", sUMed) +
+          getBuildString("URL_STREAM_MP3_TRASH", sUTrash) +
           buildClose +
           suffixData
         );

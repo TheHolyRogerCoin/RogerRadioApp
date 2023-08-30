@@ -12,7 +12,6 @@ const PlayerInterfaceComponent: React.FC = () => {
     const [mediaReloading, setMediaReloading] = React.useState(false);
     const [mediaReloadLock, setMediaReloadLock] = React.useState(false);
     const [mediaIsPlaying, setMediaIsPlaying] = React.useState(false);
-    const [mediaIsStopped, setMediaIsStopped] = React.useState(true);
     const [mediaEnded, setMediaEnded] = React.useState(false);
     const [mediaErrored, setMediaErrored] = React.useState(false);
     const [mediaVolume, setMediaVolume] = React.useState(0);
@@ -23,6 +22,7 @@ const PlayerInterfaceComponent: React.FC = () => {
     const url: string | undefined = useSelector(selectPlayerUrl);
 
     const volRef = React.useRef(volume);
+    const audioRef = React.useRef<ReactAudioPlayer | null>();
 
     usePlayerReload_Browser();
     useSetPlayerUrl();
@@ -56,10 +56,10 @@ const PlayerInterfaceComponent: React.FC = () => {
         if (!mediaReloading && playing && mediaShouldRender && !mediaIsPlaying) {
             window.console.log('playing');
             setMediaIsPlaying(true);
-            setMediaIsStopped(false);
             setMediaVolume(Math.max(Math.min(vRef, 1.0), 0));
         } else if (!mediaReloading && !playing && mediaShouldRender && mediaIsPlaying) {
-            setMediaIsStopped(true);
+            audioRef.current?.audioEl.current?.pause();
+            audioRef.current?.audioEl.current?.load();
             setMediaIsPlaying(false);
         }
     }, [playing, mediaShouldRender, mediaIsPlaying, mediaReloading]);
@@ -90,6 +90,10 @@ const PlayerInterfaceComponent: React.FC = () => {
         }
     }, [mediaEnded]);
 
+    const getPlayerUrl = React.useCallback(() => {
+        return mediaIsPlaying ? url : undefined;
+    }, [mediaIsPlaying, url]);
+
     React.useEffect(() => {
         return () => {
             setMediaShouldRender(false);
@@ -107,16 +111,20 @@ const PlayerInterfaceComponent: React.FC = () => {
         setMediaErrored(true);
     }, []);
 
-    return mediaShouldRender && !mediaIsStopped ? (
+    return (
         <ReactAudioPlayer
-            src={url}
+            ref={(element) => {
+                audioRef.current = element;
+            }}
+            src={getPlayerUrl()}
             autoPlay={true}
             muted={muted}
             volume={mediaVolume}
             onEnded={onMediaEnded}
             onError={onMediaError}
+            preload="none"
         />
-    ) : null;
+    );
 };
 
 export const PlayerInterface_Browser = React.memo(PlayerInterfaceComponent);

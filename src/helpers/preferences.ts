@@ -5,6 +5,7 @@ const pref_key_voucher_tokens = 'voucher_tokens';
 
 export const quality_mp3_max = 'mp3_max';
 export const quality_mp3_med = 'mp3_med';
+export const quality_mp3_trash = 'mp3_trash';
 
 const getValidQuality = (input: string | null | undefined) => {
     switch (input) {
@@ -12,6 +13,8 @@ const getValidQuality = (input: string | null | undefined) => {
             return quality_mp3_max;
         case quality_mp3_med:
             return quality_mp3_med;
+        case quality_mp3_trash:
+            return quality_mp3_trash;
         default:
             return quality_mp3_max;
     }

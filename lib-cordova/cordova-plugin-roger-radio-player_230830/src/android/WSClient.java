@@ -2,18 +2,11 @@ package com.theholyroger.WSClient;
 
 import com.theholyroger.WSProcessor.WSProcessor;
 
-import android.os.Handler;
-import android.util.Log;
-
-import dev.gustavoavila.websocketclient.WebSocketClient;
+import org.json.JSONObject;
 
 import java.net.URI;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.O;
+import dev.gustavoavila.websocketclient.WebSocketClient;
 
 
 public class WSClient {
@@ -22,7 +15,10 @@ public class WSClient {
     private WebSocketClient webSocketClient;
     private WSProcessor wsProcessor;
 
-    public WSClient(String wsUrl, WSProcessor wsProc) {
+    public WSClient(
+            String wsUrl,
+            WSProcessor wsProc
+    ) {
         try {
             wsUri = new URI(wsUrl);
         } catch (Exception e) {
@@ -51,8 +47,7 @@ public class WSClient {
                 try {
                     JSONObject jsonMsg = new JSONObject(message);
                     wsProcessor.processWsMsg(jsonMsg);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     System.out.print("onTextReceived err processing: ");
                     System.out.println(message);
@@ -77,7 +72,10 @@ public class WSClient {
             }
 
             @Override
-            public void onCloseReceived(int reason, String description) {}
+            public void onCloseReceived(
+                    int reason,
+                    String description
+            ) {}
         };
 
         webSocketClient.setConnectTimeout(10000);

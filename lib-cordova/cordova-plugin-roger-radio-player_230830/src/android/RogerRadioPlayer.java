@@ -1,35 +1,35 @@
 package com.theholyroger.RogerRadioPlayer;
 
+import android.os.Handler;
+import android.util.Log;
+
+import com.homerours.musiccontrols.MusicControls;
 import com.theholyroger.RogerRadioConfig.RogerRadioConfig;
 import com.theholyroger.WSClient.WSClient;
 import com.theholyroger.WSProcessor.WSProcessor;
 
-import com.homerours.musiccontrols.MusicControls;
-
-import de.appplant.cordova.plugin.background.BackgroundMode;
-import de.appplant.cordova.plugin.background.BackgroundModeExt;
-
-import android.os.Handler;
-import android.util.Log;
-
-import java.util.Iterator;
-import java.util.UUID;
-
+import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
+import org.apache.cordova.media.AudioHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.media.AudioHandler;
-import org.apache.cordova.PluginResult;
+import java.util.Iterator;
+import java.util.UUID;
 
-public class RogerRadioPlayer extends CordovaPlugin {
+import de.appplant.cordova.plugin.background.BackgroundMode;
+import de.appplant.cordova.plugin.background.BackgroundModeExt;
+
+public class RogerRadioPlayer
+        extends CordovaPlugin
+{
+    private final int maxReconnects = 10;
     private BackgroundMode pluginBgMode;
     private BackgroundModeExt pluginBgModeExt;
     private AudioHandler pluginMedia;
     private MusicControls pluginMusicControls;
-
     private boolean mediaControlsActive = false;
     private boolean shouldReEnterBackground = false;
     private boolean lockReloading = false;
@@ -45,12 +45,10 @@ public class RogerRadioPlayer extends CordovaPlugin {
     private CallbackContext callbackTasksEnable;
     private CallbackContext callbackTasksDisable;
     private int reconnectTries = 0;
-    private final int maxReconnects = 10;
-
     private String lastWsDataNowplayingArtist;
     private String lastWsDataNowplayingTitle;
 
-    private RogerRadioConfig radioConfig = new RogerRadioConfig();
+    private final RogerRadioConfig radioConfig = new RogerRadioConfig();
 
     private Handler handler;
     private String urlStatWs;
@@ -60,20 +58,20 @@ public class RogerRadioPlayer extends CordovaPlugin {
     protected void pluginInitialize() {
         handler = new Handler();
 
-        pluginBgMode = (BackgroundMode)this.webView.getPluginManager().getPlugin("BackgroundMode");
-        pluginBgModeExt = (BackgroundModeExt)this.webView.getPluginManager().getPlugin("BackgroundModeExt");
-        pluginMedia = (AudioHandler)this.webView.getPluginManager().getPlugin("Media");
-        pluginMusicControls = (MusicControls)this.webView.getPluginManager().getPlugin("MusicControls");
+        pluginBgMode = (BackgroundMode) this.webView.getPluginManager().getPlugin("BackgroundMode");
+        pluginBgModeExt = (BackgroundModeExt) this.webView.getPluginManager().getPlugin("BackgroundModeExt");
+        pluginMedia = (AudioHandler) this.webView.getPluginManager().getPlugin("Media");
+        pluginMusicControls = (MusicControls) this.webView.getPluginManager().getPlugin("MusicControls");
 
         try {
-            pluginMedia.execute("messageChannel", (JSONArray)null, new CallbackContext(null, null) {
+            pluginMedia.execute("messageChannel", (JSONArray) null, new CallbackContext(null, null) {
                 @Override
                 public void sendPluginResult(PluginResult pluginResult) {
-                    Log.d("RRP","messageChannel onMessageFromMedia sendPluginResult");
+                    Log.d("RRP", "messageChannel onMessageFromMedia sendPluginResult");
                     onMessageFromMedia(pluginResult);
                 }
             });
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
 
         createWebSocketClient();
     }
@@ -85,15 +83,18 @@ public class RogerRadioPlayer extends CordovaPlugin {
      * @param args     The exec() arguments.
      * @param callback The callback context used when
      *                 calling back into JavaScript.
-     *
      * @return Returning false results in a "MethodNotFound" error.
      */
     @Override
-    public boolean execute (String action, JSONArray args, CallbackContext callback) throws JSONException {
+    public boolean execute(
+            String action,
+            JSONArray args,
+            CallbackContext callback
+    )
+            throws JSONException {
         boolean validAction = true;
 
-        switch (action)
-        {
+        switch (action) {
             case "setCallbackStopped":
                 callbackStop = callback;
                 break;
@@ -162,7 +163,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     public void playerLoad(String pURL) {
-        Log.d("RRP","playerLoad");
+        Log.d("RRP", "playerLoad");
         playerURL = pURL;
         if (stateIsPlaying && !lockReloading) {
             playerReload();
@@ -175,17 +176,23 @@ public class RogerRadioPlayer extends CordovaPlugin {
         createArgs.put(playerURL);
         try {
             pluginMedia.execute("create", createArgs, emptyCbMedia());
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     public void playerReload() {
+        final Runnable runnablePlayerReload = new Runnable() {
+            public void run() {
+                Log.d("RRP", "runnablePlayerReload");
+                playerFullReload();
+            }
+        };
         handler.postDelayed(runnablePlayerReload, 500);
     }
 
     public void playerFullReload() {
         if (lockReloading) return;
         lockForReload();
-        Log.d("RRP","playerFullReload");
+        Log.d("RRP", "playerFullReload");
         pluginMedia.stopPlayingAudio(playerUUID);
         playerRelease();
         backgroundDisable();
@@ -199,13 +206,22 @@ public class RogerRadioPlayer extends CordovaPlugin {
             return;
         }
         int adjustedTime = ((reconnectTries * 2) * 1000) + 1500;
-        Log.d("RRP","Reload delaying for " + String.valueOf(adjustedTime));
+        Log.d("RRP", "Reload delaying for " + adjustedTime);
         reconnectTries++;
+        final Runnable runnablePlayerLoad = new Runnable() {
+            public void run() {
+                Log.d("RRP", "runnablePlayerLoad");
+                boolean shouldPlay = stateIsPlaying;
+                playerLoad(playerURL);
+                if (shouldPlay) playerPlay();
+                unlockForReload();
+            }
+        };
         handler.postDelayed(runnablePlayerLoad, adjustedTime);
     }
 
     public void playerPlay() {
-        Log.d("RRP","playerPlay");
+        Log.d("RRP", "playerPlay");
         setStateIsPlaying();
         controlsCreate();
         controlsSubscribe();
@@ -220,7 +236,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     public void playerStop(boolean calledFromUi) {
-        Log.d("RRP","playerStop");
+        Log.d("RRP", "playerStop");
         controlsDestroy();
         pluginMedia.stopPlayingAudio(playerUUID);
         if (!calledFromUi) {
@@ -235,7 +251,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
         if (stateIsPlaying) {
             try {
                 pluginMedia.setVolume(playerUUID, playerVolume);
-            } catch (Exception e){ e.printStackTrace(); }
+            } catch (Exception e) {e.printStackTrace();}
         }
     }
 
@@ -244,18 +260,21 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     public void playerMute() {
-        Log.d("RRP","playerMute");
+        Log.d("RRP", "playerMute");
         pluginMedia.setVolume(playerUUID, 0.0f);
     }
 
     public void playerExit() {
-        Log.d("RRP","playerExit");
+        Log.d("RRP", "playerExit");
         controlsDestroy();
         playerStop(false);
     }
 
-    public void updateMetadata(String artist, String title) {
-        Log.d("RRP","updateMetadata");
+    public void updateMetadata(
+            String artist,
+            String title
+    ) {
+        Log.d("RRP", "updateMetadata");
         playMetaTitle = title;
         playMetaArtist = artist;
         if (mediaControlsActive) {
@@ -264,31 +283,31 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     public void controlsDestroy() {
-        Log.d("RRP","controlsDestroy");
+        Log.d("RRP", "controlsDestroy");
         try {
             mediaControlsActive = false;
-            pluginMusicControls.execute("destroy", (JSONArray)null, new CallbackContext(null, null) {
+            pluginMusicControls.execute("destroy", (JSONArray) null, new CallbackContext(null, null) {
                 @Override
                 public void success(String message) {}
             });
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     public void controlsSubscribe() {
-        Log.d("RRP","controlsSubscribe");
+        Log.d("RRP", "controlsSubscribe");
         try {
-            pluginMusicControls.execute("watch", (JSONArray)null, new CallbackContext(null, null) {
+            pluginMusicControls.execute("watch", (JSONArray) null, new CallbackContext(null, null) {
                 @Override
                 public void success(String message) {
                     controlsEventProcess(message);
                 }
             });
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
         lockMusicControlsStop = false;
     }
 
     public void controlsCreate() {
-        Log.d("RRP","controlsCreate");
+        Log.d("RRP", "controlsCreate");
         try {
             mediaControlsActive = true;
             JSONObject argsData = new JSONObject();
@@ -318,46 +337,53 @@ public class RogerRadioPlayer extends CordovaPlugin {
                     @Override
                     public void success(String message) {}
                 });
-            } catch (JSONException e){ e.printStackTrace(); }
-        } catch (JSONException e){ e.printStackTrace(); }
+            } catch (JSONException e) {e.printStackTrace();}
+        } catch (JSONException e) {e.printStackTrace();}
         lockMusicControlsStop = false;
     }
 
     private void controlsEventProcess(String message) {
-        Log.d("RRP","controlsEventProcess");
+        Log.d("RRP", "controlsEventProcess");
         try {
             JSONObject jsonMsg = new JSONObject(message);
             String msgType = jsonMsg.optString("message");
-            Log.d("RRP",message);
+            Log.d("RRP", message);
             switch (msgType) {
                 case "music-controls-pause":
                 case "music-controls-destroy":
                 case "music-controls-headset-unplugged":
                 case "music-controls-media-button-pause":
                 case "music-controls-media-button-stop":
-                // case "music-controls-stop-listening":
+                    // case "music-controls-stop-listening":
                     if (!lockMusicControlsStop) {
                         mediaControlsActive = false;
                         lockMusicControlsStop = true;
                         backgroundUnlock();
                         backgroundMoveForeground();
+                        final Runnable runnablePlayerStop = new Runnable() {
+                            public void run() {
+                                callbackStop.success();
+                                controlsDestroy();
+                                playerStop(false);
+                            }
+                        };
                         handler.postDelayed(runnablePlayerStop, 1);
                     }
                     break;
                 default:
                     break;
             }
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
         controlsSubscribe();
     }
 
     private void playerRelease() {
-        Log.d("RRP","playerRelease");
+        Log.d("RRP", "playerRelease");
         JSONArray releaseArgs = new JSONArray();
         releaseArgs.put(playerUUID);
         try {
             pluginMedia.execute("release", releaseArgs, emptyCbMedia());
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     private void setStateIsPlaying() {
@@ -378,7 +404,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
 
     private void onMediaError(int status) {
         if (status <= 0) return;
-        Log.d("RRP","onMediaError " + String.valueOf(status));
+        Log.d("RRP", "onMediaError " + status);
         if (pluginBgMode.isBackgroundActive()) {
             shouldReEnterBackground = true;
         }
@@ -397,7 +423,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
                 pluginMedia.setVolume(playerUUID, playerVolume);
             }
         } else if (status == 4) {
-            Log.d("RRP","onMediaStatus stopped");
+            Log.d("RRP", "onMediaStatus stopped");
             backgroundMoveForeground();
             playerRelease();
             setStateIsStopped();
@@ -417,89 +443,37 @@ public class RogerRadioPlayer extends CordovaPlugin {
             switch (messageType) {
                 case 9:
                     JSONObject errCodes = statusUpdate.optJSONObject("value");
-                    int errorCode = (int)errCodes.optDouble("code");
+                    int errorCode = (int) errCodes.optDouble("code");
                     onMediaError(errorCode);
                     break;
                 case 1:
-                    int statusCode = (int)statusUpdate.optDouble("value");
+                    int statusCode = (int) statusUpdate.optDouble("value");
                     onMediaStatus(statusCode);
                     break;
                 default:
                     break;
             }
-        } catch (JSONException e){ e.printStackTrace(); }
+        } catch (JSONException e) {e.printStackTrace();}
 
     }
 
-    private final Runnable onCallbackActivate = new Runnable() {
-        public void run() {
-            try {
-                callbackTasksDisable.success();
-                pluginBgMode.execute("webview", (JSONArray)null, emptyCbBackground());
-                connectWebSocketClient();
-            } catch (Exception e){ e.printStackTrace(); }
-            backgroundSetCallbackActivate();
-        }
-    };
-
-    private final Runnable onCallbackDeactivate = new Runnable() {
-        public void run() {
-            try {
-                callbackTasksEnable.success();
-                closeWebSocketClient();
-            } catch (Exception e){ e.printStackTrace(); }
-            backgroundSetCallbackDeactivate();
-        }
-    };
-
-    private final Runnable onCallbackBeforeExit = new Runnable() {
-        public void run() {
-            backgroundSetCallbackBeforeExit();
-        }
-    };
-
-    private final Runnable onCallbackAfterResume = new Runnable() {
-        public void run() {
-            try {
-                callbackTasksEnable.success();
-            } catch (Exception e){ e.printStackTrace(); }
-            backgroundSetCallbackAfterResume();
-        }
-    };
-
-    private final Runnable runnablePlayerLoad = new Runnable() {
-        public void run() {
-            Log.d("RRP","runnablePlayerLoad");
-            boolean shouldPlay = false;
-            if (stateIsPlaying) shouldPlay = true;
-            playerLoad(playerURL);
-            if (shouldPlay) playerPlay();
-            unlockForReload();
-        }
-    };
-
-    private final Runnable runnablePlayerReload = new Runnable() {
-        public void run() {
-            Log.d("RRP","runnablePlayerReload");
-            playerFullReload();
-        }
-    };
-
-    private final Runnable runnablePlayerStop = new Runnable() {
-        public void run() {
-            callbackStop.success();
-            controlsDestroy();
-            playerStop(false);
-        }
-    };
-
     private void backgroundSetCallbackActivate() {
-        pluginBgMode.execute("setCallbackActivate", (JSONArray)null, new CallbackContext(null, null) {
+        pluginBgMode.execute("setCallbackActivate", (JSONArray) null, new CallbackContext(null, null) {
             @Override
             public void success() {
                 try {
+                    final Runnable onCallbackActivate = new Runnable() {
+                        public void run() {
+                            try {
+                                callbackTasksDisable.success();
+                                pluginBgMode.execute("webview", (JSONArray) null, emptyCbBackground());
+                                connectWebSocketClient();
+                            } catch (Exception e) {e.printStackTrace();}
+                            backgroundSetCallbackActivate();
+                        }
+                    };
                     handler.postDelayed(onCallbackActivate, 2);
-                } catch (Exception e){ e.printStackTrace(); }
+                } catch (Exception e) {e.printStackTrace();}
             }
 
             @Override
@@ -508,12 +482,21 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void backgroundSetCallbackDeactivate() {
-        pluginBgMode.execute("setCallbackDeactivate", (JSONArray)null, new CallbackContext(null, null) {
+        pluginBgMode.execute("setCallbackDeactivate", (JSONArray) null, new CallbackContext(null, null) {
             @Override
             public void success() {
                 try {
+                    final Runnable onCallbackDeactivate = new Runnable() {
+                        public void run() {
+                            try {
+                                callbackTasksEnable.success();
+                                closeWebSocketClient();
+                            } catch (Exception e) {e.printStackTrace();}
+                            backgroundSetCallbackDeactivate();
+                        }
+                    };
                     handler.postDelayed(onCallbackDeactivate, 2);
-                } catch (Exception e){ e.printStackTrace(); }
+                } catch (Exception e) {e.printStackTrace();}
             }
 
             @Override
@@ -522,14 +505,19 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void backgroundSetCallbackBeforeExit() {
-        pluginBgMode.execute("setCallbackBeforeExit", (JSONArray)null, new CallbackContext(null, null) {
+        pluginBgMode.execute("setCallbackBeforeExit", (JSONArray) null, new CallbackContext(null, null) {
             @Override
             public void success() {
-                Log.d("RRP","backgroundSetCallbackBeforeExit called");
+                Log.d("RRP", "backgroundSetCallbackBeforeExit called");
                 try {
+                    final Runnable onCallbackBeforeExit = new Runnable() {
+                        public void run() {
+                            backgroundSetCallbackBeforeExit();
+                        }
+                    };
                     callbackTasksDisable.success();
                     handler.postDelayed(onCallbackBeforeExit, 2);
-                } catch (Exception e){ e.printStackTrace(); }
+                } catch (Exception e) {e.printStackTrace();}
             }
 
             @Override
@@ -538,13 +526,21 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void backgroundSetCallbackAfterResume() {
-        pluginBgMode.execute("setCallbackAfterResume", (JSONArray)null, new CallbackContext(null, null) {
+        pluginBgMode.execute("setCallbackAfterResume", (JSONArray) null, new CallbackContext(null, null) {
             @Override
             public void success() {
-                Log.d("RRP","backgroundSetCallbackAfterResume called");
+                Log.d("RRP", "backgroundSetCallbackAfterResume called");
                 try {
+                    final Runnable onCallbackAfterResume = new Runnable() {
+                        public void run() {
+                            try {
+                                callbackTasksEnable.success();
+                            } catch (Exception e) {e.printStackTrace();}
+                            backgroundSetCallbackAfterResume();
+                        }
+                    };
                     handler.postDelayed(onCallbackAfterResume, 100);
-                } catch (Exception e){ e.printStackTrace(); }
+                } catch (Exception e) {e.printStackTrace();}
             }
 
             @Override
@@ -553,7 +549,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void backgroundSetup() {
-        Log.d("RRP","backgroundSetup");
+        Log.d("RRP", "backgroundSetup");
         try {
             JSONObject bgSettings = new JSONObject();
             bgSettings.put("title", "RogerRadio running in background");
@@ -580,34 +576,34 @@ public class RogerRadioPlayer extends CordovaPlugin {
             backgroundSetCallbackDeactivate();
             backgroundSetCallbackBeforeExit();
             backgroundSetCallbackAfterResume();
-            pluginBgMode.execute("battery", (JSONArray)null, emptyCbBackground());
-            pluginBgMode.execute("requestTopPermissions", (JSONArray)null, emptyCbBackground());
-        } catch (JSONException e){ e.printStackTrace(); }
+            pluginBgMode.execute("battery", (JSONArray) null, emptyCbBackground());
+            pluginBgMode.execute("requestTopPermissions", (JSONArray) null, emptyCbBackground());
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     private void backgroundEnable() {
-        Log.d("RRP","backgroundEnable");
-        pluginBgMode.execute("enable", (JSONArray)null, emptyCbBackground());
+        Log.d("RRP", "backgroundEnable");
+        pluginBgMode.execute("enable", (JSONArray) null, emptyCbBackground());
     }
 
     private void backgroundDisable() {
-        Log.d("RRP","backgroundDisable");
-        pluginBgMode.execute("disable", (JSONArray)null, emptyCbBackground());
+        Log.d("RRP", "backgroundDisable");
+        pluginBgMode.execute("disable", (JSONArray) null, emptyCbBackground());
     }
 
     private void backgroundUnlock() {
-        Log.d("RRP","backgroundUnlock");
-        pluginBgModeExt.execute("unlock", (JSONArray)null, emptyCbBackground());
+        Log.d("RRP", "backgroundUnlock");
+        pluginBgModeExt.execute("unlock", (JSONArray) null, emptyCbBackground());
     }
 
     private void backgroundMoveBackground() {
-        Log.d("RRP","backgroundMoveBackground");
-        pluginBgModeExt.execute("background", (JSONArray)null, emptyCbBackground());
+        Log.d("RRP", "backgroundMoveBackground");
+        pluginBgModeExt.execute("background", (JSONArray) null, emptyCbBackground());
     }
 
     private void backgroundMoveForeground() {
-        Log.d("RRP","backgroundMoveForeground");
-        pluginBgModeExt.execute("foreground", (JSONArray)null, emptyCbBackground());
+        Log.d("RRP", "backgroundMoveForeground");
+        pluginBgModeExt.execute("foreground", (JSONArray) null, emptyCbBackground());
     }
 
     private CallbackContext emptyCbMedia() {
@@ -635,7 +631,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
         if (payload == null) return;
 
         Iterator<String> iter = payload.keys();
-        while(iter.hasNext()){
+        while (iter.hasNext()) {
             String routingKey = iter.next();
             switch (routingKey) {
                 case "now_playing":
@@ -656,7 +652,7 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void createWebSocketClient() {
-        Log.d("RRP","createWebSocketClient");
+        Log.d("RRP", "createWebSocketClient");
         if (urlStatWs == null) {
             urlStatWs = radioConfig.getUrlStatWs(this.cordova.getActivity().getApplicationContext());
         }
@@ -672,12 +668,12 @@ public class RogerRadioPlayer extends CordovaPlugin {
     }
 
     private void connectWebSocketClient() {
-        Log.d("RRP","connectWebSocketClient");
+        Log.d("RRP", "connectWebSocketClient");
         webSocketClient.connect();
     }
 
     private void closeWebSocketClient() {
-        Log.d("RRP","closeWebSocketClient");
+        Log.d("RRP", "closeWebSocketClient");
         webSocketClient.close();
     }
 }

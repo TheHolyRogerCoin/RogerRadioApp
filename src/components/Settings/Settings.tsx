@@ -18,7 +18,13 @@ import { useDispatch } from 'react-redux';
 import { RogerRadioPlayer } from '@ionic-native/roger-radio-player';
 
 import { checkViewportSmallSize } from '../../helpers/checkViewportSmallSize';
-import { setQuality, quality_mp3_max, quality_mp3_med, addVoucherToken } from '../../helpers/preferences';
+import {
+    setQuality,
+    quality_mp3_max,
+    quality_mp3_med,
+    quality_mp3_trash,
+    addVoucherToken,
+} from '../../helpers/preferences';
 import { useFetchUserBalance } from '../../hooks/useFetchUserBalance';
 import { usePrefFetchQuality } from '../../hooks/usePrefFetchQuality';
 import { usePrefFetchVoucherTokens } from '../../hooks/usePrefFetchVoucherTokens';
@@ -113,6 +119,7 @@ const SettingsComponent: React.FC = () => {
                         <Select value={playerQuality || prefPlayerQuality} onChange={handleChange}>
                             <MenuItem value={quality_mp3_max}>Maximum (320)</MenuItem>
                             <MenuItem value={quality_mp3_med}>Medium (128)</MenuItem>
+                            <MenuItem value={quality_mp3_trash}>Trash (8)</MenuItem>
                         </Select>
                     </FormControl>
                 </TableCell>
