@@ -1,3 +1,4 @@
+const fs = require('fs');
 import { DefinePlugin } from 'webpack';
 import webpack from 'webpack';
 import ESLintPlugin from 'eslint-webpack-plugin';
@@ -12,6 +13,8 @@ import alias from './alias.js';
 const rootDir = path.resolve(__dirname, '..');
 const BUILD_DIR = path.resolve(rootDir, 'public');
 
+const app_version = fs.readFileSync('VERSION').toString();
+
 const config: webpack.Configuration = {
     output: {
         path: BUILD_DIR,
@@ -20,8 +23,11 @@ const config: webpack.Configuration = {
         publicPath: '/',
     },
     plugins: [
-        new DefinePlugin({ 'process.env.BUILD_EXPIRE': JSON.stringify(process.env.BUILD_EXPIRE) }),
-        new DefinePlugin({ 'process.env.APP_VERSION': JSON.stringify(process.env.APP_VERSION) }),
+        new DefinePlugin({
+            'process.env.BUILD_EXPIRE': JSON.stringify(process.env.BUILD_EXPIRE),
+            'process.env.REACT_APP_GIT_SHA': JSON.stringify(process.env.REACT_APP_GIT_SHA || 'dev'),
+            'process.env.APP_VERSION': JSON.stringify(app_version),
+        }),
         new webpack.EnvironmentPlugin({
             envType: 'dev',
         }),

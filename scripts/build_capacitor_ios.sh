@@ -1,6 +1,8 @@
 #!/bin/sh
 
-cross-env APP_VERSION=$(cat VERSION) NODE_ENV=production NODE_OPTIONS=--max_old_space_size=8192 webpack --config ./webpack/mobile.ts
+export REACT_APP_GIT_SHA=$(git rev-parse --short HEAD)
+
+yarn build:mobile:ios
 
 npx cap add ios
 

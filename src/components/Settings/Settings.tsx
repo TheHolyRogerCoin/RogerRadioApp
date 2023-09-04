@@ -103,7 +103,9 @@ const SettingsComponent: React.FC = () => {
                 <TableCell className={classes.descriptionCol} component="th" scope="row">
                     App Version
                 </TableCell>
-                <TableCell>{process.env.APP_VERSION}</TableCell>
+                <TableCell>
+                    {process.env.APP_VERSION}-{process.env.REACT_APP_GIT_SHA}
+                </TableCell>
             </TableRow>
         );
     }, [classes.descriptionCol]);
