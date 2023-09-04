@@ -237,8 +237,9 @@ public class RogerRadioPlayer
 
     public void playerStop(boolean calledFromUi) {
         Log.d("RRP", "playerStop");
-        controlsDestroy();
         pluginMedia.stopPlayingAudio(playerUUID);
+        controlsStop();
+        controlsDestroy();
         if (!calledFromUi) {
             callbackStop.success();
         }
@@ -266,8 +267,9 @@ public class RogerRadioPlayer
 
     public void playerExit() {
         Log.d("RRP", "playerExit");
-        controlsDestroy();
         playerStop(false);
+        controlsStop();
+        controlsDestroy();
     }
 
     public void updateMetadata(
@@ -280,6 +282,23 @@ public class RogerRadioPlayer
         if (mediaControlsActive) {
             controlsCreate();
         }
+    }
+
+    public void controlsStop() {
+        if (!mediaControlsActive) return;
+
+        Log.d("RRP", "controlsStop");
+        try {
+            mediaControlsActive = false;
+            JSONObject argsData = new JSONObject();
+            argsData.put("isPlaying", false);
+            JSONArray args = new JSONArray();
+            args.put(argsData);
+            pluginMusicControls.execute("updateIsPlaying", args, new CallbackContext(null, null) {
+                @Override
+                public void success(String message) {}
+            });
+        } catch (JSONException e) {e.printStackTrace();}
     }
 
     public void controlsDestroy() {
@@ -354,7 +373,6 @@ public class RogerRadioPlayer
                 case "music-controls-headset-unplugged":
                 case "music-controls-media-button-pause":
                 case "music-controls-media-button-stop":
-                    // case "music-controls-stop-listening":
                     if (!lockMusicControlsStop) {
                         mediaControlsActive = false;
                         lockMusicControlsStop = true;
@@ -363,18 +381,28 @@ public class RogerRadioPlayer
                         final Runnable runnablePlayerStop = new Runnable() {
                             public void run() {
                                 callbackStop.success();
-                                controlsDestroy();
                                 playerStop(false);
+                                controlsStop();
+                                controlsDestroy();
                             }
                         };
                         handler.postDelayed(runnablePlayerStop, 1);
                     }
                     break;
+                case "music-controls-stop-listening":
+                    final Runnable runnableControlsDestroy = new Runnable() {
+                        public void run() {
+                            controlsDestroy();
+                        }
+                    };
+                    handler.postDelayed(runnableControlsDestroy, 1);
                 default:
                     break;
             }
         } catch (JSONException e) {e.printStackTrace();}
-        controlsSubscribe();
+        if (mediaControlsActive) {
+            controlsSubscribe();
+        }
     }
 
     private void playerRelease() {

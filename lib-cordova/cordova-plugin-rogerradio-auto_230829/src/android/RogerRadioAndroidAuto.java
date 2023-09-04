@@ -35,6 +35,7 @@ import com.theholyroger.WSProcessor.WSProcessor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -61,6 +62,7 @@ public class RogerRadioAndroidAuto
     private final int maxReconnects = 10;
 
     private final RogerRadioConfig radioConfig = new RogerRadioConfig();
+    private Uri uriMainLogo;
     private int reconnectTries = 0;
     private String urlStatWs;
     private int currentPlaybackState;
@@ -156,6 +158,39 @@ public class RogerRadioAndroidAuto
         result.sendResult(resultMediaItems);
     }
 
+    private Uri getMainLogoUri() {
+        if (uriMainLogo != null) {
+            return uriMainLogo;
+        }
+
+        int drawableResourceId = this.getResources().getIdentifier(
+                "main_logo_transparent",
+                "drawable",
+                this.getPackageName());
+        uriMainLogo = new Uri.Builder()
+                .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                .authority(resources.getResourcePackageName(drawableResourceId))
+                .appendPath(resources.getResourceTypeName(drawableResourceId))
+                .appendPath(resources.getResourceEntryName(drawableResourceId))
+                .build();
+
+        return uriMainLogo;
+    }
+
+    private Bitmap getBitmapFromUri(Uri localUri){
+        try {
+            InputStream buf = this.getContentResolver().openInputStream(localUri);
+            Bitmap loadedBitmap = BitmapFactory.decodeStream(buf);
+            buf.close();
+
+            return loadedBitmap;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+            return null;
+        }
+    }
+
     private MediaBrowserCompat.MediaItem createBrowsableMediaItem(
             String mediaId,
             String folderName,
@@ -166,17 +201,7 @@ public class RogerRadioAndroidAuto
         mediaDescriptionBuilder.setMediaId(mediaId);
         mediaDescriptionBuilder.setTitle(folderName);
         if (iconUri == null) {
-            int drawableResourceId = this.getResources().getIdentifier(
-                    "main_logo_transparent",
-                    "drawable",
-                    this.getPackageName());
-            Uri lcoalIconUri = new Uri.Builder()
-                    .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                    .authority(resources.getResourcePackageName(drawableResourceId))
-                    .appendPath(resources.getResourceTypeName(drawableResourceId))
-                    .appendPath(resources.getResourceEntryName(drawableResourceId))
-                    .build();
-            mediaDescriptionBuilder.setIconUri(lcoalIconUri);
+            mediaDescriptionBuilder.setIconUri(getMainLogoUri());
         } else {
             mediaDescriptionBuilder.setIconUri(iconUri);
         }
@@ -448,6 +473,15 @@ public class RogerRadioAndroidAuto
                                 Bitmap decodedImage = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
                                 mBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, decodedImage);
                             } catch (Exception e) {
+                                Bitmap default_bitmap = getBitmapFromUri(getMainLogoUri());
+                                if (default_bitmap != null) {
+                                    mBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, default_bitmap);
+                                }
+                            }
+                        } else {
+                            Bitmap default_bitmap = getBitmapFromUri(getMainLogoUri());
+                            if (default_bitmap != null) {
+                                mBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, default_bitmap);
                             }
                         }
 
